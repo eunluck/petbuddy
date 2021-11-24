@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: petbuddy
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    cache-duration: PT1H
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    platform: h2
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:mem:social_server;MODE=MYSQL;DB_CLOSE_DELAY=-1"
+    username: sa
+    password:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: H2_DB
+server:
+  port: 8080
+jwt:
+  token:
+    header: api_key
+    issuer: petbuddy
+    clientSecret: Rel3Bjce2MajBo09qgkNgYaTuzvJe8iwnBFhsDS5
+    expirySeconds: 0
+cloud:
+  aws:
+    s3:
+      region: ap-northeast-2
+      accessKey: AKIAICIRJ3XXHNYOOGLQ
+      secretKey: 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
+      url: https://s3.ap-northeast-2.amazonaws.com
+      bucketName: prgrms-web-bjs
+eventbus:
+  asyncPoolCore: 1
+  asyncPoolMax: 4
+  asyncPoolQueue: 100
+webpush:
+  publicKey: BFJsnkDcKmsymlt5ZVUlIrGtqUxKVEiZ0iBRV3NKCFHrizInoT9FuA8MYESQVzbrTx4njj7lC3Iiz7K41dKUwGE
+  privateKey: K0IOiuODucZ4Tu8WprpXVKwiPBvYYLe4cle4ZLdhPVY
