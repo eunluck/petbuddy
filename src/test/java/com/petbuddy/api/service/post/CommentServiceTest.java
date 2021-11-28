@@ -2,9 +2,9 @@ package com.petbuddy.api.service.post;
 
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Comment;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Comment;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.User;
 import org.junit.jupiter.api.*;
@@ -33,7 +33,7 @@ class CommentServiceTest {
 
   @Autowired private CommentService commentService;
 
-  private Id<Post, Long> postId;
+  private Id<Pet, Long> postId;
 
   private Id<User, Long> postWriterId;
 
@@ -41,7 +41,7 @@ class CommentServiceTest {
 
   @BeforeAll
   void setUp() {
-    postId = Id.of(Post.class, 1L);
+    postId = Id.of(Pet.class, 1L);
     postWriterId = Id.of(User.class, 1L);
     userId = Id.of(User.class, 2L);
   }
@@ -50,15 +50,15 @@ class CommentServiceTest {
   @Order(1)
   void 코멘트를_작성한다() {
     String contents = randomAlphabetic(40);
-    Post beforePost = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Post.class, postId));
+    Pet beforePet = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Pet.class, postId));
     Comment comment = commentService.write(
       postId,
       postWriterId,
       userId,
       new Comment(userId, postId, new Writer(new Email("test00@gmail.com"), "test00"), contents)
     );
-    Post afterPost = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Post.class, postId));
-    assertThat(afterPost.getComments() - beforePost.getComments(), is(1));
+    Pet afterPet = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Pet.class, postId));
+    assertThat(afterPet.getComments() - beforePet.getComments(), is(1));
     assertThat(comment, is(notNullValue()));
     assertThat(comment.getSeq(), is(notNullValue()));
     assertThat(comment.getContents(), is(contents));

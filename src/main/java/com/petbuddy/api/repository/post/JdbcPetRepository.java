@@ -1,9 +1,7 @@
 package com.petbuddy.api.repository.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
-import com.petbuddy.api.model.user.Email;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,48 +18,46 @@ import static com.petbuddy.api.util.DateTimeUtils.timestampOf;
 import static java.util.Optional.ofNullable;
 
 @Repository
-public class JdbcPostRepository implements PostRepository {
+public class JdbcPetRepository implements PetRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
-  public JdbcPostRepository(JdbcTemplate jdbcTemplate) {
+  public JdbcPetRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
   @Override
-  public Post insert(Post post) {
+  public Pet insert(Pet pet) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(conn -> {
       PreparedStatement ps = conn.prepareStatement("INSERT INTO posts(seq,user_seq,contents,like_count,comment_count,create_at) VALUES (null,?,?,?,?,?)", new String[]{"seq"});
-      ps.setLong(1, post.getUserId().value());
-      ps.setString(2, post.getContents());
-      ps.setInt(3, post.getLikes());
-      ps.setInt(4, post.getComments());
-      ps.setTimestamp(5, timestampOf(post.getCreateAt()));
+      ps.setLong(1, pet.getUserId().getSeq());
+      ps.setString(2, pet.getPetIntroduce());
+      ps.setInt(3, pet.getLikes());
+      ps.setTimestamp(4, timestampOf(pet.getCreateAt()));
       return ps;
     }, keyHolder);
 
     Number key = keyHolder.getKey();
     long generatedSeq = key != null ? key.longValue() : -1;
-    return new Post.Builder(post)
+    return new Pet.Builder(pet)
       .seq(generatedSeq)
       .build();
   }
 
   @Override
-  public void update(Post post) {
+  public void update(Pet pet) {
     jdbcTemplate.update(
       "UPDATE posts SET contents=?,like_count=?,comment_count=? WHERE seq=?",
-      post.getContents(),
-      post.getLikes(),
-      post.getComments(),
-      post.getSeq()
+      pet.getPetIntroduce(),
+      pet.getLikes(),
+      pet.getSeq()
     );
   }
 
   @Override
-  public Optional<Post> findById(Id<Post, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
-    List<Post> results = jdbcTemplate.query(
+  public Optional<Pet> findById(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
+    List<Pet> results = jdbcTemplate.query(
       "SELECT " +
           "p.*,u.email,u.name,ifnull(l.seq,false) as likesOfMe " +
         "FROM " +
@@ -75,7 +71,7 @@ public class JdbcPostRepository implements PostRepository {
   }
 
   @Override
-  public List<Post> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit) {
+  public List<Pet> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit) {
     return jdbcTemplate.query(
       "SELECT " +
           "p.*,u.email,u.name,ifnull(l.seq,false) as likesOfMe " +
@@ -92,14 +88,12 @@ public class JdbcPostRepository implements PostRepository {
     );
   }
 
-  static RowMapper<Post> mapper = (rs, rowNum) -> new Post.Builder()
+  static RowMapper<Pet> mapper = (rs, rowNum) -> new Pet.Builder()
     .seq(rs.getLong("seq"))
     .userId(Id.of(User.class, rs.getLong("user_seq")))
-    .contents(rs.getString("contents"))
+    .petIntroduce(rs.getString("pet_introduce"))
     .likes(rs.getInt("like_count"))
     .likesOfMe(rs.getBoolean("likesOfMe"))
-    .comments(rs.getInt("comment_count"))
-    .writer(new Writer(new Email(rs.getString("email")), rs.getString("name")))
     .createAt(dateTimeOf(rs.getTimestamp("create_at")))
     .build();
 

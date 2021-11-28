@@ -4,19 +4,24 @@ import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.regex.Pattern.matches;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Entity
 public class Email {
 
   @ApiModelProperty(value = "메일주소", required = true)
   private final String address;
+  @ApiModelProperty(value = "이메일 타입", required = true)
+  private final String emailType;
 
-  public Email(String address) {
+  public Email(String address,String emailType) {
     checkArgument(isNotEmpty(address), "address must be provided.");
+    checkArgument(isNotEmpty(emailType), "email type must be provided.");
     checkArgument(
       address.length() >= 4 && address.length() <= 50,
       "address length must be between 4 and 50 characters."
@@ -24,6 +29,7 @@ public class Email {
     checkArgument(checkAddress(address), "Invalid email address: " + address);
 
     this.address = address;
+    this.emailType = emailType;
   }
 
   private static boolean checkAddress(String address) {
@@ -35,6 +41,10 @@ public class Email {
     if (tokens.length == 2)
       return tokens[0];
     return null;
+  }
+
+  public String getEmailType() {
+    return emailType;
   }
 
   public String getDomain() {

@@ -1,12 +1,15 @@
 package com.petbuddy.api.controller.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public class PostingRequest {
 
@@ -19,8 +22,8 @@ public class PostingRequest {
     return contents;
   }
 
-  public Post newPost(Id<User, Long> userId, Writer writer) {
-    return new Post(userId, writer, contents);
+  public Pet netPet(Id<User, Long> userId) {
+    return new Pet(userId,  contents);
   }
 
   @Override

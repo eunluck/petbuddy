@@ -1,3 +1,4 @@
+/*
 package com.petbuddy.api.repository.user;
 
 import com.petbuddy.api.model.commons.Id;
@@ -118,3 +119,4 @@ public class JdbcUserRepository implements UserRepository {
     .build();
 
 }
+*/

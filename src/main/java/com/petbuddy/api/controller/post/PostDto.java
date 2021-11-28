@@ -1,7 +1,7 @@
 package com.petbuddy.api.controller.post;
 
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -33,10 +33,9 @@ public class PostDto {
   @ApiModelProperty(value = "작성일시", required = true)
   private LocalDateTime createAt;
 
-  public PostDto(Post source) {
+  public PostDto(Pet source) {
     copyProperties(source, this);
 
-    this.writer = source.getWriter().orElse(null);
   }
 
   public Long getSeq() {

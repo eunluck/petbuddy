@@ -1,3 +1,4 @@
+/*
 package com.petbuddy.api.repository.subscription;
 
 import com.petbuddy.api.model.commons.Id;
@@ -79,3 +80,4 @@ public class JdbcSubscriptionRepository implements SubscriptionRepository {
             .build();
 
 }
+*/

@@ -1,6 +1,8 @@
-package com.petbuddy.api.model.post;
+package com.petbuddy.api.repository.post;
 
 import com.petbuddy.api.model.commons.Id;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,13 +18,13 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-public class Comment {
+public class CommentEntity {
 
   private final Long seq;
 
   private final Id<User, Long> userId;
 
-  private final Id<Post, Long> postId;
+  private final Id<Pet, Long> postId;
 
   private String contents;
 
@@ -30,11 +32,11 @@ public class Comment {
 
   private final LocalDateTime createAt;
 
-  public Comment(Id<User, Long> userId, Id<Post, Long> postId, Writer writer, String contents) {
+  public CommentEntity(Id<User, Long> userId, Id<Pet, Long> postId, Writer writer, String contents) {
     this(null, userId, postId, contents, writer, null);
   }
 
-  public Comment(Long seq, Id<User, Long> userId, Id<Post, Long> postId, String contents, Writer writer, LocalDateTime createAt) {
+  public CommentEntity(Long seq, Id<User, Long> userId, Id<Pet, Long> postId, String contents, Writer writer, LocalDateTime createAt) {
     checkNotNull(userId, "userId must be provided.");
     checkNotNull(postId, "postId must be provided.");
     checkArgument(isNotEmpty(contents), "contents must be provided.");
@@ -69,7 +71,7 @@ public class Comment {
     return userId;
   }
 
-  public Id<Post, Long> getPostId() {
+  public Id<Pet, Long> getPostId() {
     return postId;
   }
 
@@ -89,7 +91,7 @@ public class Comment {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Comment comment = (Comment) o;
+    CommentEntity comment = (CommentEntity) o;
     return Objects.equals(seq, comment.seq);
   }
 
@@ -113,14 +115,14 @@ public class Comment {
   static public class Builder {
     private Long seq;
     private Id<User, Long> userId;
-    private Id<Post, Long> postId;
+    private Id<Pet, Long> postId;
     private String contents;
     private Writer writer;
     private LocalDateTime createAt;
 
     public Builder() {}
 
-    public Builder(Comment comment) {
+    public Builder(CommentEntity comment) {
       this.seq = comment.seq;
       this.userId = comment.userId;
       this.postId = comment.postId;
@@ -139,7 +141,7 @@ public class Comment {
       return this;
     }
 
-    public Builder postId(Id<Post, Long> postId) {
+    public Builder postId(Id<Pet, Long> postId) {
       this.postId = postId;
       return this;
     }
@@ -159,8 +161,8 @@ public class Comment {
       return this;
     }
 
-    public Comment build() {
-      return new Comment(seq, userId, postId, contents, writer, createAt);
+    public CommentEntity build() {
+      return new CommentEntity(seq, userId, postId, contents, writer, createAt);
     }
   }
 

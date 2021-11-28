@@ -1,10 +1,16 @@
 package com.petbuddy.api.model.user;
 
 import com.petbuddy.api.security.Jwt;
+import com.sun.istack.NotNull;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,30 +22,31 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Entity
+@NoArgsConstructor
 public class User {
 
-  private final Long seq;
-
-  private final String name;
-
-  private final Email email;
-
+  @Id
+  @GeneratedValue
+  private  Long seq;
+  @NotNull
+  private  String name;
+  @OneToOne
+  private  Email email;
   private String password;
-
+  private String snsKey;
   private String profileImageUrl;
-
   private int loginCount;
-
   private LocalDateTime lastLoginAt;
 
-  private final LocalDateTime createAt;
+  private LocalDateTime createAt;
 
   public User(String name, Email email, String password) {
     this(name, email, password, null);
   }
 
   public User(String name, Email email, String password, String profileImageUrl) {
-    this(null, name, email, password, profileImageUrl, 0, null, null);
+    this(null, name, email,  password, profileImageUrl, 0, null, null);
   }
 
   public User(Long seq, String name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {

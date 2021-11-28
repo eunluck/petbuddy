@@ -1,7 +1,8 @@
+/*
 package com.petbuddy.api.repository.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,7 @@ public class JdbcPostLikeRepository implements PostLikeRepository {
   }
 
   @Override
-  public void like(Id<User, Long> userId, Id<Post, Long> postId) {
+  public void like(Id<User, Long> userId, Id<Pet, Long> postId) {
     jdbcTemplate.update(conn -> {
       PreparedStatement ps = conn.prepareStatement("INSERT INTO likes(seq,user_seq,post_seq) VALUES (null,?,?)");
       ps.setLong(1, userId.value());
@@ -27,4 +28,4 @@ public class JdbcPostLikeRepository implements PostLikeRepository {
     });
   }
 
-}
+}*/

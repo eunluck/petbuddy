@@ -12,6 +12,7 @@ import com.petbuddy.api.model.user.User;
 import com.petbuddy.api.security.Jwt;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.user.UserService;
+import io.github.humbleui.skija.Canvas;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,6 +63,8 @@ public class UserRestController {
   }
 
   public Optional<String> uploadProfileImage(AttachedFile profileFile) {
+
+
     String profileImageUrl = null;
     if (profileFile != null) {
       String key = profileFile.randomName("profiles", "jpeg");

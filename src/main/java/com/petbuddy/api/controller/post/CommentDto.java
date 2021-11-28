@@ -1,7 +1,7 @@
 package com.petbuddy.api.controller.post;
 
-import com.petbuddy.api.model.post.Comment;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Comment;
+import com.petbuddy.api.model.pet.Writer;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

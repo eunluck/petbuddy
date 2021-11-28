@@ -1,10 +1,10 @@
 package com.petbuddy.api.service.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.User;
-import com.petbuddy.api.repository.post.PostLikeRepository;
-import com.petbuddy.api.repository.post.PostRepository;
+import com.petbuddy.api.repository.post.PetLikeRepository;
+import com.petbuddy.api.repository.post.PetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,32 +16,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Service
 public class PostService {
 
-  private final PostRepository postRepository;
+  private final PetRepository petRepository;
 
-  private final PostLikeRepository postLikeRepository;
+  private final PetLikeRepository petLikeRepository;
 
-  public PostService(PostRepository postRepository, PostLikeRepository postLikeRepository) {
-    this.postRepository = postRepository;
-    this.postLikeRepository = postLikeRepository;
+  public PostService(PetRepository petRepository, PetLikeRepository petLikeRepository) {
+    this.petRepository = petRepository;
+    this.petLikeRepository = petLikeRepository;
   }
 
   @Transactional
-  public Post write(Post post) {
-    return insert(post);
+  public Pet write(Pet pet) {
+    return insert(pet);
   }
 
   @Transactional
-  public Post modify(Post post) {
-    update(post);
-    return post;
+  public Pet modify(Pet pet) {
+    update(pet);
+    return pet;
   }
 
   @Transactional
-  public Optional<Post> like(Id<Post, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
+  public Optional<Pet> like(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
     return findById(postId, writerId, userId).map(post -> {
       if (!post.isLikesOfMe()) {
         post.incrementAndGetLikes();
-        postLikeRepository.like(userId, postId);
+        petLikeRepository.like(userId, postId);
         update(post);
       }
       return post;
@@ -49,16 +49,16 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<Post> findById(Id<Post, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
+  public Optional<Pet> findById(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
     checkNotNull(writerId, "writerId must be provided.");
     checkNotNull(postId, "postId must be provided.");
     checkNotNull(userId, "userId must be provided.");
 
-    return postRepository.findById(postId, writerId, userId);
+    return petRepository.findById(postId, writerId, userId);
   }
 
   @Transactional(readOnly = true)
-  public List<Post> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit) {
+  public List<Pet> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit) {
     checkNotNull(writerId, "writerId must be provided.");
     checkNotNull(userId, "userId must be provided.");
     if (offset < 0)
@@ -66,15 +66,15 @@ public class PostService {
     if (limit < 1 || limit > 5)
       limit = 5;
 
-    return postRepository.findAll(writerId, userId, offset, limit);
+    return petRepository.findAll(writerId, userId, offset, limit);
   }
 
-  private Post insert(Post post) {
-    return postRepository.insert(post);
+  private Pet insert(Pet pet) {
+    return petRepository.insert(pet);
   }
 
-  private void update(Post post) {
-    postRepository.update(post);
+  private void update(Pet pet) {
+    petRepository.update(pet);
   }
 
 }
