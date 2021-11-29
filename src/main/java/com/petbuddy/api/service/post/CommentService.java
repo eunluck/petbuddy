@@ -2,8 +2,8 @@ package com.petbuddy.api.service.post;
 
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Comment;
-import com.petbuddy.api.model.post.Post;
+import com.petbuddy.api.model.pet.Comment;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.User;
 import com.petbuddy.api.repository.post.CommentRepository;
 import com.petbuddy.api.repository.post.PostRepository;
@@ -30,28 +30,27 @@ public class CommentService {
   }
 
   @Transactional
-  public Comment write(Id<Post, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId, Comment comment) {
+  public Comment write(Id<Pet, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId, Comment comment) {
     checkArgument(comment.getPostId().equals(postId), "comment.postId must equals postId");
     checkArgument(comment.getUserId().equals(userId), "comment.userId must equals userId");
     checkNotNull(comment, "comment must be provided.");
 
     return findPost(postId, postWriterId, userId)
       .map(post -> {
-        post.incrementAndGetComments();
         postRepository.update(post);
         return insert(comment);
       })
-      .orElseThrow(() -> new NotFoundException(Post.class, postId, userId));
+      .orElseThrow(() -> new NotFoundException(Pet.class, postId, userId));
   }
 
   @Transactional(readOnly = true)
-  public List<Comment> findAll(Id<Post, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId) {
+  public List<Comment> findAll(Id<Pet, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId) {
     return findPost(postId, postWriterId, userId)
       .map(post -> commentRepository.findAll(postId))
       .orElse(emptyList());
   }
 
-  private Optional<Post> findPost(Id<Post, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId) {
+  private Optional<Pet> findPost(Id<Pet, Long> postId, Id<User, Long> postWriterId, Id<User, Long> userId) {
     checkNotNull(postId, "postId must be provided.");
     checkNotNull(postWriterId, "postWriterId must be provided.");
     checkNotNull(userId, "userId must be provided.");

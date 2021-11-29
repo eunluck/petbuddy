@@ -46,6 +46,7 @@ public final class Jwt {
     builder.withClaim("userKey", claims.userKey);
     builder.withClaim("name", claims.name);
     builder.withClaim("email", claims.email.getAddress());
+    builder.withClaim("emailType", claims.email.getEmailType());
     builder.withArrayClaim("roles", claims.roles);
     return builder.sign(algorithm);
   }
@@ -100,8 +101,9 @@ public final class Jwt {
       if (!name.isNull())
         this.name = name.asString();
       Claim email = decodedJWT.getClaim("email");
-      if (!email.isNull())
-        this.email = new Email(email.asString());
+      Claim emailType = decodedJWT.getClaim("emailType");
+      if (!email.isNull() && !emailType.isNull())
+        this.email = new Email(email.asString(),emailType.asString());
       Claim roles = decodedJWT.getClaim("roles");
       if (!roles.isNull())
         this.roles = roles.asArray(String.class);

@@ -67,7 +67,7 @@ public class Swagger2Configure implements WebMvcConfigurer {
 
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-      .title("Social-Server")
+      .title("Petbuddy-API")
       .contact(new Contact("username", null, "your-email@address.com"))
       .version("1.0.0")
       .build();

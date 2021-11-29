@@ -1,10 +1,12 @@
 package com.petbuddy.api.model.user;
 
 import com.petbuddy.api.security.Jwt;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,15 +18,25 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+@Entity
+@NoArgsConstructor
 public class User {
 
-  private final Long seq;
+  @Id
+  @GeneratedValue
+  private  Long seq;
 
-  private final String name;
+  private  String name;
 
-  private final Email email;
+  @Embedded
+  @AttributeOverrides({
+          @AttributeOverride(name = "address", column = @Column(name = "email")),
+          @AttributeOverride(name = "emailType", column = @Column(name = "email_type"))
+  })
+  private  Email email;
 
   private String password;
+
 
   private String profileImageUrl;
 
@@ -32,7 +44,7 @@ public class User {
 
   private LocalDateTime lastLoginAt;
 
-  private final LocalDateTime createAt;
+  private  LocalDateTime createAt;
 
   public User(String name, Email email, String password) {
     this(name, email, password, null);

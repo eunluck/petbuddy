@@ -10,7 +10,6 @@ import java.util.Collection;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
   private final Object principal;
-
   private String credentials;
 
   public JwtAuthenticationToken(String principal, String credentials) {
@@ -24,7 +23,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
   JwtAuthenticationToken(Object principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
     super(authorities);
     super.setAuthenticated(true);
-
     this.principal = principal;
     this.credentials = credentials;
   }

@@ -12,6 +12,11 @@ public class JoinRequest {
   @ApiModelProperty(value = "로그인 이메일", required = true)
   private String principal;
 
+  @ApiModelProperty(value = "이메일 타입", required = true)
+  private String emailType;
+
+
+
   @ApiModelProperty(value = "로그인 비밀번호", required = true)
   private String credentials;
 
@@ -41,12 +46,22 @@ public class JoinRequest {
     this.credentials = credentials;
   }
 
+
+  public String getEmailType() {
+    return emailType;
+  }
+
+  public void setEmailType(String emailType) {
+    this.emailType = emailType;
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
       .append("name", name)
       .append("principal", principal)
       .append("credentials", credentials)
+      .append("emailType", emailType)
       .toString();
   }
 

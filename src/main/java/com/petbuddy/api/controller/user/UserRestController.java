@@ -55,7 +55,7 @@ public class UserRestController {
   public ApiResult<Boolean> checkEmail(
     @RequestBody @ApiParam(value = "example: {\"address\": \"test00@gmail.com\"}") Map<String, String> request
   ) {
-    Email email = new Email(request.get("address"));
+    Email email = new Email(request.get("email"),request.get("emailType"));
     return ApiResult.OK(
       userService.findByEmail(email).isPresent()
     );
@@ -82,7 +82,7 @@ public class UserRestController {
   ) {
     User user = userService.join(
       joinRequest.getName(),
-      new Email(joinRequest.getPrincipal()),
+      new Email(joinRequest.getPrincipal(),joinRequest.getEmailType()),
       joinRequest.getCredentials()
     );
 

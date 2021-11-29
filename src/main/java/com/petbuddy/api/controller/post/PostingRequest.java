@@ -1,8 +1,8 @@
 package com.petbuddy.api.controller.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,8 +19,8 @@ public class PostingRequest {
     return contents;
   }
 
-  public Post newPost(Id<User, Long> userId, Writer writer) {
-    return new Post(userId, writer, contents);
+  public Pet newPost(Id<User, Long> userId) {
+    return new Pet(userId,  contents);
   }
 
   @Override

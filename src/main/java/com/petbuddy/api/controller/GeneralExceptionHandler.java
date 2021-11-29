@@ -1,6 +1,7 @@
 package com.petbuddy.api.controller;
 
 import com.petbuddy.api.error.NotFoundException;
+import com.petbuddy.api.error.NotImageExtension;
 import com.petbuddy.api.error.ServiceRuntimeException;
 import com.petbuddy.api.error.UnauthorizedException;
 import org.slf4j.Logger;
@@ -62,6 +63,8 @@ public class GeneralExceptionHandler {
       return newResponse(e, HttpStatus.NOT_FOUND);
     if (e instanceof UnauthorizedException)
       return newResponse(e, HttpStatus.UNAUTHORIZED);
+    if (e instanceof NotImageExtension)
+      return newResponse(e, HttpStatus.BAD_REQUEST);
 
     log.warn("Unexpected service exception occurred: {}", e.getMessage(), e);
     return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,4 +1,4 @@
-package com.petbuddy.api.model.post;
+package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.user.Email;
 import io.swagger.annotations.ApiModelProperty;

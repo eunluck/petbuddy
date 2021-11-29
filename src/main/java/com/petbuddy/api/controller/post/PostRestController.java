@@ -4,8 +4,8 @@ import com.petbuddy.api.configure.support.Pageable;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.post.CommentService;
@@ -35,14 +35,14 @@ public class PostRestController {
   }
 
   @PostMapping(path = "post")
-  public ApiResult<PostDto> posting(
+  public ApiResult<PetDto> posting(
     @AuthenticationPrincipal JwtAuthentication authentication,
     @RequestBody PostingRequest request
   ) {
     return ApiResult.OK(
-      new PostDto(
+      new PetDto(
         postService.write(
-          request.newPost(authentication.id, new Writer(authentication.email, authentication.name))
+          request.newPost(authentication.id)
         )
       )
     );
@@ -54,29 +54,29 @@ public class PostRestController {
     @ApiImplicitParam(name = "offset", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
     @ApiImplicitParam(name = "limit", dataType = "integer", paramType = "query", defaultValue = "20", value = "최대 조회 갯수")
   })
-  public ApiResult<List<PostDto>> posts(
+  public ApiResult<List<PetDto>> posts(
     @AuthenticationPrincipal JwtAuthentication authentication,
     @PathVariable @ApiParam(value = "조회대상자 PK (본인 또는 친구)", example = "1") Long userId,
     Pageable pageable
   ) {
     return ApiResult.OK(
       postService.findAll(Id.of(User.class, userId), authentication.id, pageable.offset(), pageable.limit()).stream()
-        .map(PostDto::new)
+        .map(PetDto::new)
         .collect(toList())
     );
   }
 
   @PatchMapping(path = "user/{userId}/post/{postId}/like")
   @ApiOperation(value = "포스트 좋아요")
-  public ApiResult<PostDto> like(
+  public ApiResult<PetDto> like(
     @AuthenticationPrincipal JwtAuthentication authentication,
     @PathVariable @ApiParam(value = "조회대상자 PK (본인 또는 친구)", example = "1") Long userId,
     @PathVariable @ApiParam(value = "대상 포스트 PK", example = "1") Long postId
   ) {
     return ApiResult.OK(
-      postService.like(Id.of(Post.class, postId), Id.of(User.class, userId), authentication.id)
-        .map(PostDto::new)
-        .orElseThrow(() -> new NotFoundException(Post.class, Id.of(Post.class, postId), Id.of(User.class, userId)))
+      postService.like(Id.of(Pet.class, postId), Id.of(User.class, userId), authentication.id)
+        .map(PetDto::new)
+        .orElseThrow(() -> new NotFoundException(Pet.class, Id.of(Pet.class, postId), Id.of(User.class, userId)))
     );
   }
 
@@ -90,11 +90,11 @@ public class PostRestController {
     return ApiResult.OK(
       new CommentDto(
         commentService.write(
-          Id.of(Post.class, postId),
+          Id.of(Pet.class, postId),
           Id.of(User.class, userId),
           authentication.id,
           request.newComment(
-            authentication.id, Id.of(Post.class, postId),
+            authentication.id, Id.of(Pet.class, postId),
             new Writer(authentication.email, authentication.name)
           )
         )
@@ -109,7 +109,7 @@ public class PostRestController {
     @PathVariable @ApiParam(value = "대상 포스트 PK", example = "1") Long postId
   ) {
     return ApiResult.OK(
-      commentService.findAll(Id.of(Post.class, postId), Id.of(User.class, userId), authentication.id).stream()
+      commentService.findAll(Id.of(Pet.class, postId), Id.of(User.class, userId), authentication.id).stream()
         .map(CommentDto::new)
         .collect(toList())
     );

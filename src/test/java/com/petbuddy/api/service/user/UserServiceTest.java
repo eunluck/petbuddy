@@ -36,7 +36,7 @@ class UserServiceTest {
   @BeforeAll
   void setUp() {
     name = "tester";
-    email = new Email("test@gmail.com");
+    email = new Email("test@gmail.com","user");
     password = "1234";
   }
 

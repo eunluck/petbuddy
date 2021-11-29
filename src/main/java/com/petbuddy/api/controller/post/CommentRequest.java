@@ -1,9 +1,9 @@
 package com.petbuddy.api.controller.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Comment;
-import com.petbuddy.api.model.post.Post;
-import com.petbuddy.api.model.post.Writer;
+import com.petbuddy.api.model.pet.Comment;
+import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,7 +20,7 @@ public class CommentRequest {
     return contents;
   }
 
-  public Comment newComment(Id<User, Long> userId, Id<Post, Long> postId, Writer writer) {
+  public Comment newComment(Id<User, Long> userId, Id<Pet, Long> postId, Writer writer) {
     return new Comment(userId, postId, writer, contents);
   }
 

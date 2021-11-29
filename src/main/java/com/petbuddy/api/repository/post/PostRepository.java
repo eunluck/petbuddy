@@ -1,20 +1,22 @@
 package com.petbuddy.api.repository.post;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.post.Post;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface PostRepository {
 
-  Post insert(Post post);
+  Pet insert(Pet pet);
 
-  void update(Post post);
+  void update(Pet pet);
 
-  Optional<Post> findById(Id<Post, Long> postId, Id<User, Long> writerId, Id<User, Long> userId);
+  Optional<Pet> findById(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId);
 
-  List<Post> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit);
+  List<Pet> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit);
 
 }
