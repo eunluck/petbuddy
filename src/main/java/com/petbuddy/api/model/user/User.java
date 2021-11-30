@@ -4,6 +4,8 @@ import com.petbuddy.api.security.Jwt;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -24,26 +26,25 @@ public class User {
 
   @Id
   @GeneratedValue
-  private  Long seq;
+  private Long seq;
 
-  private  String name;
+  private String name;
 
   @Embedded
   @AttributeOverrides({
           @AttributeOverride(name = "address", column = @Column(name = "email")),
           @AttributeOverride(name = "emailType", column = @Column(name = "email_type"))
   })
-  private  Email email;
+  private Email email;
 
   private String password;
 
-
   private String profileImageUrl;
-
-  private int loginCount;
 
   private LocalDateTime lastLoginAt;
 
+  @CreatedDate
+  @Column(updatable = false)
   private  LocalDateTime createAt;
 
   public User(String name, Email email, String password) {
@@ -51,10 +52,10 @@ public class User {
   }
 
   public User(String name, Email email, String password, String profileImageUrl) {
-    this(null, name, email, password, profileImageUrl, 0, null, null);
+    this(null, name, email, password, profileImageUrl,  null, null);
   }
 
-  public User(Long seq, String name, Email email, String password, String profileImageUrl, int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
+  public User(Long seq, String name, Email email, String password, String profileImageUrl,LocalDateTime lastLoginAt, LocalDateTime createAt) {
     checkArgument(isNotEmpty(name), "name must be provided.");
     checkArgument(
       name.length() >= 1 && name.length() <= 10,
@@ -72,7 +73,6 @@ public class User {
     this.email = email;
     this.password = password;
     this.profileImageUrl = profileImageUrl;
-    this.loginCount = loginCount;
     this.lastLoginAt = lastLoginAt;
     this.createAt = defaultIfNull(createAt, now());
   }
@@ -83,7 +83,6 @@ public class User {
   }
 
   public void afterLoginSuccess() {
-    loginCount++;
     lastLoginAt = now();
   }
 
@@ -121,10 +120,6 @@ public class User {
     return ofNullable(profileImageUrl);
   }
 
-  public int getLoginCount() {
-    return loginCount;
-  }
-
   public Optional<LocalDateTime> getLastLoginAt() {
     return ofNullable(lastLoginAt);
   }
@@ -154,7 +149,6 @@ public class User {
       .append("email", email)
       .append("password", "[PROTECTED]")
       .append("profileImageUrl", profileImageUrl)
-      .append("loginCount", loginCount)
       .append("lastLoginAt", lastLoginAt)
       .append("createAt", createAt)
       .toString();
@@ -177,7 +171,6 @@ public class User {
       this.name = user.name;
       this.email = user.email;
       this.password = user.password;
-      this.loginCount = user.loginCount;
       this.lastLoginAt = user.lastLoginAt;
       this.createAt = user.createAt;
     }
@@ -223,7 +216,7 @@ public class User {
     }
 
     public User build() {
-      return new User(seq, name, email, password, profileImageUrl, loginCount, lastLoginAt, createAt);
+      return new User(seq, name, email, password, profileImageUrl, lastLoginAt, createAt);
     }
   }
 

@@ -26,15 +26,15 @@ public class Comment {
 
   private String contents;
 
-  private final Writer writer;
+  private final PetOwner petOwner;
 
   private final LocalDateTime createAt;
 
-  public Comment(Id<User, Long> userId, Id<Pet, Long> postId, Writer writer, String contents) {
-    this(null, userId, postId, contents, writer, null);
+  public Comment(Id<User, Long> userId, Id<Pet, Long> postId, PetOwner petOwner, String contents) {
+    this(null, userId, postId, contents, petOwner, null);
   }
 
-  public Comment(Long seq, Id<User, Long> userId, Id<Pet, Long> postId, String contents, Writer writer, LocalDateTime createAt) {
+  public Comment(Long seq, Id<User, Long> userId, Id<Pet, Long> postId, String contents, PetOwner petOwner, LocalDateTime createAt) {
     checkNotNull(userId, "userId must be provided.");
     checkNotNull(postId, "postId must be provided.");
     checkArgument(isNotEmpty(contents), "contents must be provided.");
@@ -47,7 +47,7 @@ public class Comment {
     this.userId = userId;
     this.postId = postId;
     this.contents = contents;
-    this.writer = writer;
+    this.petOwner = petOwner;
     this.createAt = defaultIfNull(createAt, now());
   }
 
@@ -77,8 +77,8 @@ public class Comment {
     return contents;
   }
 
-  public Optional<Writer> getWriter() {
-    return ofNullable(writer);
+  public Optional<PetOwner> getWriter() {
+    return ofNullable(petOwner);
   }
 
   public LocalDateTime getCreateAt() {
@@ -105,7 +105,7 @@ public class Comment {
       .append("userId", userId)
       .append("postId", postId)
       .append("contents", contents)
-      .append("writer", writer)
+      .append("writer", petOwner)
       .append("createAt", createAt)
       .toString();
   }
@@ -115,7 +115,7 @@ public class Comment {
     private Id<User, Long> userId;
     private Id<Pet, Long> postId;
     private String contents;
-    private Writer writer;
+    private PetOwner petOwner;
     private LocalDateTime createAt;
 
     public Builder() {}
@@ -125,7 +125,7 @@ public class Comment {
       this.userId = comment.userId;
       this.postId = comment.postId;
       this.contents = comment.contents;
-      this.writer = comment.writer;
+      this.petOwner = comment.petOwner;
       this.createAt = comment.createAt;
     }
 
@@ -149,8 +149,8 @@ public class Comment {
       return this;
     }
 
-    public Builder writer(Writer writer) {
-      this.writer = writer;
+    public Builder writer(PetOwner petOwner) {
+      this.petOwner = petOwner;
       return this;
     }
 
@@ -160,7 +160,7 @@ public class Comment {
     }
 
     public Comment build() {
-      return new Comment(seq, userId, postId, contents, writer, createAt);
+      return new Comment(seq, userId, postId, contents, petOwner, createAt);
     }
   }
 

@@ -7,8 +7,12 @@ import com.petbuddy.api.model.user.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -22,19 +26,23 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Data
 @NoArgsConstructor
 @EntityListeners(MyEntityListener.class)
-public class Pet implements Auditable {
+public class Pet {
 
-  private  Long seq;
-
-  private  Id<User, Long> userId;
-
+  private Long seq;
+  private String petName;
+  private int petAge;
+  private String petGender;
+  private boolean neuteringYn;
   private String petIntroduce;
-
   private int likes;
-
+  @Transient
   private boolean likesOfMe;
+  private Id<User, Long> userId;
 
+  @CreatedDate
+  @Column(updatable = false)
   private  LocalDateTime createdAt;
+  @LastModifiedDate
   private  LocalDateTime updatedAt;
 
   public Pet(Id<User, Long> userId, String petIntroduce) {

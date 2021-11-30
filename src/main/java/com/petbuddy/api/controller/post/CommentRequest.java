@@ -3,7 +3,7 @@ package com.petbuddy.api.controller.post;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Comment;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.Writer;
+import com.petbuddy.api.model.pet.PetOwner;
 import com.petbuddy.api.model.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,8 +20,8 @@ public class CommentRequest {
     return contents;
   }
 
-  public Comment newComment(Id<User, Long> userId, Id<Pet, Long> postId, Writer writer) {
-    return new Comment(userId, postId, writer, contents);
+  public Comment newComment(Id<User, Long> userId, Id<Pet, Long> postId, PetOwner petOwner) {
+    return new Comment(userId, postId, petOwner, contents);
   }
 
   @Override

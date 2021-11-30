@@ -2,32 +2,21 @@ package com.petbuddy.api.controller.post;
 
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.Writer;
 import com.petbuddy.api.model.user.User;
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class PostingRequest {
 
   @ApiModelProperty(value = "내용", required = true)
-  private String contents;
+  private String petIntroduce;
+  private String petName;
 
   protected PostingRequest() {}
 
-  public String getContents() {
-    return contents;
-  }
 
   public Pet newPost(Id<User, Long> userId) {
-    return new Pet(userId,  contents);
+    return new Pet(userId,  petIntroduce);
   }
 
-  @Override
-  public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("contents", contents)
-      .toString();
-  }
 
 }

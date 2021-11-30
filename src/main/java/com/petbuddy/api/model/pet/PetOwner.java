@@ -10,7 +10,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 
-public class Writer {
+public class PetOwner {
 
   @ApiModelProperty(value = "이메일", required = true)
   private final Email email;
@@ -18,11 +18,11 @@ public class Writer {
   @ApiModelProperty(value = "이름")
   private final String name;
 
-  public Writer(Email email) {
+  public PetOwner(Email email) {
     this(email, null);
   }
 
-  public Writer(Email email, String name) {
+  public PetOwner(Email email, String name) {
     checkNotNull(email, "email must be provided.");
 
     this.email = email;

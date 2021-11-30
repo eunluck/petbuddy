@@ -5,7 +5,7 @@ import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.Writer;
+import com.petbuddy.api.model.pet.PetOwner;
 import com.petbuddy.api.model.user.User;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.post.CommentService;
@@ -49,7 +49,7 @@ public class PostRestController {
   }
 
   @GetMapping(path = "user/{userId}/post/list")
-  @ApiOperation(value = "포스트 목록 조회")
+  @ApiOperation(value = "강아지 목록 조회")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "offset", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
     @ApiImplicitParam(name = "limit", dataType = "integer", paramType = "query", defaultValue = "20", value = "최대 조회 갯수")
@@ -67,7 +67,7 @@ public class PostRestController {
   }
 
   @PatchMapping(path = "user/{userId}/post/{postId}/like")
-  @ApiOperation(value = "포스트 좋아요")
+  @ApiOperation(value = "강아지 좋아요")
   public ApiResult<PetDto> like(
     @AuthenticationPrincipal JwtAuthentication authentication,
     @PathVariable @ApiParam(value = "조회대상자 PK (본인 또는 친구)", example = "1") Long userId,
@@ -95,7 +95,7 @@ public class PostRestController {
           authentication.id,
           request.newComment(
             authentication.id, Id.of(Pet.class, postId),
-            new Writer(authentication.email, authentication.name)
+            new PetOwner(authentication.email, authentication.name)
           )
         )
       )

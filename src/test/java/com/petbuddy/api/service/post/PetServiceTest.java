@@ -2,8 +2,6 @@ package com.petbuddy.api.service.post;
 
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.Writer;
-import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.User;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;

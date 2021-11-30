@@ -4,7 +4,7 @@ import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Comment;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.Writer;
+import com.petbuddy.api.model.pet.PetOwner;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.User;
 import org.junit.jupiter.api.*;
@@ -55,7 +55,7 @@ class CommentServiceTest {
       postId,
       postWriterId,
       userId,
-      new Comment(userId, postId, new Writer(new Email("test00@gmail.com","user"), "test00"), contents)
+      new Comment(userId, postId, new PetOwner(new Email("test00@gmail.com","user"), "test00"), contents)
     );
     Pet afterPet = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Pet.class, postId));
     assertThat(comment, is(notNullValue()));

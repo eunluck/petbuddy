@@ -1,7 +1,7 @@
 package com.petbuddy.api.controller.post;
 
 import com.petbuddy.api.model.pet.Comment;
-import com.petbuddy.api.model.pet.Writer;
+import com.petbuddy.api.model.pet.PetOwner;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,7 +19,7 @@ public class CommentDto {
   private String contents;
 
   @ApiModelProperty(value = "작성자")
-  private Writer writer;
+  private PetOwner petOwner;
 
   @ApiModelProperty(value = "작성일시", required = true)
   private LocalDateTime createAt;
@@ -27,7 +27,7 @@ public class CommentDto {
   public CommentDto(Comment source) {
     copyProperties(source, this);
 
-    this.writer = source.getWriter().orElse(null);
+    this.petOwner = source.getWriter().orElse(null);
   }
 
   public Long getSeq() {
@@ -46,12 +46,12 @@ public class CommentDto {
     this.contents = contents;
   }
 
-  public Writer getWriter() {
-    return writer;
+  public PetOwner getWriter() {
+    return petOwner;
   }
 
-  public void setWriter(Writer writer) {
-    this.writer = writer;
+  public void setWriter(PetOwner petOwner) {
+    this.petOwner = petOwner;
   }
 
   public LocalDateTime getCreateAt() {
@@ -67,7 +67,7 @@ public class CommentDto {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
       .append("seq", seq)
       .append("contents", contents)
-      .append("writer", writer)
+      .append("writer", petOwner)
       .append("createAt", createAt)
       .toString();
   }
