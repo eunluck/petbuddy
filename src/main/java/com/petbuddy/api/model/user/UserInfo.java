@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -22,13 +21,15 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @NoArgsConstructor
-public class User {
+public class UserInfo {
 
   @Id
   @GeneratedValue
   private Long seq;
 
   private String name;
+  private String gender;
+  private String birth;
 
   @Embedded
   @AttributeOverrides({
@@ -47,15 +48,15 @@ public class User {
   @Column(updatable = false)
   private  LocalDateTime createAt;
 
-  public User(String name, Email email, String password) {
+  public UserInfo(String name, Email email, String password) {
     this(name, email, password, null);
   }
 
-  public User(String name, Email email, String password, String profileImageUrl) {
+  public UserInfo(String name, Email email, String password, String profileImageUrl) {
     this(null, name, email, password, profileImageUrl,  null, null);
   }
 
-  public User(Long seq, String name, Email email, String password, String profileImageUrl,LocalDateTime lastLoginAt, LocalDateTime createAt) {
+  public UserInfo(Long seq, String name, Email email, String password, String profileImageUrl, LocalDateTime lastLoginAt, LocalDateTime createAt) {
     checkArgument(isNotEmpty(name), "name must be provided.");
     checkArgument(
       name.length() >= 1 && name.length() <= 10,
@@ -132,8 +133,8 @@ public class User {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    User user = (User) o;
-    return Objects.equals(seq, user.seq);
+    UserInfo userInfo = (UserInfo) o;
+    return Objects.equals(seq, userInfo.seq);
   }
 
   @Override
@@ -166,13 +167,13 @@ public class User {
 
     public Builder() {}
 
-    public Builder(User user) {
-      this.seq = user.seq;
-      this.name = user.name;
-      this.email = user.email;
-      this.password = user.password;
-      this.lastLoginAt = user.lastLoginAt;
-      this.createAt = user.createAt;
+    public Builder(UserInfo userInfo) {
+      this.seq = userInfo.seq;
+      this.name = userInfo.name;
+      this.email = userInfo.email;
+      this.password = userInfo.password;
+      this.lastLoginAt = userInfo.lastLoginAt;
+      this.createAt = userInfo.createAt;
     }
 
     public Builder seq(Long seq) {
@@ -215,8 +216,8 @@ public class User {
       return this;
     }
 
-    public User build() {
-      return new User(seq, name, email, password, profileImageUrl, lastLoginAt, createAt);
+    public UserInfo build() {
+      return new UserInfo(seq, name, email, password, profileImageUrl, lastLoginAt, createAt);
     }
   }
 

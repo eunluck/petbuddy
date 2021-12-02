@@ -1,25 +1,30 @@
 package com.petbuddy.api.model.user;
 
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 
+@NoArgsConstructor
 public class ConnectedUser {
 
-  private final Long seq;
+  private  Long seq;
 
-  private final String name;
+  private  String name;
 
-  private final Email email;
+  private  Email email;
 
-  private final String profileImageUrl;
+  private  String profileImageUrl;
 
-  private final LocalDateTime grantedAt;
+  private  LocalDateTime grantedAt;
 
   public ConnectedUser(Long seq, String name, Email email, String profileImageUrl, LocalDateTime grantedAt) {
     checkNotNull(seq, "seq must be provided.");

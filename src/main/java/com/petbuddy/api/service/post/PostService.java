@@ -1,10 +1,13 @@
 package com.petbuddy.api.service.post;
 
+import com.petbuddy.api.configure.support.Pageable;
 import com.petbuddy.api.model.commons.Id;
+import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.user.User;
-import com.petbuddy.api.repository.post.PostLikeRepository;
-import com.petbuddy.api.repository.post.PostRepository;
+import com.petbuddy.api.model.user.UserInfo;
+import com.petbuddy.api.repository.post.PetLikeRepository;
+import com.petbuddy.api.repository.post.PetRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +19,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Service
 public class PostService {
 
-  private final PostRepository postRepository;
+  private final PetRepository petRepository;
 
-  private final PostLikeRepository postLikeRepository;
+  private final PetLikeRepository petLikeRepository;
 
-  public PostService(PostRepository postRepository, PostLikeRepository postLikeRepository) {
-    this.postRepository = postRepository;
-    this.postLikeRepository = postLikeRepository;
+  public PostService(PetRepository petRepository, PetLikeRepository petLikeRepository) {
+    this.petRepository = petRepository;
+    this.petLikeRepository = petLikeRepository;
   }
 
   @Transactional
@@ -37,11 +40,12 @@ public class PostService {
   }
 
   @Transactional
-  public Optional<Pet> like(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
+  public Optional<Pet> like(Id<Pet, Long> postId, Id<UserInfo, Long> writerId, Id<UserInfo, Long> userId) {
     return findById(postId, writerId, userId).map(post -> {
       if (!post.isLikesOfMe()) {
         post.incrementAndGetLikes();
-        postLikeRepository.like(userId, postId);
+
+        petLikeRepository.save(new Likes( userId.value(), postId.value()));
         update(post);
       }
       return post;
@@ -49,32 +53,33 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<Pet> findById(Id<Pet, Long> postId, Id<User, Long> writerId, Id<User, Long> userId) {
+  public Optional<Pet> findById(Id<Pet, Long> petId, Id<UserInfo, Long> writerId, Id<UserInfo, Long> userId) {
     checkNotNull(writerId, "writerId must be provided.");
-    checkNotNull(postId, "postId must be provided.");
+    checkNotNull(petId, "postId must be provided.");
     checkNotNull(userId, "userId must be provided.");
 
-    return postRepository.findById(postId, writerId, userId);
+    return petRepository.findById(petId.value());
   }
 
   @Transactional(readOnly = true)
-  public List<Pet> findAll(Id<User, Long> writerId, Id<User, Long> userId, long offset, int limit) {
-    checkNotNull(writerId, "writerId must be provided.");
+  public List<Pet> findAll(Id<UserInfo, Long> userId, PageRequest pageable) {
     checkNotNull(userId, "userId must be provided.");
+    /*
     if (offset < 0)
       offset = 0;
     if (limit < 1 || limit > 5)
       limit = 5;
+*/
 
-    return postRepository.findAll(writerId, userId, offset, limit);
+    return petRepository.findByUserId(userId.value(), pageable);
   }
 
   private Pet insert(Pet pet) {
-    return postRepository.insert(pet);
+    return petRepository.save(pet);
   }
 
   private void update(Pet pet) {
-    postRepository.update(pet);
+    petRepository.save(pet);
   }
 
 }

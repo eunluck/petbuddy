@@ -1,13 +1,15 @@
 package com.petbuddy.api.service.post;
 
+import com.petbuddy.api.configure.support.Pageable;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -29,15 +31,15 @@ class PetServiceTest {
 
   private Id<Pet, Long> postId;
 
-  private Id<User, Long> writerId;
+  private Id<UserInfo, Long> writerId;
 
-  private Id<User, Long> userId;
+  private Id<UserInfo, Long> userId;
 
   @BeforeAll
   void setUp() {
     postId = Id.of(Pet.class, 1L);
-    writerId = Id.of(User.class, 1L);
-    userId = Id.of(User.class, 2L);
+    writerId = Id.of(UserInfo.class, 1L);
+    userId = Id.of(UserInfo.class, 2L);
   }
 
   @Test
@@ -66,7 +68,7 @@ class PetServiceTest {
   @Test
   @Order(3)
   void 포스트_목록을_조회한다() {
-    List<Pet> pets = postService.findAll(writerId, userId, 0, 20);
+    List<Pet> pets = postService.findAll( userId, PageRequest.of(0,20));
     assertThat(pets, is(notNullValue()));
     assertThat(pets.size(), is(4));
   }

@@ -1,15 +1,23 @@
 package com.petbuddy.api.model.notification;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+@Entity
+@Data
+@NoArgsConstructor
 public class Subscription {
 
+    @javax.persistence.Id
+    @GeneratedValue
     private Long seq;
 
     private String notificationEndPoint;
@@ -17,15 +25,15 @@ public class Subscription {
     private String publicKey;
 
     private String auth;
-
-    private Id<User, Long> userId;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "value", column = @Column(name = "user_id")),
+    })
+    private Id<UserInfo, Long> userId;
 
     private LocalDateTime createAt;
 
-    protected Subscription() {
-    }
-
-    public Subscription(Long seq, String notificationEndPoint, String publicKey, String auth, Id<User, Long> userId) {
+    public Subscription(Long seq, String notificationEndPoint, String publicKey, String auth, Id<UserInfo, Long> userId) {
         this.seq = seq;
         this.notificationEndPoint = notificationEndPoint;
         this.publicKey = publicKey;
@@ -38,7 +46,7 @@ public class Subscription {
         return seq;
     }
 
-    public Id<User, Long> getUserId() {
+    public Id<UserInfo, Long> getUserId() {
         return userId;
     }
 
@@ -63,7 +71,7 @@ public class Subscription {
         private String notificationEndPoint;
         private String publicKey;
         private String auth;
-        private Id<User, Long> userId;
+        private Id<UserInfo, Long> userId;
         private LocalDateTime createAt;
 
         public SubscriptionBuilder() {
@@ -98,7 +106,7 @@ public class Subscription {
             return this;
         }
 
-        public SubscriptionBuilder userId(Id<User, Long> userId) {
+        public SubscriptionBuilder userId(Id<UserInfo, Long> userId) {
             this.userId = userId;
             return this;
         }

@@ -8,7 +8,7 @@ import com.petbuddy.api.model.commons.AttachedFile;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.Jwt;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.user.UserService;
@@ -80,7 +80,7 @@ public class UserRestController {
     @ModelAttribute JoinRequest joinRequest,
     @RequestPart(required = false) MultipartFile file
   ) {
-    User user = userService.join(
+    UserInfo userInfo = userService.join(
       joinRequest.getName(),
       new Email(joinRequest.getPrincipal(),joinRequest.getEmailType()),
       joinRequest.getCredentials()
@@ -92,15 +92,15 @@ public class UserRestController {
       ).thenAccept(opt ->
         opt.ifPresent(profileImageUrl ->
           // 이미지가 정상적으로 업로드가 완료된 경우 (profileImageUrl != null)
-          userService.updateProfileImage(Id.of(User.class, user.getSeq()), profileImageUrl)
+          userService.updateProfileImage(Id.of(UserInfo.class, userInfo.getSeq()), profileImageUrl)
         )
       )
     );
 
     // supplyAsync 실행 완료 여부와 관계 없이 리턴한다.
-    String apiToken = user.newApiToken(jwt, new String[]{Role.USER.value()});
+    String apiToken = userInfo.newApiToken(jwt, new String[]{Role.USER.value()});
     return ApiResult.OK(
-      new JoinResult(apiToken, user)
+      new JoinResult(apiToken, userInfo)
     );
   }
 
@@ -110,17 +110,7 @@ public class UserRestController {
     return ApiResult.OK(
       userService.findById(authentication.id)
         .map(UserDto::new)
-        .orElseThrow(() -> new NotFoundException(User.class, authentication.id))
-    );
-  }
-
-  @GetMapping(path = "user/connections")
-  @ApiOperation(value = "내 친구 목록")
-  public ApiResult<List<ConnectedUserDto>> connections(@AuthenticationPrincipal JwtAuthentication authentication) {
-    return ApiResult.OK(
-      userService.findAllConnectedUser(authentication.id).stream()
-        .map(ConnectedUserDto::new)
-        .collect(toList())
+        .orElseThrow(() -> new NotFoundException(UserInfo.class, authentication.id))
     );
   }
 

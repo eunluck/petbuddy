@@ -1,17 +1,22 @@
 package com.petbuddy.api.model.commons;
 
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Embeddable;
+import javax.persistence.IdClass;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Embeddable
+@NoArgsConstructor
 public class Id<R, V> {
 
-  private final Class<R> reference;
+  private Class<R> reference;
 
-  private final V value;
+  private V value;
 
   private Id(Class<R> reference, V value) {
     this.reference = reference;

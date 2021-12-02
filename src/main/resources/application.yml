@@ -1,18 +1,40 @@
 spring:
   profiles:
     active: local
----
 
+---
 spring:
   profiles:
     group:
-      "local": "common"
+      "local": "local,common"
+
+---
+spring:
+  profiles:
+    group:
+      "dev": "dev,common"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
+  datasource:
+    url: jdbc:postgresql://172.31.232.230:5432/petbuddy_local
+    username: petbuddy
+    password: "0694123"
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8101
 
 ---
 
+
 spring:
-  datasource:
-    url: jdbc:postgresql://3.38.93.96:5432/petbuddydev
   config:
     activate:
       on-profile: "common"
@@ -22,16 +44,6 @@ spring:
     basename: i18n/messages
     encoding: UTF-8
     cache-duration: PT1H
-  jpa:
-    database: postgresql
-
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
-
-server:
-  port: 8080
 jwt:
   token:
     header: api_key

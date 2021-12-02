@@ -1,18 +1,15 @@
 package com.petbuddy.api.model.pet;
 
-import com.petbuddy.api.model.Auditable;
 import com.petbuddy.api.model.MyEntityListener;
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -26,8 +23,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Data
 @NoArgsConstructor
 @EntityListeners(MyEntityListener.class)
+@Entity
 public class Pet {
 
+  @javax.persistence.Id
+  @GeneratedValue
   private Long seq;
   private String petName;
   private int petAge;
@@ -37,7 +37,10 @@ public class Pet {
   private int likes;
   @Transient
   private boolean likesOfMe;
-  private Id<User, Long> userId;
+  @AttributeOverrides({
+          @AttributeOverride(name = "value", column = @Column(name = "user_id")),
+  })
+  private Id<UserInfo, Long> userId;
 
   @CreatedDate
   @Column(updatable = false)
@@ -45,13 +48,15 @@ public class Pet {
   @LastModifiedDate
   private  LocalDateTime updatedAt;
 
-  public Pet(Id<User, Long> userId, String petIntroduce) {
-    this(null, userId, petIntroduce, 0, false, null);
+  public Pet(Id<UserInfo, Long> userId, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
+    this(null, userId, petIntroduce, petGender, petAge, neuteringYn, 0, false,null);
   }
   @Builder
-  public Pet(Long seq, Id<User, Long> userId, String petIntroduce, int likes, boolean likesOfMe, LocalDateTime createdAt) {
+  public Pet(Long seq, Id<UserInfo, Long> userId, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe, LocalDateTime createdAt) {
     checkNotNull(userId, "userId must be provided.");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
+    checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
+    checkArgument(isNotEmpty(petGender) && petGender.equals("male") || petGender.equals("female"), "contents must be provided and 'male' or 'female'");
     checkArgument(
             petIntroduce.length() >= 4 && petIntroduce.length() <= 500,
       "post contents length must be between 4 and 500 characters."
@@ -60,6 +65,9 @@ public class Pet {
     this.seq = seq;
     this.userId = userId;
     this.petIntroduce = petIntroduce;
+    this.petGender = petGender;
+    this.petAge = petAge;
+    this.neuteringYn = neuteringYn;
     this.likes = likes;
     this.likesOfMe = likesOfMe;
     this.createdAt = defaultIfNull(createdAt, now());

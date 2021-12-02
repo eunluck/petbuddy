@@ -2,7 +2,7 @@ package com.petbuddy.api.configure;
 
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.*;
 import com.petbuddy.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         /* url에서 targetId를 추출하기 위해 정규식 처리 */
         Matcher matcher = pattern.matcher(url);
         long id = matcher.find() ? toLong(matcher.group(1), -1) : -1;
-        return Id.of(User.class, id);
+        return Id.of(UserInfo.class, id);
       }
     );
   }

@@ -1,6 +1,6 @@
 package com.petbuddy.api.controller.user;
 
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,29 +13,29 @@ public class JoinResult {
   private final String apiToken;
 
   @ApiModelProperty(value = "사용자 정보", required = true)
-  private final User user;
+  private final UserInfo userInfo;
 
-  public JoinResult(String apiToken, User user) {
+  public JoinResult(String apiToken, UserInfo userInfo) {
     checkNotNull(apiToken, "apiToken must be provided.");
-    checkNotNull(user, "user must be provided.");
+    checkNotNull(userInfo, "user must be provided.");
 
     this.apiToken = apiToken;
-    this.user = user;
+    this.userInfo = userInfo;
   }
 
   public String getApiToken() {
     return apiToken;
   }
 
-  public User getUser() {
-    return user;
+  public UserInfo getUserInfo() {
+    return userInfo;
   }
 
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
       .append("apiToken", apiToken)
-      .append("user", user)
+      .append("user", userInfo)
       .toString();
   }
 

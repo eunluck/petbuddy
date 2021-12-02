@@ -113,6 +113,8 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
           String scheme = parts[0];
           String credentials = parts[1];
           return BEARER.matcher(scheme).matches() ? credentials : null;
+        } else if (parts.length == 1){
+          return parts[0];
         }
       } catch (UnsupportedEncodingException e) {
         log.error(e.getMessage(), e);

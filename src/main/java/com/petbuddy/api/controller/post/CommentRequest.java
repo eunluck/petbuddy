@@ -4,7 +4,7 @@ import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Comment;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.pet.PetOwner;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,7 +20,7 @@ public class CommentRequest {
     return contents;
   }
 
-  public Comment newComment(Id<User, Long> userId, Id<Pet, Long> postId, PetOwner petOwner) {
+  public Comment newComment(Id<UserInfo, Long> userId, Id<Pet, Long> postId, PetOwner petOwner) {
     return new Comment(userId, postId, petOwner, contents);
   }
 

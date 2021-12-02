@@ -3,7 +3,7 @@ package com.petbuddy.api.security;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.user.UserService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -35,14 +35,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   private Authentication processUserAuthentication(AuthenticationRequest request) {
     try {
-      User user = userService.login(new Email(request.getPrincipal(),"user"), request.getCredentials());
+      UserInfo userInfo = userService.login(new Email(request.getPrincipal(),"user"), request.getCredentials());
       JwtAuthenticationToken authenticated =
         new JwtAuthenticationToken(
-          new JwtAuthentication(user.getSeq(), user.getName(), user.getEmail()),
+          new JwtAuthentication(userInfo.getSeq(), userInfo.getName(), userInfo.getEmail()),
           null,
           AuthorityUtils.createAuthorityList(Role.USER.value()));
-      String apiToken = user.newApiToken(jwt, new String[]{Role.USER.value()});
-      authenticated.setDetails(new AuthenticationResult(apiToken, user));
+      String apiToken = userInfo.newApiToken(jwt, new String[]{Role.USER.value()});
+      authenticated.setDetails(new AuthenticationResult(apiToken, userInfo));
       return authenticated;
     } catch (NotFoundException e) {
       throw new UsernameNotFoundException(e.getMessage());

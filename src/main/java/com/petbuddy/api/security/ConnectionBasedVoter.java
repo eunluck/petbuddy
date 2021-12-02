@@ -1,7 +1,7 @@
 package com.petbuddy.api.security;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -22,11 +22,11 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
 
   private final RequestMatcher requiresAuthorizationRequestMatcher;
 
-  private final Function<String, Id<User, Long>> idExtractor;
+  private final Function<String, Id<UserInfo, Long>> idExtractor;
 
   private UserService userService;
 
-  public ConnectionBasedVoter(RequestMatcher requiresAuthorizationRequestMatcher, Function<String, Id<User, Long>> idExtractor) {
+  public ConnectionBasedVoter(RequestMatcher requiresAuthorizationRequestMatcher, Function<String, Id<UserInfo, Long>> idExtractor) {
     checkNotNull(requiresAuthorizationRequestMatcher, "requiresAuthorizationRequestMatcher must be provided.");
     checkNotNull(idExtractor, "idExtractor must be provided.");
 
@@ -47,7 +47,7 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
     }
 
     JwtAuthentication jwtAuth = (JwtAuthentication) authentication.getPrincipal();
-    Id<User, Long> targetId = obtainTargetId(request);
+    Id<UserInfo, Long> targetId = obtainTargetId(request);
 
     // 본인 자신
     if (jwtAuth.id.equals(targetId)) {
@@ -55,10 +55,10 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
     }
 
     // 친구IDs 조회 후 targetId가 포함되는지 확인한다.
-    List<Id<User, Long>> connectedIds = userService.findConnectedIds(jwtAuth.id);
+    /*List<Id<UserInfo, Long>> connectedIds = userService.findConnectedIds(jwtAuth.id);
     if (connectedIds.contains(targetId)) {
       return ACCESS_GRANTED;
-    }
+    }*/
 
     return ACCESS_DENIED;
   }
@@ -67,7 +67,7 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
     return requiresAuthorizationRequestMatcher.matches(request);
   }
 
-  private Id<User, Long> obtainTargetId(HttpServletRequest request) {
+  private Id<UserInfo, Long> obtainTargetId(HttpServletRequest request) {
     return idExtractor.apply(request.getRequestURI());
   }
 

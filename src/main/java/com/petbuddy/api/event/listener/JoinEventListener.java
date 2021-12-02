@@ -3,7 +3,7 @@ package com.petbuddy.api.event.listener;
 import com.petbuddy.api.event.JoinEvent;
 import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.notification.PushMessage;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.notification.NotificationService;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -31,7 +31,7 @@ public class JoinEventListener implements AutoCloseable {
   @Subscribe
   public void handleJoinEvent(JoinEvent event) {
     String name = event.getName();
-    Id<User, Long> userId = event.getUserId();
+    Id<UserInfo, Long> userId = event.getUserId();
     log.info("user {}, userId {} joined!", name, userId);
 
     try {

@@ -3,7 +3,7 @@ package com.petbuddy.api.service.notification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petbuddy.api.model.notification.PushMessage;
 import com.petbuddy.api.model.notification.Subscription;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.subscription.SubscriptionRepository;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
@@ -40,11 +40,11 @@ public class NotificationService {
         return subscriptionRepository.save(subscription);
     }
 
-    public PushMessage notifyUser(User user, PushMessage message) throws Exception {
-        Optional<Subscription> maybeSubscription = subscriptionRepository.findByUserSeq(user.getSeq());
+    public PushMessage notifyUser(UserInfo userInfo, PushMessage message) throws Exception {
+        Optional<Subscription> maybeSubscription = subscriptionRepository.findByUserId(userInfo.getSeq());
 
         if (!maybeSubscription.isPresent()) {
-            log.info("Can not send message to user {} because not found any subscription", user);
+            log.info("Can not send message to user {} because not found any subscription", userInfo);
             return null;
         }
 

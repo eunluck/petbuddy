@@ -1,7 +1,7 @@
 package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,7 +20,7 @@ public class Comment {
 
   private final Long seq;
 
-  private final Id<User, Long> userId;
+  private final Id<UserInfo, Long> userId;
 
   private final Id<Pet, Long> postId;
 
@@ -30,11 +30,11 @@ public class Comment {
 
   private final LocalDateTime createAt;
 
-  public Comment(Id<User, Long> userId, Id<Pet, Long> postId, PetOwner petOwner, String contents) {
+  public Comment(Id<UserInfo, Long> userId, Id<Pet, Long> postId, PetOwner petOwner, String contents) {
     this(null, userId, postId, contents, petOwner, null);
   }
 
-  public Comment(Long seq, Id<User, Long> userId, Id<Pet, Long> postId, String contents, PetOwner petOwner, LocalDateTime createAt) {
+  public Comment(Long seq, Id<UserInfo, Long> userId, Id<Pet, Long> postId, String contents, PetOwner petOwner, LocalDateTime createAt) {
     checkNotNull(userId, "userId must be provided.");
     checkNotNull(postId, "postId must be provided.");
     checkArgument(isNotEmpty(contents), "contents must be provided.");
@@ -65,7 +65,7 @@ public class Comment {
     return seq;
   }
 
-  public Id<User, Long> getUserId() {
+  public Id<UserInfo, Long> getUserId() {
     return userId;
   }
 
@@ -112,7 +112,7 @@ public class Comment {
 
   static public class Builder {
     private Long seq;
-    private Id<User, Long> userId;
+    private Id<UserInfo, Long> userId;
     private Id<Pet, Long> postId;
     private String contents;
     private PetOwner petOwner;
@@ -134,7 +134,7 @@ public class Comment {
       return this;
     }
 
-    public Builder userId(Id<User, Long> userId) {
+    public Builder userId(Id<UserInfo, Long> userId) {
       this.userId = userId;
       return this;
     }

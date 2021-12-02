@@ -19,7 +19,7 @@ public class AuthenticationResultDto {
   public AuthenticationResultDto(AuthenticationResult source) {
     copyProperties(source, this);
 
-    this.user = new UserDto(source.getUser());
+    this.user = new UserDto(source.getUserInfo());
   }
 
   public String getApiToken() {

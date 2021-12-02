@@ -1,7 +1,7 @@
 package com.petbuddy.api.controller.user;
 
 import com.petbuddy.api.model.user.Email;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -33,7 +33,7 @@ public class UserDto {
   @ApiModelProperty(value = "생성일시", required = true)
   private LocalDateTime createAt;
 
-  public UserDto(User source) {
+  public UserDto(UserInfo source) {
     copyProperties(source, this);
 
     this.profileImageUrl = source.getProfileImageUrl().orElse(null);
