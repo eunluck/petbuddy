@@ -46,7 +46,9 @@ class PetServiceTest {
   @Order(1)
   void 포스트를_작성한다() {
     String contents = randomAlphabetic(40);
-    Pet pet = postService.write(new Pet(writerId, contents));
+    String male = ("male");
+
+    Pet pet = postService.write(new Pet(writerId, male,1,false,contents));
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getSeq(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));
