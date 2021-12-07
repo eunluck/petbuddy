@@ -1,7 +1,5 @@
 package com.petbuddy.api.repository.user;
 
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.ConnectedUser;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;

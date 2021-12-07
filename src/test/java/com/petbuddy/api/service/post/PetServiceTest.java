@@ -1,7 +1,5 @@
 package com.petbuddy.api.service.post;
 
-import com.petbuddy.api.configure.support.Pageable;
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.UserInfo;
 import org.junit.jupiter.api.*;
@@ -29,26 +27,25 @@ class PetServiceTest {
 
   @Autowired private PostService postService;
 
-  private Id<Pet, Long> postId;
+  private Long petId;
 
-  private Id<UserInfo, Long> writerId;
+  private Long writerId;
 
-  private Id<UserInfo, Long> userId;
+  private Long userId;
 
   @BeforeAll
   void setUp() {
-    postId = Id.of(Pet.class, 1L);
-    writerId = Id.of(UserInfo.class, 1L);
-    userId = Id.of(UserInfo.class, 2L);
+    petId =  1L;
+    writerId =  1L;
+    userId =  2L;
   }
-
   @Test
   @Order(1)
   void 포스트를_작성한다() {
     String contents = randomAlphabetic(40);
     String male = ("male");
 
-    Pet pet = postService.write(new Pet(writerId, male,1,false,contents));
+    Pet pet = postService.write(new Pet(writerId,"삐삐", male,1,false,contents));
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getSeq(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));
@@ -58,7 +55,7 @@ class PetServiceTest {
   @Test
   @Order(2)
   void 포스트를_수정한다() {
-    Pet pet = postService.findById(postId, writerId, userId).orElse(null);
+    Pet pet = postService.findById(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     String petIntroduce = randomAlphabetic(40);
     pet.modifyPetIntroduce(petIntroduce);
@@ -70,7 +67,7 @@ class PetServiceTest {
   @Test
   @Order(3)
   void 포스트_목록을_조회한다() {
-    List<Pet> pets = postService.findAll( userId, PageRequest.of(0,20));
+    List<Pet> pets = postService.findAll( userId);
     assertThat(pets, is(notNullValue()));
     assertThat(pets.size(), is(4));
   }
@@ -80,13 +77,13 @@ class PetServiceTest {
   void 포스트를_처음으로_좋아한다() {
     Pet pet;
 
-    pet = postService.findById(postId, writerId, userId).orElse(null);
+    pet = postService.findById(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(false));
 
     int beforeLikes = pet.getLikes();
 
-    pet = postService.like(postId, writerId, userId).orElse(null);
+    pet = postService.like(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes + 1));
@@ -97,13 +94,13 @@ class PetServiceTest {
   void 포스트를_중복으로_좋아할수없다() {
     Pet pet;
 
-    pet = postService.findById(postId, writerId, userId).orElse(null);
+    pet = postService.findById(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
 
     int beforeLikes = pet.getLikes();
 
-    pet = postService.like(postId, writerId, userId).orElse(null);
+    pet = postService.like(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));

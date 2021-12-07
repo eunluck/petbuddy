@@ -1,7 +1,5 @@
 package com.petbuddy.api.service.post;
 
-import com.petbuddy.api.configure.support.Pageable;
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.UserInfo;
@@ -40,12 +38,12 @@ public class PostService {
   }
 
   @Transactional
-  public Optional<Pet> like(Id<Pet, Long> postId, Id<UserInfo, Long> writerId, Id<UserInfo, Long> userId) {
-    return findById(postId, writerId, userId).map(post -> {
+  public Optional<Pet> like(Long petId, Long writerId, Long userId) {
+    return findById(petId, writerId, userId).map(post -> {
       if (!post.isLikesOfMe()) {
         post.incrementAndGetLikes();
 
-        petLikeRepository.save(new Likes( userId.value(), postId.value()));
+        petLikeRepository.save(new Likes( userId, petId));
         update(post);
       }
       return post;
@@ -53,16 +51,16 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<Pet> findById(Id<Pet, Long> petId, Id<UserInfo, Long> writerId, Id<UserInfo, Long> userId) {
+  public Optional<Pet> findById( Long petId,Long writerId,  Long userId) {
     checkNotNull(writerId, "writerId must be provided.");
     checkNotNull(petId, "postId must be provided.");
     checkNotNull(userId, "userId must be provided.");
 
-    return petRepository.findById(petId.value());
+    return petRepository.findById(petId);
   }
 
   @Transactional(readOnly = true)
-  public List<Pet> findAll(Id<UserInfo, Long> userId, PageRequest pageable) {
+  public List<Pet> findAll( Long userId) {
     checkNotNull(userId, "userId must be provided.");
     /*
     if (offset < 0)
@@ -71,7 +69,7 @@ public class PostService {
       limit = 5;
 */
 
-    return petRepository.findByUserId(userId.value(), pageable);
+    return petRepository.findByUserId(userId);
   }
 
   private Pet insert(Pet pet) {

@@ -1,8 +1,6 @@
 package com.petbuddy.api.controller.post;
 
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.user.UserInfo;
 import io.swagger.annotations.ApiModelProperty;
 
 public class RegisterPetRequest {
@@ -21,8 +19,8 @@ public class RegisterPetRequest {
   protected RegisterPetRequest() {}
 
 
-  public Pet newPet(Id<UserInfo, Long> userId) {
-    return new Pet(userId,petGender,petAge,neuteringYn,  petIntroduce);
+  public Pet newPet(Long userId) {
+    return new Pet(userId,petName,petGender,petAge,neuteringYn,  petIntroduce);
   }
 
 

@@ -1,7 +1,5 @@
 package com.petbuddy.api.service.user;
 
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.ConnectedUser;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import org.junit.jupiter.api.*;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

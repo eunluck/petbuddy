@@ -2,8 +2,6 @@ package com.petbuddy.api.service.user;
 
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.event.JoinEvent;
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.ConnectedUser;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.user.UserRepository;
@@ -13,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -64,7 +61,7 @@ public class UserService {
   }
 
   @Transactional
-  public UserInfo updateProfileImage(Id<UserInfo, Long> userId, String profileImageUrl) {
+  public UserInfo updateProfileImage( Long userId, String profileImageUrl) {
     UserInfo userInfo = findById(userId)
       .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
     userInfo.updateProfileImage(profileImageUrl);
@@ -73,10 +70,10 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<UserInfo> findById(Id<UserInfo, Long> userId) {
+  public Optional<UserInfo> findById( Long userId) {
     checkNotNull(userId, "userId must be provided.");
 
-    return userRepository.findById(userId.value());
+    return userRepository.findById(userId);
   }
 
   @Transactional(readOnly = true)

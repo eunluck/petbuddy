@@ -1,7 +1,5 @@
 package com.petbuddy.api.security;
 
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -12,7 +10,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,11 +19,11 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
 
   private final RequestMatcher requiresAuthorizationRequestMatcher;
 
-  private final Function<String, Id<UserInfo, Long>> idExtractor;
+  private final Function<String,  Long> idExtractor;
 
   private UserService userService;
 
-  public ConnectionBasedVoter(RequestMatcher requiresAuthorizationRequestMatcher, Function<String, Id<UserInfo, Long>> idExtractor) {
+  public ConnectionBasedVoter(RequestMatcher requiresAuthorizationRequestMatcher, Function<String,  Long> idExtractor) {
     checkNotNull(requiresAuthorizationRequestMatcher, "requiresAuthorizationRequestMatcher must be provided.");
     checkNotNull(idExtractor, "idExtractor must be provided.");
 
@@ -47,7 +44,7 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
     }
 
     JwtAuthentication jwtAuth = (JwtAuthentication) authentication.getPrincipal();
-    Id<UserInfo, Long> targetId = obtainTargetId(request);
+    Long targetId = obtainTargetId(request);
 
     // 본인 자신
     if (jwtAuth.id.equals(targetId)) {
@@ -67,7 +64,7 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
     return requiresAuthorizationRequestMatcher.matches(request);
   }
 
-  private Id<UserInfo, Long> obtainTargetId(HttpServletRequest request) {
+  private  Long obtainTargetId(HttpServletRequest request) {
     return idExtractor.apply(request.getRequestURI());
   }
 

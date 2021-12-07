@@ -5,7 +5,6 @@ import com.petbuddy.api.aws.S3Client;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.AttachedFile;
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
 import com.petbuddy.api.model.user.UserInfo;
@@ -22,14 +21,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.petbuddy.api.model.commons.AttachedFile.toAttachedFile;
 import static java.util.Optional.ofNullable;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("api")
@@ -92,7 +89,7 @@ public class UserRestController {
       ).thenAccept(opt ->
         opt.ifPresent(profileImageUrl ->
           // 이미지가 정상적으로 업로드가 완료된 경우 (profileImageUrl != null)
-          userService.updateProfileImage(Id.of(UserInfo.class, userInfo.getSeq()), profileImageUrl)
+          userService.updateProfileImage(userInfo.getSeq(), profileImageUrl)
         )
       )
     );

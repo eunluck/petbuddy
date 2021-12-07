@@ -1,8 +1,6 @@
 package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.MyEntityListener;
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.UserInfo;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,23 +35,20 @@ public class Pet {
   private int likes;
   @Transient
   private boolean likesOfMe;
-  @AttributeOverrides({
-          @AttributeOverride(name = "value", column = @Column(name = "user_id")),
-  })
-  private Id<UserInfo, Long> userId;
-
+  private Long userId;
   @CreatedDate
   @Column(updatable = false)
   private  LocalDateTime createdAt;
   @LastModifiedDate
   private  LocalDateTime updatedAt;
 
-  public Pet(Id<UserInfo, Long> userId, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
-    this(null, userId, petIntroduce, petGender, petAge, neuteringYn, 0, false,null);
+  public Pet(Long userId,String petName, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
+    this(null, userId, petIntroduce,petName, petGender, petAge, neuteringYn, 0, false,null);
   }
   @Builder
-  public Pet(Long seq, Id<UserInfo, Long> userId, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe, LocalDateTime createdAt) {
+  public Pet(Long seq, Long userId, String petName, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe, LocalDateTime createdAt) {
     checkNotNull(userId, "userId must be provided.");
+    checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
     checkArgument(isNotEmpty(petGender) && petGender.equals("male") || petGender.equals("female"), "contents must be provided and 'male' or 'female'");
@@ -66,6 +61,7 @@ public class Pet {
     this.userId = userId;
     this.petIntroduce = petIntroduce;
     this.petGender = petGender;
+    this.petName = petName;
     this.petAge = petAge;
     this.neuteringYn = neuteringYn;
     this.likes = likes;

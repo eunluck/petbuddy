@@ -1,7 +1,5 @@
 package com.petbuddy.api.model.notification;
 
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.UserInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,15 +23,12 @@ public class Subscription {
     private String publicKey;
 
     private String auth;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "value", column = @Column(name = "user_id")),
-    })
-    private Id<UserInfo, Long> userId;
+
+    private Long userId;
 
     private LocalDateTime createAt;
 
-    public Subscription(Long seq, String notificationEndPoint, String publicKey, String auth, Id<UserInfo, Long> userId) {
+    public Subscription(Long seq, String notificationEndPoint, String publicKey, String auth,  Long userId) {
         this.seq = seq;
         this.notificationEndPoint = notificationEndPoint;
         this.publicKey = publicKey;
@@ -46,7 +41,7 @@ public class Subscription {
         return seq;
     }
 
-    public Id<UserInfo, Long> getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -71,7 +66,7 @@ public class Subscription {
         private String notificationEndPoint;
         private String publicKey;
         private String auth;
-        private Id<UserInfo, Long> userId;
+        private Long userId;
         private LocalDateTime createAt;
 
         public SubscriptionBuilder() {
@@ -106,7 +101,7 @@ public class Subscription {
             return this;
         }
 
-        public SubscriptionBuilder userId(Id<UserInfo, Long> userId) {
+        public SubscriptionBuilder userId( Long userId) {
             this.userId = userId;
             return this;
         }
