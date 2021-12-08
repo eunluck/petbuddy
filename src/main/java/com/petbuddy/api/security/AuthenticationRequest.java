@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class AuthenticationRequest {
 
   private String principal;
-  private String principalType;
 
   private String credentials;
 

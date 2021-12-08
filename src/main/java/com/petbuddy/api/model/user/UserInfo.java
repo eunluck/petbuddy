@@ -1,7 +1,11 @@
 package com.petbuddy.api.model.user;
 
+import com.petbuddy.api.model.BaseEntity;
 import com.petbuddy.api.security.Jwt;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,12 +25,14 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @NoArgsConstructor
-public class UserInfo {
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class UserInfo extends BaseEntity {
 
   @Id
   @GeneratedValue
   private Long seq;
-
   private String name;
   private String gender;
   private String birth;
@@ -36,27 +42,30 @@ public class UserInfo {
           @AttributeOverride(name = "address", column = @Column(name = "email")),
           @AttributeOverride(name = "emailType", column = @Column(name = "email_type"))
   })
-  private Email email;
 
+  private Email email;
+  @Embedded
+  @AttributeOverrides({
+          @AttributeOverride(name = "addressJb", column = @Column(name = "address_jb")),
+          @AttributeOverride(name = "addressSt", column = @Column(name = "address_st")),
+          @AttributeOverride(name = "addressEtc", column = @Column(name = "address_etc"))
+  })
+  private Address address;
   private String password;
 
   private String profileImageUrl;
 
   private LocalDateTime lastLoginAt;
 
-  @CreatedDate
-  @Column(updatable = false)
-  private  LocalDateTime createAt;
-
   public UserInfo(String name, Email email, String password) {
     this(name, email, password, null);
   }
 
   public UserInfo(String name, Email email, String password, String profileImageUrl) {
-    this(null, name, email, password, profileImageUrl,  null, null);
+    this(null, name, email, password, profileImageUrl,  null );
   }
 
-  public UserInfo(Long seq, String name, Email email, String password, String profileImageUrl, LocalDateTime lastLoginAt, LocalDateTime createAt) {
+  public UserInfo(Long seq, String name, Email email, String password, String profileImageUrl, LocalDateTime lastLoginAt) {
     checkArgument(isNotEmpty(name), "name must be provided.");
     checkArgument(
       name.length() >= 1 && name.length() <= 10,
@@ -75,7 +84,6 @@ public class UserInfo {
     this.password = password;
     this.profileImageUrl = profileImageUrl;
     this.lastLoginAt = lastLoginAt;
-    this.createAt = defaultIfNull(createAt, now());
   }
 
   public void login(PasswordEncoder passwordEncoder, String credentials) {
@@ -125,9 +133,6 @@ public class UserInfo {
     return ofNullable(lastLoginAt);
   }
 
-  public LocalDateTime getCreateAt() {
-    return createAt;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -151,7 +156,6 @@ public class UserInfo {
       .append("password", "[PROTECTED]")
       .append("profileImageUrl", profileImageUrl)
       .append("lastLoginAt", lastLoginAt)
-      .append("createAt", createAt)
       .toString();
   }
 
@@ -173,7 +177,6 @@ public class UserInfo {
       this.email = userInfo.email;
       this.password = userInfo.password;
       this.lastLoginAt = userInfo.lastLoginAt;
-      this.createAt = userInfo.createAt;
     }
 
     public Builder seq(Long seq) {
@@ -217,7 +220,7 @@ public class UserInfo {
     }
 
     public UserInfo build() {
-      return new UserInfo(seq, name, email, password, profileImageUrl, lastLoginAt, createAt);
+      return new UserInfo(seq, name, email, password, profileImageUrl, lastLoginAt);
     }
   }
 

@@ -20,6 +20,7 @@ public class Email {
 
   @ApiModelProperty(value = "메일주소", required = true)
   private String address;
+  @ApiModelProperty(value = "메일 타입(user or snsName)", required = true)
   private String emailType;
 
   public Email(String address,String emailType) {
