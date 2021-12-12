@@ -56,7 +56,7 @@ public class PostService {
     checkNotNull(petId, "postId must be provided.");
     checkNotNull(userId, "userId must be provided.");
 
-    return petRepository.findById(petId);
+    return petRepository.findBySeq(petId);
   }
 
   @Transactional(readOnly = true)
@@ -69,7 +69,7 @@ public class PostService {
       limit = 5;
 */
 
-    return petRepository.findByUserId(userId);
+    return petRepository.findByUserSeq(userId);
   }
 
   private Pet insert(Pet pet) {

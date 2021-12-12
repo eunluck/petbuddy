@@ -73,7 +73,7 @@ public class UserService {
   public Optional<UserInfo> findById( Long userId) {
     checkNotNull(userId, "userId must be provided.");
 
-    return userRepository.findById(userId);
+    return userRepository.findBySeq(userId);
   }
 
   @Transactional(readOnly = true)

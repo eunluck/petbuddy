@@ -5,8 +5,10 @@ import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.post.PostService;
+import com.petbuddy.api.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +17,12 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api")
 public class PostRestController {
 
   private final PostService postService;
-
-  public PostRestController(PostService postService) {
-    this.postService = postService;
-  }
+  private final UserService userService;
 
   @PostMapping(path = "pet")
   @ApiOperation(value = "강아지 등록")
@@ -30,10 +30,11 @@ public class PostRestController {
     @AuthenticationPrincipal JwtAuthentication authentication,
     @RequestBody RegisterPetRequest request
   ) {
+
     return ApiResult.OK(
       new PetDto(
         postService.write(
-          request.newPet(authentication.id)
+          request.newPet(userService.findById(authentication.id).orElseThrow(RuntimeException::new))
         )
       )
     );

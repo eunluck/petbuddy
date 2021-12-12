@@ -20,7 +20,7 @@ spring:
     activate:
       on-profile: "local"
   datasource:
-    url: jdbc:postgresql://172.25.59.61:5432/petbuddy_local
+    url: jdbc:postgresql://localhost:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:

@@ -1,6 +1,8 @@
 package com.petbuddy.api.model.user;
 
+import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.model.BaseEntity;
+import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,13 +39,11 @@ public class UserInfo extends BaseEntity {
   private String name;
   private String gender;
   private String birth;
-
   @Embedded
   @AttributeOverrides({
           @AttributeOverride(name = "address", column = @Column(name = "email")),
           @AttributeOverride(name = "emailType", column = @Column(name = "email_type"))
   })
-
   private Email email;
   @Embedded
   @AttributeOverrides({
@@ -52,10 +53,11 @@ public class UserInfo extends BaseEntity {
   })
   private Address address;
   private String password;
-
   private String profileImageUrl;
-
   private LocalDateTime lastLoginAt;
+
+  @OneToMany
+  private List<Pet> pets = Lists.newArrayList();
 
   public UserInfo(String name, Email email, String password) {
     this(name, email, password, null);
@@ -109,21 +111,6 @@ public class UserInfo extends BaseEntity {
     this.profileImageUrl = profileImageUrl;
   }
 
-  public Long getSeq() {
-    return seq;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Email getEmail() {
-    return email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
 
   public Optional<String> getProfileImageUrl() {
     return ofNullable(profileImageUrl);
@@ -134,94 +121,5 @@ public class UserInfo extends BaseEntity {
   }
 
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    UserInfo userInfo = (UserInfo) o;
-    return Objects.equals(seq, userInfo.seq);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(seq);
-  }
-
-  @Override
-  public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
-      .append("name", name)
-      .append("email", email)
-      .append("password", "[PROTECTED]")
-      .append("profileImageUrl", profileImageUrl)
-      .append("lastLoginAt", lastLoginAt)
-      .toString();
-  }
-
-  static public class Builder {
-    private Long seq;
-    private String name;
-    private Email email;
-    private String password;
-    private String profileImageUrl;
-    private int loginCount;
-    private LocalDateTime lastLoginAt;
-    private LocalDateTime createAt;
-
-    public Builder() {}
-
-    public Builder(UserInfo userInfo) {
-      this.seq = userInfo.seq;
-      this.name = userInfo.name;
-      this.email = userInfo.email;
-      this.password = userInfo.password;
-      this.lastLoginAt = userInfo.lastLoginAt;
-    }
-
-    public Builder seq(Long seq) {
-      this.seq = seq;
-      return this;
-    }
-
-    public Builder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public Builder email(Email email) {
-      this.email = email;
-      return this;
-    }
-
-    public Builder password(String password) {
-      this.password = password;
-      return this;
-    }
-
-    public Builder profileImageUrl(String profileImageUrl) {
-      this.profileImageUrl = profileImageUrl;
-      return this;
-    }
-
-    public Builder loginCount(int loginCount) {
-      this.loginCount = loginCount;
-      return this;
-    }
-
-    public Builder lastLoginAt(LocalDateTime lastLoginAt) {
-      this.lastLoginAt = lastLoginAt;
-      return this;
-    }
-
-    public Builder createAt(LocalDateTime createAt) {
-      this.createAt = createAt;
-      return this;
-    }
-
-    public UserInfo build() {
-      return new UserInfo(seq, name, email, password, profileImageUrl, lastLoginAt);
-    }
-  }
 
 }

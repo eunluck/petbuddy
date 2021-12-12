@@ -1,6 +1,7 @@
 package com.petbuddy.api.service.post;
 
 import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ class PetServiceTest {
     String contents = randomAlphabetic(40);
     String male = ("male");
 
-    Pet pet = postService.write(new Pet(writerId,"삐삐", male,1,false,contents));
+    Pet pet = postService.write(new Pet(new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123"),"삐삐", male,1,false,contents));
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getSeq(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));

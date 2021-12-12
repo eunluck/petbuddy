@@ -12,7 +12,8 @@ public interface PetRepository extends JpaRepository<Pet,Long> {
 
 
   Optional<Pet> findById( Long petId);
+  Optional<Pet> findBySeq( Long petId);
 
-  List<Pet> findByUserId(Long userId);
+  List<Pet> findByUserSeq(Long userId);
 
 }

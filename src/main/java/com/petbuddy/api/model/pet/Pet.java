@@ -1,10 +1,9 @@
 package com.petbuddy.api.model.pet;
 
+import com.petbuddy.api.model.BaseEntity;
 import com.petbuddy.api.model.MyEntityListener;
 import com.petbuddy.api.model.user.UserInfo;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -21,11 +20,12 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Data
 @NoArgsConstructor
-@EntityListeners(MyEntityListener.class)
 @Entity
-public class Pet {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class Pet extends BaseEntity {
 
-  @javax.persistence.Id
+  @Id
   @GeneratedValue
   private Long seq;
   private String petName;
@@ -36,19 +36,14 @@ public class Pet {
   private int likes;
   @Transient
   private boolean likesOfMe;
-  @JoinColumn(name = "seq")
-  private Long userId;
-  @CreatedDate
-  @Column(updatable = false)
-  private  LocalDateTime createdAt;
-  @LastModifiedDate
-  private  LocalDateTime updatedAt;
+  @ManyToOne(optional = false,fetch = FetchType.LAZY)
+  private UserInfo user;
 
-  public Pet(Long user,String petName, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
-    this(null, user, petIntroduce,petName, petGender, petAge, neuteringYn, 0, false,null);
+  public Pet(UserInfo user,String petName, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
+    this(null, user, petIntroduce,petName, petGender, petAge, neuteringYn, 0, false);
   }
   @Builder
-  public Pet(Long seq, Long user, String petName, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe, LocalDateTime createdAt) {
+  public Pet(Long seq, UserInfo user, String petName, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe) {
     checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
@@ -59,7 +54,7 @@ public class Pet {
     );
 
     this.seq = seq;
-    this.userId = userId;
+    this.user = user;
     this.petIntroduce = petIntroduce;
     this.petGender = petGender;
     this.petName = petName;
@@ -67,7 +62,6 @@ public class Pet {
     this.neuteringYn = neuteringYn;
     this.likes = likes;
     this.likesOfMe = likesOfMe;
-    this.createdAt = defaultIfNull(createdAt, now());
   }
 
   public void modifyPetIntroduce(String petIntroduce) {
@@ -84,19 +78,5 @@ public class Pet {
     likesOfMe = true;
     return ++likes;
   }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Pet pet = (Pet) o;
-    return Objects.equals(seq, pet.seq);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(seq);
-  }
-
 
 }
