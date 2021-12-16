@@ -1,4 +1,4 @@
-package com.petbuddy.api.service.post;
+package com.petbuddy.api.service.pet;
 
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Email;
@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;

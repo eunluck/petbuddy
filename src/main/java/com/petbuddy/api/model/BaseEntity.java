@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class BaseEntity implements Auditable{
 
     @CreatedDate
-    @Column( nullable = false, updatable = false)
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime updatedAt;
 }

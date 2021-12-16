@@ -56,7 +56,7 @@ public class UserInfo extends BaseEntity {
   private String profileImageUrl;
   private LocalDateTime lastLoginAt;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Pet> pets = Lists.newArrayList();
 
   public UserInfo(String name, Email email, String password) {

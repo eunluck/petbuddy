@@ -1,11 +1,9 @@
-package com.petbuddy.api.service.post;
+package com.petbuddy.api.service.pet;
 
 import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.post.PetLikeRepository;
 import com.petbuddy.api.repository.post.PetRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

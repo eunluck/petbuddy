@@ -1,17 +1,12 @@
 spring:
   profiles:
     active: local
-
 ---
+
 spring:
   profiles:
     group:
       "local": "local,common"
-
----
-spring:
-  profiles:
-    group:
       "dev": "dev,common"
 
 ---
@@ -20,21 +15,42 @@ spring:
     activate:
       on-profile: "local"
   datasource:
-    url: jdbc:postgresql://localhost:5432/petbuddy_local
+    url: jdbc:postgresql://172.24.52.86:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:
     database: postgresql
     show-sql: true
     hibernate:
-      ddl-auto: create
-server:
-  port: 8101
-
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    url: jdbc:postgresql://172.24.52.222:5432/petbuddy_local
+    username: petbuddy
+    password: "0694123"
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
 ---
 
-
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    allow-circular-references: true
   config:
     activate:
       on-profile: "common"
@@ -65,3 +81,5 @@ eventbus:
 webpush:
   publicKey: BFJsnkDcKmsymlt5ZVUlIrGtqUxKVEiZ0iBRV3NKCFHrizInoT9FuA8MYESQVzbrTx4njj7lC3Iiz7K41dKUwGE
   privateKey: K0IOiuODucZ4Tu8WprpXVKwiPBvYYLe4cle4ZLdhPVY
+server:
+  port: 8101

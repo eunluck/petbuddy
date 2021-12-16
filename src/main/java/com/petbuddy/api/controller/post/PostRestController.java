@@ -1,10 +1,9 @@
 package com.petbuddy.api.controller.post;
 
-import com.petbuddy.api.configure.support.Pageable;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.security.JwtAuthentication;
-import com.petbuddy.api.service.post.PostService;
+import com.petbuddy.api.service.pet.PostService;
 import com.petbuddy.api.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

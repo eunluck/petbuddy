@@ -37,6 +37,8 @@ public class Pet extends BaseEntity {
   @Transient
   private boolean likesOfMe;
   @ManyToOne(optional = false,fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  @ToString.Exclude
   private UserInfo user;
 
   public Pet(UserInfo user,String petName, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {

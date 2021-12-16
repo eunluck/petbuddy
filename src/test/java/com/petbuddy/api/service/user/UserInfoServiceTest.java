@@ -25,11 +25,9 @@ class UserInfoServiceTest {
   @Autowired private UserService userService;
 
   private String name;
-
   private Email email;
-
   private String password;
-
+  private
   @BeforeAll
   void setUp() {
     name = "tester";
