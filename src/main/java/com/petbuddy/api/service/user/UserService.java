@@ -26,7 +26,7 @@ public class UserService {
 
   private final EventBus eventBus;
 
-  public UserService(PasswordEncoder passwordEncoder, @Lazy UserRepository userRepository, EventBus eventBus) {
+  public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, EventBus eventBus) {
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
     this.eventBus = eventBus;

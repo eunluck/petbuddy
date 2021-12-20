@@ -1,4 +1,4 @@
-package com.petbuddy.api.controller.post;
+package com.petbuddy.api.controller.pet;
 
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
-public class PostRestController {
+public class PetRestController {
 
   private final PostService postService;
   private final UserService userService;

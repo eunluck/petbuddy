@@ -55,15 +55,17 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     return new JwtAuthenticationTokenFilter(jwtTokenConfigure.getHeader(), jwt);
   }
 
+
   @Override
   public void configure(WebSecurity web) {
     web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**");
   }
-
+/*
   @Autowired
   public void configureAuthentication(AuthenticationManagerBuilder builder, JwtAuthenticationProvider authenticationProvider) {
     builder.authenticationProvider(authenticationProvider);
   }
+*/
 
   @Bean
   public JwtAuthenticationProvider jwtAuthenticationProvider(Jwt jwt, UserService userService) {

@@ -5,6 +5,7 @@ import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.user.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang3.ClassUtils.isAssignable;
 

@@ -1,4 +1,4 @@
-package com.petbuddy.api.controller.post;
+package com.petbuddy.api.controller.pet;
 
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.UserInfo;

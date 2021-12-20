@@ -2,11 +2,13 @@ package com.petbuddy.api.service.user;
 
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -16,6 +18,7 @@ import static org.hamcrest.core.Is.is;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserInfoServiceTest {
