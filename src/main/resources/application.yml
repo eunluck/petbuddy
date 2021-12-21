@@ -8,13 +8,14 @@ spring:
     group:
       "local": "local,common"
       "dev": "dev,common"
+      "test": "common"
 ---
 spring:
   config:
     activate:
       on-profile: "local"
   datasource:
-    url: jdbc:postgresql://172.17.123.153:5432/petbuddy_local
+    url: jdbc:postgresql://172.31.174.106:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:
@@ -48,7 +49,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
   config:
     activate:
       on-profile: "common"

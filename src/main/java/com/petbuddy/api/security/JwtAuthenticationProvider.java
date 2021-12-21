@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang3.ClassUtils.isAssignable;
 
+@Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   private final Jwt jwt;
-
   private final UserService userService;
 
   public JwtAuthenticationProvider(Jwt jwt, UserService userService) {

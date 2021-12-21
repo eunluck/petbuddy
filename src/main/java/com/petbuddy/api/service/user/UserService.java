@@ -19,7 +19,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 public class UserService {
-
   private final PasswordEncoder passwordEncoder;
 
   private final UserRepository userRepository;

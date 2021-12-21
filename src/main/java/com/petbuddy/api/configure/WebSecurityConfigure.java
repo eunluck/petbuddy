@@ -7,6 +7,8 @@ import com.petbuddy.api.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
@@ -42,12 +44,13 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
   private final JwtAccessDeniedHandler accessDeniedHandler;
 
   private final EntryPointUnauthorizedHandler unauthorizedHandler;
-
-  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler) {
-    this.jwt = jwt;
+  private final JwtAuthenticationProvider jwtAuthenticationProvider;
+  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler, @Lazy JwtAuthenticationProvider jwtAuthenticationProvider) {
     this.jwtTokenConfigure = jwtTokenConfigure;
+    this.jwt = jwt;
     this.accessDeniedHandler = accessDeniedHandler;
     this.unauthorizedHandler = unauthorizedHandler;
+    this.jwtAuthenticationProvider =jwtAuthenticationProvider;
   }
 
   @Bean
@@ -60,17 +63,21 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
   public void configure(WebSecurity web) {
     web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**");
   }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth){
+    auth.authenticationProvider(jwtAuthenticationProvider);
+  }
 /*
   @Autowired
   public void configureAuthentication(AuthenticationManagerBuilder builder, JwtAuthenticationProvider authenticationProvider) {
     builder.authenticationProvider(authenticationProvider);
-  }
-*/
-
+  }*/
+/*
   @Bean
   public JwtAuthenticationProvider jwtAuthenticationProvider(Jwt jwt, UserService userService) {
     return new JwtAuthenticationProvider(jwt, userService);
-  }
+  }*/
 
   @Bean
   @Override

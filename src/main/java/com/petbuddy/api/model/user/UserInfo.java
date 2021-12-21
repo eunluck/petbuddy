@@ -37,7 +37,8 @@ public class UserInfo extends BaseEntity {
   @GeneratedValue
   private Long seq;
   private String name;
-  private String gender;
+  @Enumerated(value = EnumType.STRING)
+  private Gender gender;
   private String birth;
   @Embedded
   @AttributeOverrides({
@@ -57,6 +58,7 @@ public class UserInfo extends BaseEntity {
   private LocalDateTime lastLoginAt;
 
   @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id",insertable = false,updatable = false)
   private List<Pet> pets = Lists.newArrayList();
 
   public UserInfo(String name, Email email, String password) {

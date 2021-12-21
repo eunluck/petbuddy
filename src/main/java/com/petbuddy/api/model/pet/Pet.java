@@ -2,6 +2,7 @@ package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.BaseEntity;
 import com.petbuddy.api.model.MyEntityListener;
+import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,26 +31,26 @@ public class Pet extends BaseEntity {
   private Long seq;
   private String petName;
   private int petAge;
-  private String petGender;
+  @Enumerated(value = EnumType.STRING)
+  private Gender petGender;
   private boolean neuteringYn;
   private String petIntroduce;
   private int likes;
   @Transient
   private boolean likesOfMe;
   @ManyToOne(optional = false,fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
   @ToString.Exclude
   private UserInfo user;
 
-  public Pet(UserInfo user,String petName, String petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
+  public Pet(UserInfo user,String petName, Gender petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
     this(null, user, petIntroduce,petName, petGender, petAge, neuteringYn, 0, false);
   }
   @Builder
-  public Pet(Long seq, UserInfo user, String petName, String petIntroduce, String petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe) {
+  public Pet(Long seq, UserInfo user, String petName, String petIntroduce, Gender petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe) {
     checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
-    checkArgument(isNotEmpty(petGender) && petGender.equals("male") || petGender.equals("female"), "contents must be provided and 'male' or 'female'");
+    checkArgument(petGender != null && petGender.name().equals("male") || petGender.name().equals("female"), "contents must be provided and 'male' or 'female'");
     checkArgument(
             petIntroduce.length() >= 4 && petIntroduce.length() <= 500,
       "post contents length must be between 4 and 500 characters."

@@ -1,5 +1,6 @@
 package com.petbuddy.api.configure;
 
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,10 +19,12 @@ public class JwtTokenConfigure {
   private int expirySeconds;
 
   public String getHeader() {
+
     return header;
   }
 
   public void setHeader(String header) {
+
     this.header = header;
   }
 

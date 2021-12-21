@@ -1,5 +1,6 @@
 package com.petbuddy.api.service.user;
 
+import com.petbuddy.api.configure.JwtTokenConfigure;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -7,18 +8,24 @@ import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
+
+import java.lang.annotation.Target;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+
 @SpringBootTest
 @ActiveProfiles("test")
-@RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserInfoServiceTest {

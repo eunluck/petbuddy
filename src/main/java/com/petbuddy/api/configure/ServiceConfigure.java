@@ -31,20 +31,22 @@ import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class ServiceConfigure {
-/*
+
+
+
   @Bean
   @Profile("test")
   public DataSource testDataSource() {
     DataSourceBuilder<? extends DataSource> factory = DataSourceBuilder
       .create()
       .driverClassName("org.h2.Driver")
-      .url("jdbc:h2:mem:test_social_server;MODE=MYSQL;DB_CLOSE_DELAY=-1");
+      .url("jdbc:h2:mem:test_petbuddy_server;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
     HikariDataSource dataSource = (HikariDataSource) factory.build();
     dataSource.setPoolName("TEST_H2_DB");
     dataSource.setMinimumIdle(1);
     dataSource.setMaximumPoolSize(1);
     return new Log4jdbcProxyDataSource(dataSource);
-  }*/
+  }
 
   @Bean
   public MessageSourceAccessor messageSourceAccessor(MessageSource messageSource) {
@@ -52,11 +54,11 @@ public class ServiceConfigure {
     MessageUtils.setMessageSourceAccessor(messageSourceAccessor);
     return messageSourceAccessor;
   }
-
+/*
   @Bean
   public Jwt jwt(JwtTokenConfigure jwtTokenConfigure) {
     return new Jwt(jwtTokenConfigure.getIssuer(), jwtTokenConfigure.getClientSecret(), jwtTokenConfigure.getExpirySeconds());
-  }
+  }*/
 
   @Bean
   public AmazonS3 amazonS3Client(AwsConfigure awsConfigure) {
