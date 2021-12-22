@@ -34,8 +34,10 @@ public class Pet extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private Gender petGender;
   private boolean neuteringYn;
+  private boolean representativeYn;
   private String petIntroduce;
   private int likes;
+  private int status;
   @Transient
   private boolean likesOfMe;
   @ManyToOne(optional = false,fetch = FetchType.LAZY)
@@ -43,17 +45,19 @@ public class Pet extends BaseEntity {
   private UserInfo user;
 
   public Pet(UserInfo user,String petName, Gender petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
-    this(null, user, petIntroduce,petName, petGender, petAge, neuteringYn, 0, false);
+    this(null, user,petName, petIntroduce, petGender, petAge, neuteringYn, 0, false);
   }
   @Builder
   public Pet(Long seq, UserInfo user, String petName, String petIntroduce, Gender petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe) {
+    System.out.println(petIntroduce);
+    System.out.println(petIntroduce.length());
     checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
-    checkArgument(petGender != null && petGender.name().equals("male") || petGender.name().equals("female"), "contents must be provided and 'male' or 'female'");
+    checkArgument(petGender!= null && petGender.name().equalsIgnoreCase("male") || petGender.name().equalsIgnoreCase("female"), "contents must be provided and 'male' or 'female'");
     checkArgument(
             petIntroduce.length() >= 4 && petIntroduce.length() <= 500,
-      "post contents length must be between 4 and 500 characters."
+      "자기소개는 두 글자 이상 and 250자 이하로 적어주세요."
     );
 
     this.seq = seq;
@@ -65,6 +69,8 @@ public class Pet extends BaseEntity {
     this.neuteringYn = neuteringYn;
     this.likes = likes;
     this.likesOfMe = likesOfMe;
+    this.status = 1;
+    this.representativeYn = true;
   }
 
   public void modifyPetIntroduce(String petIntroduce) {

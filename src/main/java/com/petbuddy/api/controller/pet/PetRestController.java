@@ -3,7 +3,7 @@ package com.petbuddy.api.controller.pet;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.security.JwtAuthentication;
-import com.petbuddy.api.service.pet.PostService;
+import com.petbuddy.api.service.pet.PetService;
 import com.petbuddy.api.service.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("api")
 public class PetRestController {
 
-  private final PostService postService;
+  private final PetService petService;
   private final UserService userService;
 
   @PostMapping(path = "pet")
@@ -32,7 +32,7 @@ public class PetRestController {
 
     return ApiResult.OK(
       new PetDto(
-        postService.write(
+        petService.register(
           request.newPet(userService.findById(authentication.id).orElseThrow(RuntimeException::new))
         )
       )
@@ -45,7 +45,7 @@ public class PetRestController {
     @AuthenticationPrincipal JwtAuthentication authentication
   ) {
     return ApiResult.OK(
-      postService.findAll( authentication.id).stream()
+      petService.findAll( authentication.id).stream()
         .map(PetDto::new)
         .collect(toList())
     );
@@ -59,7 +59,7 @@ public class PetRestController {
     @PathVariable @ApiParam(value = "대상 펫 PK", example = "1") Long petId
   ) {
     return ApiResult.OK(
-      postService.like(petId, userId, authentication.id)
+      petService.like(petId, userId, authentication.id)
         .map(PetDto::new)
         .orElseThrow(() -> new NotFoundException("petId:"+petId.toString(),"userId:"+  userId.toString()))
     );

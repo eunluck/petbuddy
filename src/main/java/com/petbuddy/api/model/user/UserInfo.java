@@ -2,28 +2,24 @@ package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.model.BaseEntity;
+import com.petbuddy.api.model.card.SearchFilterEntity;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
@@ -55,10 +51,13 @@ public class UserInfo extends BaseEntity {
   private Address address;
   private String password;
   private String profileImageUrl;
+  private int status;
   private LocalDateTime lastLoginAt;
+  @OneToOne
+  private SearchFilterEntity searchFilter;
 
   @OneToMany(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id",insertable = false,updatable = false)
+  @JoinColumn(name = "user_seq",insertable = false,updatable = false)
   private List<Pet> pets = Lists.newArrayList();
 
   public UserInfo(String name, Email email, String password) {
@@ -88,6 +87,7 @@ public class UserInfo extends BaseEntity {
     this.password = password;
     this.profileImageUrl = profileImageUrl;
     this.lastLoginAt = lastLoginAt;
+    this.status = 1;
   }
 
   public void login(PasswordEncoder passwordEncoder, String credentials) {

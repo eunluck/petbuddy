@@ -2,8 +2,8 @@ package com.petbuddy.api.service.pet;
 
 import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.repository.post.PetLikeRepository;
-import com.petbuddy.api.repository.post.PetRepository;
+import com.petbuddy.api.repository.pet.PetLikeRepository;
+import com.petbuddy.api.repository.pet.PetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,19 +13,19 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
-public class PostService {
+public class PetService {
 
   private final PetRepository petRepository;
 
   private final PetLikeRepository petLikeRepository;
 
-  public PostService(PetRepository petRepository, PetLikeRepository petLikeRepository) {
+  public PetService(PetRepository petRepository, PetLikeRepository petLikeRepository) {
     this.petRepository = petRepository;
     this.petLikeRepository = petLikeRepository;
   }
 
   @Transactional
-  public Pet write(Pet pet) {
+  public Pet register(Pet pet) {
     return insert(pet);
   }
 
@@ -37,14 +37,14 @@ public class PostService {
 
   @Transactional
   public Optional<Pet> like(Long petId, Long writerId, Long userId) {
-    return findById(petId, writerId, userId).map(post -> {
-      if (!post.isLikesOfMe()) {
-        post.incrementAndGetLikes();
+    return findById(petId, writerId, userId).map(pet -> {
+      if (!pet.isLikesOfMe()) {
+        pet.incrementAndGetLikes();
 
         petLikeRepository.save(new Likes( userId, petId));
-        update(post);
+        update(pet);
       }
-      return post;
+      return pet;
     });
   }
 

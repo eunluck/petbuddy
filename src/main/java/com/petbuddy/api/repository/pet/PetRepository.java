@@ -1,4 +1,4 @@
-package com.petbuddy.api.repository.post;
+package com.petbuddy.api.repository.pet;
 
 import com.petbuddy.api.model.pet.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;

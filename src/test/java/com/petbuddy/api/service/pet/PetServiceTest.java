@@ -2,7 +2,9 @@ package com.petbuddy.api.service.pet;
 
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Email;
+import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
+import com.petbuddy.api.service.user.UserService;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +27,17 @@ class PetServiceTest {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  @Autowired private PostService postService;
-
+  @Autowired private PetService petService;
+  @Autowired private UserService userService;
   private Long petId;
 
   private Long writerId;
 
   private Long userId;
-
+  private UserInfo userInfo;
   @BeforeAll
   void setUp() {
+    userInfo = userService.join("테스트",new Email("skgoddns1@gmail.com","user"),"0694123");
     petId =  1L;
     writerId =  1L;
     userId =  2L;
@@ -42,10 +45,12 @@ class PetServiceTest {
   @Test
   @Order(1)
   void 포스트를_작성한다() {
-    String contents = randomAlphabetic(40);
-    String male = ("male");
+    String contents = randomAlphabetic(10);
+    String male = "male";
 
-    Pet pet = postService.write(new Pet(new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123"),"삐삐", male,1,false,contents));
+    UserInfo user = new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123");
+
+    Pet pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male),1,false,contents));
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getSeq(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));
@@ -55,11 +60,11 @@ class PetServiceTest {
   @Test
   @Order(2)
   void 포스트를_수정한다() {
-    Pet pet = postService.findById(petId, writerId, userId).orElse(null);
+    Pet pet = petService.findById(petId, writerId, userInfo.getSeq()).orElse(null);
     assertThat(pet, is(notNullValue()));
     String petIntroduce = randomAlphabetic(40);
     pet.modifyPetIntroduce(petIntroduce);
-    postService.modify(pet);
+    petService.modify(pet);
     assertThat(pet.getPetIntroduce(), is(petIntroduce));
     log.info("Modified post: {}", pet);
   }
@@ -67,7 +72,7 @@ class PetServiceTest {
   @Test
   @Order(3)
   void 포스트_목록을_조회한다() {
-    List<Pet> pets = postService.findAll( userId);
+    List<Pet> pets = petService.findAll( userId);
     assertThat(pets, is(notNullValue()));
     assertThat(pets.size(), is(4));
   }
@@ -77,13 +82,13 @@ class PetServiceTest {
   void 포스트를_처음으로_좋아한다() {
     Pet pet;
 
-    pet = postService.findById(petId, writerId, userId).orElse(null);
+    pet = petService.findById(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(false));
 
     int beforeLikes = pet.getLikes();
 
-    pet = postService.like(petId, writerId, userId).orElse(null);
+    pet = petService.like(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes + 1));
@@ -94,13 +99,13 @@ class PetServiceTest {
   void 포스트를_중복으로_좋아할수없다() {
     Pet pet;
 
-    pet = postService.findById(petId, writerId, userId).orElse(null);
+    pet = petService.findById(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
 
     int beforeLikes = pet.getLikes();
 
-    pet = postService.like(petId, writerId, userId).orElse(null);
+    pet = petService.like(petId, writerId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));

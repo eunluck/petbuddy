@@ -1,6 +1,26 @@
 package com.petbuddy.api.model.user;
 
-public enum  Gender {
+
+import com.google.common.base.Strings;
+
+public enum Gender {
     MALE,
-    FEMALE
+    FEMALE;
+
+
+    public static Gender of(String name) {
+        System.out.println(name);
+        System.out.println(MALE.name());
+        System.out.println(FEMALE.name());
+        if (Strings.isNullOrEmpty(name)) {
+            return null;
+        }
+        if (name.equalsIgnoreCase(MALE.name())) {
+
+            return MALE;
+        } else if (name.equalsIgnoreCase(FEMALE.name())) {
+            return FEMALE;
+        }
+        return null;
+    }
 }
