@@ -2,11 +2,12 @@ package com.petbuddy.api.service.user;
 
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.event.JoinEvent;
+import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.user.UserRepository;
 import com.google.common.eventbus.EventBus;
-import org.springframework.context.annotation.Lazy;
+import com.petbuddy.api.repository.user.UserSearchFilterRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +21,14 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Service
 public class UserService {
   private final PasswordEncoder passwordEncoder;
-
+  private final UserSearchFilterRepository userSearchFilterRepository;
   private final UserRepository userRepository;
 
   private final EventBus eventBus;
 
-  public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, EventBus eventBus) {
+  public UserService(PasswordEncoder passwordEncoder, UserSearchFilterRepository userSearchFilterRepository, UserRepository userRepository, EventBus eventBus) {
     this.passwordEncoder = passwordEncoder;
+    this.userSearchFilterRepository = userSearchFilterRepository;
     this.userRepository = userRepository;
     this.eventBus = eventBus;
   }
@@ -81,6 +83,23 @@ public class UserService {
 
     return userRepository.findByEmail(email);
   }
+
+
+
+  /*
+  *  매칭 필터 설정을 수정한다
+  */
+/*
+  @Transactional(readOnly = true)
+  public Optional<UserInfo> updateUserFilter(UserSearchFilter userSearchFilter) {
+    UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userSearchFilter.getSeq())
+            .orElseThrow(() -> new NotFoundException(UserInfo.class, userSearchFilter.getSeq()));
+
+
+
+    return userRepository.findByEmail(email);
+  }
+*/
 
 
   private UserInfo insert(UserInfo userInfo) {

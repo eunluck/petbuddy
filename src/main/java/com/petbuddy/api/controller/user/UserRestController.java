@@ -111,4 +111,15 @@ public class UserRestController {
     );
   }
 
+
+  @PutMapping(path = "user/filter")
+  @ApiOperation(value = "매칭 필터 설정")
+  public ApiResult<UserDto> updateMatchingFilter(@AuthenticationPrincipal JwtAuthentication authentication) {
+    return ApiResult.OK(
+            userService.findById(authentication.id)
+                    .map(UserDto::new)
+                    .orElseThrow(() -> new NotFoundException(UserInfo.class, authentication.id))
+    );
+  }
+
 }

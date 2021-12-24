@@ -15,7 +15,7 @@ spring:
     activate:
       on-profile: "local"
   datasource:
-    url: jdbc:postgresql://172.31.174.106:5432/petbuddy_local
+    url: jdbc:postgresql://172.31.170.66:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:
@@ -32,7 +32,7 @@ spring:
     activate:
       on-profile: "dev"
   datasource:
-    url: jdbc:postgresql://172.24.52.222:5432/petbuddy_local
+    url: jdbc:postgresql://172.31.171.18:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:

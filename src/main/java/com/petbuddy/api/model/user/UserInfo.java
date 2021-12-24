@@ -2,7 +2,7 @@ package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.model.BaseEntity;
-import com.petbuddy.api.model.card.SearchFilterEntity;
+import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
 import lombok.EqualsAndHashCode;
@@ -54,7 +54,7 @@ public class UserInfo extends BaseEntity {
   private int status;
   private LocalDateTime lastLoginAt;
   @OneToOne
-  private SearchFilterEntity searchFilter;
+  private UserSearchFilter searchFilter;
 
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_seq",insertable = false,updatable = false)
