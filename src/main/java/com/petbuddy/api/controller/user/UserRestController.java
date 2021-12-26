@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.petbuddy.api.aws.S3Client;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
+import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.commons.AttachedFile;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
@@ -114,12 +115,10 @@ public class UserRestController {
 
   @PutMapping(path = "user/filter")
   @ApiOperation(value = "매칭 필터 설정")
-  public ApiResult<UserDto> updateMatchingFilter(@AuthenticationPrincipal JwtAuthentication authentication) {
-    return ApiResult.OK(
-            userService.findById(authentication.id)
-                    .map(UserDto::new)
-                    .orElseThrow(() -> new NotFoundException(UserInfo.class, authentication.id))
-    );
+  public ApiResult<UserSearchFilter> updateMatchingFilter(@AuthenticationPrincipal JwtAuthentication authentication,
+                                                          UserSearchFilterUpdateRequest request) {
+
+    return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
   }
 
 }

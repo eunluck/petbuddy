@@ -1,5 +1,6 @@
 package com.petbuddy.api.service.user;
 
+import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.event.JoinEvent;
 import com.petbuddy.api.model.card.UserSearchFilter;
@@ -85,21 +86,18 @@ public class UserService {
   }
 
 
-
   /*
   *  매칭 필터 설정을 수정한다
   */
-/*
-  @Transactional(readOnly = true)
-  public Optional<UserInfo> updateUserFilter(UserSearchFilter userSearchFilter) {
-    UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userSearchFilter.getSeq())
-            .orElseThrow(() -> new NotFoundException(UserInfo.class, userSearchFilter.getSeq()));
+  @Transactional
+  public UserSearchFilter updateUserFilter(Long userId, UserSearchFilterUpdateRequest userSearchFilterUpdateRequest) {
+    UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
 
+    beforeFilter.update(userSearchFilterUpdateRequest);
 
-
-    return userRepository.findByEmail(email);
+    return userSearchFilterRepository.save(beforeFilter);
   }
-*/
 
 
   private UserInfo insert(UserInfo userInfo) {

@@ -12,6 +12,7 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class UserInfo extends BaseEntity {
   private String name;
   @Enumerated(value = EnumType.STRING)
   private Gender gender;
-  private String birth;
+  private LocalDate birth;
   @Embedded
   @AttributeOverrides({
           @AttributeOverride(name = "address", column = @Column(name = "email")),

@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PetRepository extends JpaRepository<Pet,Long> {
+public interface PetRepository extends JpaRepository<Pet,Long>,PetRepositoryCustom {
 
+    Optional<Pet> findById( Long petId);
+    Optional<Pet> findBySeq( Long petId);
 
-  Optional<Pet> findById( Long petId);
-  Optional<Pet> findBySeq( Long petId);
-
-  List<Pet> findByUserSeq(Long userId);
+    List<Pet> findByUserSeq(Long userId);
 
 }

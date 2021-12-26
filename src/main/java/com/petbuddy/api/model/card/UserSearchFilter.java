@@ -1,13 +1,13 @@
 package com.petbuddy.api.model.card;
 
+import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.model.BaseEntity;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.petbuddy.api.util.DateTimeUtils;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,9 +17,9 @@ import java.util.Optional;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
-@DynamicUpdate
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class UserSearchFilter extends BaseEntity {
 
     @Id
@@ -35,7 +35,7 @@ public class UserSearchFilter extends BaseEntity {
     private String petBreed;
     private String petSize;
 
-    public Optional<Gender> getGender() {
+ /*   public Optional<Gender> getGender() {
         return Optional.of(gender);
     }
 
@@ -61,5 +61,19 @@ public class UserSearchFilter extends BaseEntity {
 
     public Optional<String> getPetSize() {
         return Optional.of(petSize);
+    }
+*/
+    public void update(UserSearchFilterUpdateRequest userSearchFilterUpdateRequest){
+        BeanUtils.copyProperties(userSearchFilterUpdateRequest,this);
+        this.gender = Gender.of(userSearchFilterUpdateRequest.getGender());
+    }
+
+    public Integer minAgeOfBirth(){
+
+        return DateTimeUtils.ageYearCalculation(this.minAge);
+    }
+    public Integer maxAgeOfBirth(){
+
+        return DateTimeUtils.ageYearCalculation(this.maxAge);
     }
 }
