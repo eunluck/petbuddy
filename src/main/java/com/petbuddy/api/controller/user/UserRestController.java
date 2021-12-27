@@ -112,11 +112,31 @@ public class UserRestController {
     );
   }
 
+  @PutMapping(path = "user/phone")
+  @ApiOperation(value = "휴대폰 번호 변경")
+  public ApiResult<UserSearchFilter> updatePhoneNumber(@AuthenticationPrincipal JwtAuthentication authentication,
+                                                          @RequestBody UserSearchFilterUpdateRequest request) {
+
+    return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
+  }
+
+
+
+
+  @PutMapping(path = "user/phone")
+  @ApiOperation(value = "추가정보입력")
+  public ApiResult<UserSearchFilter> updateMoreInfomation(@AuthenticationPrincipal JwtAuthentication authentication,
+                                                       @RequestBody UserSearchFilterUpdateRequest request) {
+
+    return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
+  }
+
+
 
   @PutMapping(path = "user/filter")
   @ApiOperation(value = "매칭 필터 설정")
   public ApiResult<UserSearchFilter> updateMatchingFilter(@AuthenticationPrincipal JwtAuthentication authentication,
-                                                          UserSearchFilterUpdateRequest request) {
+                                                          @RequestBody UserSearchFilterUpdateRequest request) {
 
     return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
   }

@@ -18,7 +18,7 @@ import java.util.Optional;
 @NoArgsConstructor
 public class UserSearchFilterUpdateRequest {
 
-    private String gender;
+    private Gender gender;
     private Boolean neuteringYn;
     private Integer minAge;
     private Integer maxAge;

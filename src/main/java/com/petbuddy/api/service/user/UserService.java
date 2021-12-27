@@ -5,6 +5,7 @@ import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.event.JoinEvent;
 import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.user.Email;
+import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.user.UserRepository;
 import com.google.common.eventbus.EventBus;
@@ -35,7 +36,7 @@ public class UserService {
   }
 
   @Transactional
-  public UserInfo join(String name, Email email, String password) {
+  public UserInfo join(String name, Email email, String password, Gender gender) {
     checkArgument(isNotEmpty(password), "password must be provided.");
     checkArgument(
       password.length() >= 4 && password.length() <= 15,
@@ -94,7 +95,11 @@ public class UserService {
     UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
 
+
+    System.out.println("before::"+beforeFilter);
+    System.out.println("request::"+userSearchFilterUpdateRequest);
     beforeFilter.update(userSearchFilterUpdateRequest);
+    System.out.println("after::"+beforeFilter);
 
     return userSearchFilterRepository.save(beforeFilter);
   }

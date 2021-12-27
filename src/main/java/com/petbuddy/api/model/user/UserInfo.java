@@ -3,12 +3,10 @@ package com.petbuddy.api.model.user;
 import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.model.BaseEntity;
 import com.petbuddy.api.model.card.UserSearchFilter;
+import com.petbuddy.api.model.listener.UserSearchFilterListener;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -25,13 +23,15 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@EntityListeners(value = UserSearchFilterListener.class)
 public class UserInfo extends BaseEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long seq;
   private String name;
   @Enumerated(value = EnumType.STRING)
@@ -61,15 +61,15 @@ public class UserInfo extends BaseEntity {
   @JoinColumn(name = "user_seq",insertable = false,updatable = false)
   private List<Pet> pets = Lists.newArrayList();
 
-  public UserInfo(String name, Email email, String password) {
-    this(name, email, password, null);
+  public UserInfo(String name, Email email, String password, Gender gender) {
+    this(name, email, password, gender,null);
   }
 
-  public UserInfo(String name, Email email, String password, String profileImageUrl) {
-    this(null, name, email, password, profileImageUrl,  null );
+  public UserInfo(String name, Email email, String password, Gender gender,String profileImageUrl) {
+    this(null, name, email, password, gender, profileImageUrl,  null );
   }
 
-  public UserInfo(Long seq, String name, Email email, String password, String profileImageUrl, LocalDateTime lastLoginAt) {
+  public UserInfo(Long seq, String name, Email email, String password, Gender gender, String profileImageUrl, LocalDateTime lastLoginAt) {
     checkArgument(isNotEmpty(name), "name must be provided.");
     checkArgument(
       name.length() >= 1 && name.length() <= 10,
@@ -77,6 +77,7 @@ public class UserInfo extends BaseEntity {
     );
     checkNotNull(email, "email must be provided.");
     checkNotNull(password, "password must be provided.");
+    checkNotNull(gender, "성별을 입력해 주세요.");
     checkArgument(
       profileImageUrl == null || profileImageUrl.length() <= 255,
       "profileImageUrl length must be less than 255 characters."
@@ -85,6 +86,7 @@ public class UserInfo extends BaseEntity {
     this.seq = seq;
     this.name = name;
     this.email = email;
+    this.gender = gender;
     this.password = password;
     this.profileImageUrl = profileImageUrl;
     this.lastLoginAt = lastLoginAt;

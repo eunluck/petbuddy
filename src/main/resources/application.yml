@@ -15,14 +15,14 @@ spring:
     activate:
       on-profile: "local"
   datasource:
-    url: jdbc:postgresql://localhost:5432/petbuddy_local
+    url: jdbc:postgresql://172.31.166.116:5432/petbuddy_local
     username: petbuddy
     password: "0694123"
   jpa:
     database: postgresql
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

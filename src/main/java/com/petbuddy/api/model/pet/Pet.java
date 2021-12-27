@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class Pet extends BaseEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long seq;
   private String petName;
   private int petAge;
@@ -56,8 +56,8 @@ public class Pet extends BaseEntity {
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
     checkArgument(petGender!= null && petGender.name().equalsIgnoreCase("male") || petGender.name().equalsIgnoreCase("female"), "contents must be provided and 'male' or 'female'");
     checkArgument(
-            petIntroduce.length() >= 4 && petIntroduce.length() <= 500,
-      "자기소개는 두 글자 이상 and 250자 이하로 적어주세요."
+            petIntroduce.length() >= 2 && petIntroduce.length() <= 500,
+      "자기소개는 두 글자 이상 and 500자 이하로 적어주세요."
     );
 
     this.seq = seq;

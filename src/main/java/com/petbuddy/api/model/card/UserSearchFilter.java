@@ -6,31 +6,32 @@ import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.util.DateTimeUtils;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.BeanUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import java.util.Optional;
+import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserSearchFilter extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
     @OneToOne
     @ToString.Exclude
-    private UserInfo user;
+    private UserInfo userInfo;
+    @Enumerated(value = EnumType.STRING)
     private Gender gender;
     private Boolean neuteringYn;
     private Integer minAge;
     private Integer maxAge;
+    @Enumerated(value = EnumType.STRING)
     private Gender petGender;
     private String petBreed;
     private String petSize;
@@ -65,7 +66,6 @@ public class UserSearchFilter extends BaseEntity {
 */
     public void update(UserSearchFilterUpdateRequest userSearchFilterUpdateRequest){
         BeanUtils.copyProperties(userSearchFilterUpdateRequest,this);
-        this.gender = Gender.of(userSearchFilterUpdateRequest.getGender());
     }
 
     public Integer minAgeOfBirth(){
