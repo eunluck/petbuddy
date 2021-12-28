@@ -1,7 +1,9 @@
 package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
-import com.petbuddy.api.model.BaseEntity;
+import com.google.common.base.Strings;
+import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
+import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.listener.UserSearchFilterListener;
 import com.petbuddy.api.model.pet.Pet;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -51,11 +54,13 @@ public class UserInfo extends BaseEntity {
   })
   private Address address;
   private String password;
+  private String phone;
   private String profileImageUrl;
   private int status;
   private LocalDateTime lastLoginAt;
   @OneToOne
   private UserSearchFilter searchFilter;
+
 
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_seq",insertable = false,updatable = false)
@@ -114,6 +119,29 @@ public class UserInfo extends BaseEntity {
     );
 
     this.profileImageUrl = profileImageUrl;
+  }
+
+  public void updatePhoneNumber(String phoneNumber) {
+    checkArgument(
+            Strings.isNullOrEmpty(phoneNumber),
+      "휴대폰 번호를 입력해주세요."
+    );
+
+    checkArgument(
+            Pattern.matches("^[0-9]*$", phoneNumber),
+            "숫자만 입력해주세요."
+    );
+
+    this.phone = phoneNumber;
+  }
+
+
+
+  public void updateMoreInfo(UserMoreInformationUpdateRequest userMoreInformationUpdateRequest) {
+
+    this.address = userMoreInformationUpdateRequest.getAddress();
+    this.birth = userMoreInformationUpdateRequest.getBirth();
+
   }
 
 

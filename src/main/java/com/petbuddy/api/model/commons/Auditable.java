@@ -1,4 +1,4 @@
-package com.petbuddy.api.model;
+package com.petbuddy.api.model.commons;
 
 import java.time.LocalDateTime;
 

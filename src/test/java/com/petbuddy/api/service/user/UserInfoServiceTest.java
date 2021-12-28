@@ -2,6 +2,7 @@ package com.petbuddy.api.service.user;
 
 import com.petbuddy.api.configure.JwtTokenConfigure;
 import com.petbuddy.api.model.user.Email;
+import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
@@ -48,7 +49,7 @@ class UserInfoServiceTest {
   @Test
   @Order(1)
   void 사용자를_추가한다() {
-    UserInfo userInfo = userService.join(name, email, password);
+    UserInfo userInfo = userService.join(name, email, password, Gender.of("MALE"));
     assertThat(userInfo, is(notNullValue()));
     assertThat(userInfo.getSeq(), is(notNullValue()));
     assertThat(userInfo.getEmail(), is(email));

@@ -1,5 +1,6 @@
 package com.petbuddy.api.service.user;
 
+import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
 import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.event.JoinEvent;
@@ -22,95 +23,119 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 public class UserService {
-  private final PasswordEncoder passwordEncoder;
-  private final UserSearchFilterRepository userSearchFilterRepository;
-  private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserSearchFilterRepository userSearchFilterRepository;
+    private final UserRepository userRepository;
 
-  private final EventBus eventBus;
+    private final EventBus eventBus;
 
-  public UserService(PasswordEncoder passwordEncoder, UserSearchFilterRepository userSearchFilterRepository, UserRepository userRepository, EventBus eventBus) {
-    this.passwordEncoder = passwordEncoder;
-    this.userSearchFilterRepository = userSearchFilterRepository;
-    this.userRepository = userRepository;
-    this.eventBus = eventBus;
-  }
+    public UserService(PasswordEncoder passwordEncoder, UserSearchFilterRepository userSearchFilterRepository, UserRepository userRepository, EventBus eventBus) {
+        this.passwordEncoder = passwordEncoder;
+        this.userSearchFilterRepository = userSearchFilterRepository;
+        this.userRepository = userRepository;
+        this.eventBus = eventBus;
+    }
 
-  @Transactional
-  public UserInfo join(String name, Email email, String password, Gender gender) {
-    checkArgument(isNotEmpty(password), "password must be provided.");
-    checkArgument(
-      password.length() >= 4 && password.length() <= 15,
-      "password length must be between 4 and 15 characters."
-    );
+    @Transactional
+    public UserInfo join(String name, Email email, String password, Gender gender) {
+        checkArgument(isNotEmpty(password), "password must be provided.");
+        checkArgument(
+                password.length() >= 4 && password.length() <= 15,
+                "password length must be between 4 and 15 characters."
+        );
 
-    UserInfo userInfo = new UserInfo(name, email, passwordEncoder.encode(password));
-    UserInfo saved = insert(userInfo);
+        UserInfo userInfo = new UserInfo(name, email, passwordEncoder.encode(password), gender);
+        UserInfo saved = insert(userInfo);
 
-    // raise event
-    eventBus.post(new JoinEvent(saved));
-    return saved;
-  }
+        // raise event
+        eventBus.post(new JoinEvent(saved));
+        return saved;
+    }
 
-  @Transactional
-  public UserInfo login(Email email, String password) {
-    checkNotNull(password, "password must be provided.");
+    @Transactional
+    public UserInfo login(Email email, String password) {
+        checkNotNull(password, "password must be provided.");
 
-    UserInfo userInfo = findByEmail(email)
-      .orElseThrow(() -> new NotFoundException(UserInfo.class, email));
-    userInfo.login(passwordEncoder, password);
-    userInfo.afterLoginSuccess();
-    update(userInfo);
-    return userInfo;
-  }
+        UserInfo userInfo = findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(UserInfo.class, email));
+        userInfo.login(passwordEncoder, password);
+        userInfo.afterLoginSuccess();
+        update(userInfo);
+        return userInfo;
+    }
 
-  @Transactional
-  public UserInfo updateProfileImage( Long userId, String profileImageUrl) {
-    UserInfo userInfo = findById(userId)
-      .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
-    userInfo.updateProfileImage(profileImageUrl);
-    update(userInfo);
-    return userInfo;
-  }
+    @Transactional
+    public UserInfo updateProfileImage(Long userId, String profileImageUrl) {
+        UserInfo userInfo = findById(userId)
+                .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+        userInfo.updateProfileImage(profileImageUrl);
+        update(userInfo);
+        return userInfo;
+    }
 
-  @Transactional(readOnly = true)
-  public Optional<UserInfo> findById( Long userId) {
-    checkNotNull(userId, "userId must be provided.");
+    @Transactional(readOnly = true)
+    public Optional<UserInfo> findById(Long userId) {
+        checkNotNull(userId, "userId must be provided.");
 
-    return userRepository.findBySeq(userId);
-  }
+        return userRepository.findBySeq(userId);
+    }
 
-  @Transactional(readOnly = true)
-  public Optional<UserInfo> findByEmail(Email email) {
-    checkNotNull(email, "email must be provided.");
+    @Transactional(readOnly = true)
+    public Optional<UserInfo> findByEmail(Email email) {
+        checkNotNull(email, "email must be provided.");
 
-    return userRepository.findByEmail(email);
-  }
-
-
-  /*
-  *  매칭 필터 설정을 수정한다
-  */
-  @Transactional
-  public UserSearchFilter updateUserFilter(Long userId, UserSearchFilterUpdateRequest userSearchFilterUpdateRequest) {
-    UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+        return userRepository.findByEmail(email);
+    }
 
 
-    System.out.println("before::"+beforeFilter);
-    System.out.println("request::"+userSearchFilterUpdateRequest);
-    beforeFilter.update(userSearchFilterUpdateRequest);
-    System.out.println("after::"+beforeFilter);
+    /*
+     *  매칭 필터 설정을 수정한다
+     */
+    @Transactional
+    public UserSearchFilter updateUserFilter(Long userId, UserSearchFilterUpdateRequest userSearchFilterUpdateRequest) {
+        UserSearchFilter beforeFilter = userSearchFilterRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
 
-    return userSearchFilterRepository.save(beforeFilter);
-  }
+        beforeFilter.update(userSearchFilterUpdateRequest);
+
+        return userSearchFilterRepository.save(beforeFilter);
+    }
 
 
-  private UserInfo insert(UserInfo userInfo) {
-    return userRepository.save(userInfo);
-  }
+    /*
+     * 사용자 추가정보를 수정한다.
+     * */
+    @Transactional
+    public UserInfo updateUserMoreInformation(Long userId, UserMoreInformationUpdateRequest userMoreInformationUpdateRequest) {
 
-  private void update(UserInfo userInfo) {
-    userRepository.save(userInfo);
-  }
+        UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+
+        userInfo.updateMoreInfo(userMoreInformationUpdateRequest);
+
+        update(userInfo);
+
+        return userInfo;
+    }
+
+    @Transactional
+    public UserInfo updateUserPhoneNumber(Long userId, String phoneNumber) {
+
+        UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+
+        userInfo.updatePhoneNumber(phoneNumber);
+
+        update(userInfo);
+
+        return userInfo;
+    }
+
+
+    private UserInfo insert(UserInfo userInfo) {
+        return userRepository.save(userInfo);
+    }
+
+    private void update(UserInfo userInfo) {
+        userRepository.save(userInfo);
+    }
 
 }

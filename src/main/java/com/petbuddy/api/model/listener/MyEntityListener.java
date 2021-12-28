@@ -1,5 +1,7 @@
-package com.petbuddy.api.model;
+package com.petbuddy.api.model.listener;
 
+
+import com.petbuddy.api.model.commons.Auditable;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;

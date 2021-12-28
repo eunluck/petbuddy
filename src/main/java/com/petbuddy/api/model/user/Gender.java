@@ -9,9 +9,6 @@ public enum Gender {
 
 
     public static Gender of(String name) {
-        System.out.println(name);
-        System.out.println(MALE.name());
-        System.out.println(FEMALE.name());
         if (Strings.isNullOrEmpty(name)) {
             return null;
         }

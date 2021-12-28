@@ -12,12 +12,7 @@ public class UserSearchFilterListener {
     @PostPersist
     public void prePersistAndPreUpdate(Object o) {
         UserSearchFilterRepository userSearchFilterRepository = BeanUtils.getBean(UserSearchFilterRepository.class);
-
-        System.out.println(o);
         UserInfo user = (UserInfo) o;
-
-        System.out.println(user);
-
         userSearchFilterRepository.save(UserSearchFilter
                 .builder()
                 .userInfo(user)

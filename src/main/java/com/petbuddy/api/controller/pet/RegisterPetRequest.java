@@ -4,7 +4,12 @@ import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@NoArgsConstructor
 public class RegisterPetRequest {
 
   @ApiModelProperty(value = "강아지 소개")
@@ -17,8 +22,6 @@ public class RegisterPetRequest {
   private String petGender;
   @ApiModelProperty(value = "중성화 여부")
   private boolean neuteringYn;
-
-  protected RegisterPetRequest() {}
 
 
   public Pet newPet(UserInfo user) {

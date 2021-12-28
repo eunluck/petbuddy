@@ -37,7 +37,7 @@ class PetServiceTest {
   private UserInfo userInfo;
   @BeforeAll
   void setUp() {
-    userInfo = userService.join("테스트",new Email("skgoddns1@gmail.com","user"),"0694123");
+    userInfo = userService.join("테스트",new Email("skgoddns1@gmail.com","user"),"0694123",Gender.of("MALE"));
     petId =  1L;
     writerId =  1L;
     userId =  2L;
@@ -48,7 +48,7 @@ class PetServiceTest {
     String contents = randomAlphabetic(10);
     String male = "male";
 
-    UserInfo user = new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123");
+    UserInfo user = new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123",Gender.of("MALE"));
 
     Pet pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male),1,false,contents));
     assertThat(pet, is(notNullValue()));

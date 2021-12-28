@@ -81,7 +81,8 @@ public class UserRestController {
     UserInfo userInfo = userService.join(
       joinRequest.getName(),
       new Email(joinRequest.getPrincipal(),joinRequest.getEmailType()),
-      joinRequest.getCredentials()
+      joinRequest.getCredentials(),
+      joinRequest.getGender()
     );
 
     toAttachedFile(file).ifPresent(attachedFile ->
@@ -114,21 +115,21 @@ public class UserRestController {
 
   @PutMapping(path = "user/phone")
   @ApiOperation(value = "휴대폰 번호 변경")
-  public ApiResult<UserSearchFilter> updatePhoneNumber(@AuthenticationPrincipal JwtAuthentication authentication,
-                                                          @RequestBody UserSearchFilterUpdateRequest request) {
+  public ApiResult<UserInfo> updatePhoneNumber(@AuthenticationPrincipal JwtAuthentication authentication,
+                                                          @RequestBody String phoneNumber) {
 
-    return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
+    return ApiResult.OK(userService.updateUserPhoneNumber(authentication.id,phoneNumber));
   }
 
 
 
 
-  @PutMapping(path = "user/phone")
+  @PutMapping(path = "user/more")
   @ApiOperation(value = "추가정보입력")
-  public ApiResult<UserSearchFilter> updateMoreInfomation(@AuthenticationPrincipal JwtAuthentication authentication,
-                                                       @RequestBody UserSearchFilterUpdateRequest request) {
+  public ApiResult<UserInfo> updateMoreInformation(@AuthenticationPrincipal JwtAuthentication authentication,
+                                                       @RequestBody UserMoreInformationUpdateRequest request) {
 
-    return ApiResult.OK(userService.updateUserFilter(authentication.id,request));
+    return ApiResult.OK(userService.updateUserMoreInformation(authentication.id,request));
   }
 
 

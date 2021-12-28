@@ -1,7 +1,7 @@
 package com.petbuddy.api.model.card;
 
 import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
-import com.petbuddy.api.model.BaseEntity;
+import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.util.DateTimeUtils;

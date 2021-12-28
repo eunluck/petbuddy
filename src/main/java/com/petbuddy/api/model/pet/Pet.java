@@ -1,21 +1,15 @@
 package com.petbuddy.api.model.pet;
 
-import com.petbuddy.api.model.BaseEntity;
-import com.petbuddy.api.model.MyEntityListener;
+import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.LocalDateTime.now;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
