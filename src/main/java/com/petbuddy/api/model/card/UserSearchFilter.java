@@ -9,6 +9,8 @@ import lombok.*;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 @Entity
 @Getter
@@ -29,8 +31,8 @@ public class UserSearchFilter extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
     private Boolean neuteringYn;
-    private Integer minAge;
-    private Integer maxAge;
+    private LocalDate minBirth;
+    private LocalDate maxBirth;
     @Enumerated(value = EnumType.STRING)
     private Gender petGender;
     private String petBreed;
@@ -66,14 +68,9 @@ public class UserSearchFilter extends BaseEntity {
 */
     public void update(UserSearchFilterUpdateRequest userSearchFilterUpdateRequest){
         BeanUtils.copyProperties(userSearchFilterUpdateRequest,this);
+        this.minBirth = DateTimeUtils.minAgeYearCalculation(userSearchFilterUpdateRequest.getMinAge());
+        this.maxBirth = DateTimeUtils.maxAgeYearCalculation(userSearchFilterUpdateRequest.getMaxAge());
+
     }
 
-    public Integer minAgeOfBirth(){
-
-        return DateTimeUtils.ageYearCalculation(this.minAge);
-    }
-    public Integer maxAgeOfBirth(){
-
-        return DateTimeUtils.ageYearCalculation(this.maxAge);
-    }
 }

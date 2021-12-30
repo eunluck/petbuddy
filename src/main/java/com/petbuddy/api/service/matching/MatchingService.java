@@ -47,8 +47,8 @@ public class MatchingService {
     return petRepository.findFilteringMatchingPets(
             filter.getGender(),
             filter.getNeuteringYn(),
-            filter.minAgeOfBirth(),
-            filter.maxAgeOfBirth(),
+            filter.getMinBirth(),
+            filter.getMaxBirth(),
             filter.getPetGender(),
             filter.getPetBreed(),
             filter.getPetSize());

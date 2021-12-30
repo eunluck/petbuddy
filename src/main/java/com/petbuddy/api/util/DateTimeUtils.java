@@ -17,11 +17,19 @@ public class DateTimeUtils {
     return timestamp == null ? null : timestamp.toLocalDateTime();
   }
 
-  public static Integer ageYearCalculation(Integer age){
+  public static LocalDate minAgeYearCalculation(Integer age){
+    LocalDate now = LocalDate.now();
+
+    return LocalDate.of(now.minusYears(age).getYear(),1,1);
+  }
+
+  public static LocalDate maxAgeYearCalculation(Integer age){
     LocalDate now = LocalDate.now();
 
 
-    return Integer.valueOf(now.minusYears(age).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+    return LocalDate.of(now.minusYears(age).getYear(),1,1);
   }
+
+
 
 }

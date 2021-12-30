@@ -20,12 +20,13 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<Pet> findFilteringMatchingPets(Gender gender, Boolean neuteringYn, Integer minAge, Integer maxAge, Gender petGender, String petBreed, String petSize) {
+    public List<Pet> findFilteringMatchingPets(Gender gender, Boolean neuteringYn, LocalDate minBirth, LocalDate maxBirth, Gender petGender, String petBreed, String petSize) {
         return queryFactory.selectFrom(pet).join(pet.user,userInfo)
                 .where(
                         eqUserGender(gender),
                         eqPetGender(petGender),
-                        eqNeuteringYn(neuteringYn)
+                        eqNeuteringYn(neuteringYn),
+                        betweenAge(minBirth, maxBirth)
                 )
                 .fetch();
     }
@@ -43,19 +44,10 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
 
         return neuteringYn != null? pet.neuteringYn.eq(neuteringYn):null;
     }
-/*
 
-    private BooleanExpression eqMinAge(LocalDate minBirth) {
+    private BooleanExpression betweenAge(LocalDate minBirth,LocalDate maxBirth) {
 
-        return minBirth != null? userInfo.birth.eq(minBirth):null;
+        return minBirth != null? userInfo.birth.between(minBirth,maxBirth):null;
     }
 
-
-
-
-    private Predicate ageEq(Integer minAge, Integer maxAge){
-        return
-    }
-
- */
 }
