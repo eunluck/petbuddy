@@ -36,25 +36,31 @@ public class PetService {
   }
 
   @Transactional
-  public Optional<Pet> like(Long petId, Long writerId, Long userId) {
-    return findById(petId, writerId, userId).map(pet -> {
-      if (!pet.isLikesOfMe()) {
-        pet.incrementAndGetLikes();
+  public Optional<Pet> like(Long petId, Long userId) {
 
-        petLikeRepository.save(new Likes( userId, petId));
+
+    return findById(petId).map(pet -> {
+      if (findLikeCheckByPetId(petId, userId)){
+        pet.incrementAndGetLikes();
+        petLikeRepository.save(new Likes(userId,petId));
         update(pet);
       }
-      return pet;
+        return pet;
     });
   }
 
   @Transactional(readOnly = true)
-  public Optional<Pet> findById( Long petId,Long writerId,  Long userId) {
-    checkNotNull(writerId, "writerId must be provided.");
+  public Optional<Pet> findById( Long petId) {
     checkNotNull(petId, "postId must be provided.");
-    checkNotNull(userId, "userId must be provided.");
 
     return petRepository.findBySeq(petId);
+  }
+
+
+  @Transactional(readOnly = true)
+  public boolean findLikeCheckByPetId( Long petId,  Long userId) {
+
+    return petLikeRepository.existsByPetIdAndUserId(petId,userId);
   }
 
   @Transactional(readOnly = true)

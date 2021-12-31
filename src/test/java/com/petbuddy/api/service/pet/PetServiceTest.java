@@ -60,7 +60,7 @@ class PetServiceTest {
   @Test
   @Order(2)
   void 포스트를_수정한다() {
-    Pet pet = petService.findById(petId, writerId, userInfo.getSeq()).orElse(null);
+    Pet pet = petService.findById(petId).orElse(null);
     assertThat(pet, is(notNullValue()));
     String petIntroduce = randomAlphabetic(40);
     pet.modifyPetIntroduce(petIntroduce);
@@ -82,13 +82,13 @@ class PetServiceTest {
   void 포스트를_처음으로_좋아한다() {
     Pet pet;
 
-    pet = petService.findById(petId, writerId, userId).orElse(null);
+    pet = petService.findById(petId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(false));
 
     int beforeLikes = pet.getLikes();
 
-    pet = petService.like(petId, writerId, userId).orElse(null);
+    pet = petService.like(petId,  userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes + 1));
@@ -99,13 +99,13 @@ class PetServiceTest {
   void 포스트를_중복으로_좋아할수없다() {
     Pet pet;
 
-    pet = petService.findById(petId, writerId, userId).orElse(null);
+    pet = petService.findById(petId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
 
     int beforeLikes = pet.getLikes();
 
-    pet = petService.like(petId, writerId, userId).orElse(null);
+    pet = petService.like(petId, userId).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));

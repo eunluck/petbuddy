@@ -5,7 +5,6 @@ import static com.petbuddy.api.model.user.QUserInfo.userInfo;
 
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Gender;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

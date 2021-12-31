@@ -59,7 +59,7 @@ public class PetRestController {
     @PathVariable @ApiParam(value = "대상 펫 PK", example = "1") Long petId
   ) {
     return ApiResult.OK(
-      petService.like(petId, userId, authentication.id)
+      petService.like(petId, authentication.id)
         .map(PetDto::new)
         .orElseThrow(() -> new NotFoundException("petId:"+petId.toString(),"userId:"+  userId.toString()))
     );
