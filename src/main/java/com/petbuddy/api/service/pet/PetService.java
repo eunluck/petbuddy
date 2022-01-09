@@ -1,5 +1,6 @@
 package com.petbuddy.api.service.pet;
 
+import com.petbuddy.api.controller.pet.PetDto;
 import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.repository.pet.PetLikeRepository;
@@ -36,32 +37,24 @@ public class PetService {
   }
 
   @Transactional
-  public Optional<Pet> like(Long petId, Long userId) {
+  public Optional<PetDto> like(Long targetPetId, Long likedPetId) {
 
-
-    return findById(petId).map(pet -> {
-      if (findLikeCheckByPetId(petId, userId)){
-        pet.incrementAndGetLikes();
-        petLikeRepository.save(new Likes(userId,petId));
-        update(pet);
+    return findById(targetPetId,likedPetId).map(pet -> {
+      if (!pet.isLikesOfMe()){
+//        pet.incrementAndGetLikes();
+        petLikeRepository.save(new Likes(likedPetId,targetPetId));
+  //      update(pet);
       }
         return pet;
     });
   }
 
   @Transactional(readOnly = true)
-  public Optional<Pet> findById( Long petId) {
-    checkNotNull(petId, "postId must be provided.");
+  public Optional<PetDto> findById(Long petId, Long likedPetId) {
 
-    return petRepository.findBySeq(petId);
+    return petRepository.findBySeq(petId,likedPetId);
   }
 
-
-  @Transactional(readOnly = true)
-  public boolean findLikeCheckByPetId( Long petId,  Long userId) {
-
-    return petLikeRepository.existsByPetIdAndUserId(petId,userId);
-  }
 
   @Transactional(readOnly = true)
   public List<Pet> findAll( Long userId) {

@@ -25,6 +25,7 @@ public class RegisterPetRequest {
 
 
   public Pet newPet(UserInfo user) {
+
     return new Pet(user,petName, Gender.of(petGender),petAge,neuteringYn,  petIntroduce);
   }
 

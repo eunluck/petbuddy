@@ -30,10 +30,7 @@ public class MatchingController {
     @ApiOperation(value = "추천 강아지 리스트")
     public ApiResult<List<PetDto>> searchingPets(@AuthenticationPrincipal JwtAuthentication authentication) {
 
-        return ApiResult.OK(matchingService.findMatchingPets(authentication.id)
-                .stream()
-                .map(PetDto::new)
-                .collect(Collectors.toList()));
+        return ApiResult.OK(matchingService.findMatchingPets(authentication.id));
     }
 
 }

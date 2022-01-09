@@ -1,10 +1,12 @@
 package com.petbuddy.api.service.matching;
 
 import com.petbuddy.api.error.NotFoundException;
-import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.controller.pet.PetDto;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.pet.PetLikeRepository;
 import com.petbuddy.api.repository.pet.PetRepository;
+import com.petbuddy.api.repository.user.UserRepository;
 import com.petbuddy.api.repository.user.UserSearchFilterRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +21,13 @@ public class MatchingService {
   private final PetRepository petRepository;
   private final PetLikeRepository petLikeRepository;
   private final UserSearchFilterRepository userSearchFilterRepository;
+  private final UserRepository userRepository;
 
-  public MatchingService(PetRepository petRepository, PetLikeRepository petLikeRepository, UserSearchFilterRepository userSearchFilterRepository) {
+  public MatchingService(PetRepository petRepository, PetLikeRepository petLikeRepository, UserSearchFilterRepository userSearchFilterRepository, UserRepository userRepository) {
     this.petRepository = petRepository;
     this.petLikeRepository = petLikeRepository;
     this.userSearchFilterRepository = userSearchFilterRepository;
+    this.userRepository = userRepository;
   }
 
   @Transactional(readOnly = true)
@@ -40,18 +44,11 @@ public class MatchingService {
   }
 
   @Transactional(readOnly = true)
-  public List<Pet> findMatchingPets( Long userId) {
-    UserSearchFilter filter = userSearchFilterRepository.findById(userId).orElseThrow(() -> new NotFoundException(Long.class,userId));
+  public List<PetDto> findMatchingPets(Long userId) {
 
+    UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(Long.class,userId));
 
-    return petRepository.findFilteringMatchingPets(
-            filter.getGender(),
-            filter.getNeuteringYn(),
-            filter.getMinBirth(),
-            filter.getMaxBirth(),
-            filter.getPetGender(),
-            filter.getPetBreed(),
-            filter.getPetSize());
+    return petRepository.findFilteringMatchingPets(userInfo.getSearchFilter(),userInfo.getRepresentativePetSeq());
   }
 
 

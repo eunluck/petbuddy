@@ -1,8 +1,12 @@
 package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.commons.BaseEntity;
+import com.petbuddy.api.model.listener.RegisterPetListener;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
+import com.querydsl.core.annotations.PropertyType;
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.annotations.QueryType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@EntityListeners(RegisterPetListener.class)
 public class Pet extends BaseEntity {
 
   @Id
@@ -28,7 +33,6 @@ public class Pet extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private Gender petGender;
   private boolean neuteringYn;
-  private boolean representativeYn;
   private String petIntroduce;
   private int likes;
   private int status;
@@ -37,6 +41,9 @@ public class Pet extends BaseEntity {
   @ManyToOne(optional = false,fetch = FetchType.LAZY)
   @ToString.Exclude
   private UserInfo user;
+
+
+
 
   public Pet(UserInfo user,String petName, Gender petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
     this(null, user,petName, petIntroduce, petGender, petAge, neuteringYn, 0, false);
@@ -64,7 +71,6 @@ public class Pet extends BaseEntity {
     this.likes = likes;
     this.likesOfMe = likesOfMe;
     this.status = 1;
-    this.representativeYn = true;
   }
 
   public void modifyPetIntroduce(String petIntroduce) {

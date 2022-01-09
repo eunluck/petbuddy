@@ -10,5 +10,4 @@ public interface PetLikeRepository extends CrudRepository<Likes,Long> {
   //void like(Id<UserInfo, Long> userId, Id<Pet, Long> postId);
 
 
-    boolean existsByPetIdAndUserId(Long petId, Long userId);
 }

@@ -66,6 +66,8 @@ public class UserInfo extends BaseEntity {
   @JoinColumn(name = "user_seq",insertable = false,updatable = false)
   private List<Pet> pets = Lists.newArrayList();
 
+  private Long representativePetSeq;
+
   public UserInfo(String name, Email email, String password, Gender gender) {
     this(name, email, password, gender,null);
   }
@@ -135,6 +137,11 @@ public class UserInfo extends BaseEntity {
     this.phone = phoneNumber;
   }
 
+  public void updateRepresentativePetSeq(Long petSeq) {
+
+    this.representativePetSeq = petSeq;
+
+  }
 
 
   public void updateMoreInfo(UserMoreInformationUpdateRequest userMoreInformationUpdateRequest) {

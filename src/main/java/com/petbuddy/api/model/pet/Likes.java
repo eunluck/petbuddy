@@ -17,11 +17,11 @@ public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
-    private Long userId;
-    private Long petId;
+    private Long likedPetId;
+    private Long targetPetId;
 
-    public Likes(Long userId, Long petId) {
-        this.userId=userId;
-        this.petId=petId;
+    public Likes(Long likedPetId, Long targetPetId) {
+        this.likedPetId=likedPetId;
+        this.targetPetId=targetPetId;
     }
 }

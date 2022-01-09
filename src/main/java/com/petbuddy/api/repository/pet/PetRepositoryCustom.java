@@ -1,17 +1,18 @@
 package com.petbuddy.api.repository.pet;
 
+import com.petbuddy.api.model.card.UserSearchFilter;
+import com.petbuddy.api.controller.pet.PetDto;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.user.Gender;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PetRepositoryCustom {
 
-  List<Pet> findFilteringMatchingPets(Gender gender, Boolean neuteringYn, LocalDate minAge, LocalDate maxAge, Gender petGender, String petBreed, String petSize);
-
+  List<PetDto> findFilteringMatchingPets(UserSearchFilter userSearchFilter,Long representativePetSeq);
+  Optional<PetDto> findBySeq(Long petId,Long likedPetId);
 
 
 }
