@@ -45,10 +45,12 @@ public class UserService {
         );
 
         UserInfo userInfo = new UserInfo(name, email, passwordEncoder.encode(password), gender);
+        UserSearchFilter savedFilter = userSearchFilterRepository.save(UserSearchFilter.builder().build());
+        userInfo.setSearchFilter(savedFilter);
         UserInfo saved = insert(userInfo);
 
         // raise event
-        eventBus.post(new JoinEvent(saved));
+        //eventBus.post(new JoinEvent(saved));
         return saved;
     }
 

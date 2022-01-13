@@ -1,5 +1,7 @@
 package com.petbuddy.api.model.card;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.user.Gender;
@@ -18,15 +20,16 @@ import java.util.Calendar;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(callSuper = true)
+@ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = true)
 public class UserSearchFilter extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
-    @OneToOne
+    @OneToOne(mappedBy = "searchFilter")
     @ToString.Exclude
+
     private UserInfo userInfo;
     @Enumerated(value = EnumType.STRING)
     private Gender gender;

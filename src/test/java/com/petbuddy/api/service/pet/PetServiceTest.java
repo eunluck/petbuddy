@@ -56,6 +56,7 @@ class PetServiceTest {
     assertThat(pet.getPetIntroduce(), is(contents));
     log.info("Written post: {}", pet);
   }
+/*
 
   @Test
   @Order(2)
@@ -110,5 +111,6 @@ class PetServiceTest {
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));
   }
+*/
 
 }

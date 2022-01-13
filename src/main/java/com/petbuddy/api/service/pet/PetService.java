@@ -1,6 +1,7 @@
 package com.petbuddy.api.service.pet;
 
 import com.petbuddy.api.controller.pet.PetDto;
+import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.pet.Likes;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.repository.pet.PetLikeRepository;
@@ -41,9 +42,10 @@ public class PetService {
 
     return findById(targetPetId,likedPetId).map(pet -> {
       if (!pet.isLikesOfMe()){
-//        pet.incrementAndGetLikes();
+        Pet findPet = petRepository.findById(pet.getSeq()).orElseThrow(() -> new NotFoundException(Long.class,pet.getSeq()));
+        findPet.incrementAndGetLikes();
         petLikeRepository.save(new Likes(likedPetId,targetPetId));
-  //      update(pet);
+        update(findPet);
       }
         return pet;
     });

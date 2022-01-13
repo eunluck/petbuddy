@@ -1,3 +1,4 @@
+/*
 package com.petbuddy.api.model.listener;
 
 
@@ -13,6 +14,14 @@ public class UserSearchFilterListener {
     public void prePersistAndPreUpdate(Object o) {
         UserSearchFilterRepository userSearchFilterRepository = BeanUtils.getBean(UserSearchFilterRepository.class);
         UserInfo user = (UserInfo) o;
+
+        UserSearchFilter
+                .builder()
+                .build();
+
+
+        user.setSearchFilter(UserSearchFilter.builder().);
+
         userSearchFilterRepository.save(UserSearchFilter
                 .builder()
                 .userInfo(user)
@@ -20,3 +29,4 @@ public class UserSearchFilterListener {
 
     }
 }
+*/

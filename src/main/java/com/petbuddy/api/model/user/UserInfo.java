@@ -1,11 +1,11 @@
 package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Strings;
 import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.card.UserSearchFilter;
-import com.petbuddy.api.model.listener.UserSearchFilterListener;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
 import lombok.*;
@@ -30,7 +30,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(value = UserSearchFilterListener.class)
 public class UserInfo extends BaseEntity {
 
   @Id
@@ -59,10 +58,14 @@ public class UserInfo extends BaseEntity {
   private int status;
   private LocalDateTime lastLoginAt;
   @OneToOne
+  @ToString.Exclude
+  @Setter
+  @JoinColumn(name = "search_filter_seq",referencedColumnName = "seq")
   private UserSearchFilter searchFilter;
 
 
   @OneToMany(fetch = FetchType.EAGER)
+  @ToString.Exclude
   @JoinColumn(name = "user_seq",insertable = false,updatable = false)
   private List<Pet> pets = Lists.newArrayList();
 

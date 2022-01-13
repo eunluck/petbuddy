@@ -64,7 +64,6 @@ public class PetRestController {
 
     return ApiResult.OK(
       petService.like(petId, userInfo.getRepresentativePetSeq())
-        .map(PetDto::new)
         .orElseThrow(() -> new NotFoundException("petId:"+petId.toString(),"getRepresentativePetSeq:"+  userInfo.getRepresentativePetSeq().toString()))
     );
   }
