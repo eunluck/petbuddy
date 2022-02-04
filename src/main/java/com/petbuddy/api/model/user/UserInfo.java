@@ -1,6 +1,7 @@
 package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Strings;
 import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
@@ -60,6 +61,7 @@ public class UserInfo extends BaseEntity {
   @OneToOne
   @ToString.Exclude
   @Setter
+  @JsonBackReference
   @JoinColumn(name = "search_filter_seq",referencedColumnName = "seq")
   private UserSearchFilter searchFilter;
 

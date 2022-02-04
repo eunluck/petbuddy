@@ -28,7 +28,9 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
         return Optional.ofNullable(queryFactory.select(new QPetDto(pet.seq,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.seq,pet.createdAt,userInfo))
                 .from(pet)
                 .join(pet.user,userInfo)
-                .leftJoin(likes).on(pet.seq.eq(likes.targetPetId).and(likes.likedPetId.eq(likedPetId)))
+                .leftJoin(likes)
+                .on(pet.seq.eq(likes.targetPetId)
+                        .and(likes.likedPetId.eq(likedPetId)))
                 .where(pet.seq.eq(petId)).fetchOne());
     }
 
@@ -39,7 +41,9 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
         return queryFactory.select(new QPetDto(pet.seq,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.seq,pet.createdAt,userInfo))
                 .from(pet)
                 .join(pet.user,userInfo)
-                .leftJoin(likes).on(pet.seq.eq(likes.targetPetId).and(likes.likedPetId.eq(likedPetId)))
+                .leftJoin(likes)
+                .on(pet.seq.eq(likes.targetPetId)
+                        .and(likes.likedPetId.eq(likedPetId)))
                 .where(
                         eqUserGender(userSearchFilter.getGender()),
                         eqPetGender(userSearchFilter.getPetGender()),

@@ -20,7 +20,7 @@ import java.util.Calendar;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(callSuper = false)
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserSearchFilter extends BaseEntity {
 
@@ -29,7 +29,7 @@ public class UserSearchFilter extends BaseEntity {
     private Long seq;
     @OneToOne(mappedBy = "searchFilter")
     @ToString.Exclude
-
+    @JsonManagedReference
     private UserInfo userInfo;
     @Enumerated(value = EnumType.STRING)
     private Gender gender;

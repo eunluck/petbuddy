@@ -59,6 +59,13 @@ public class PetService {
 
 
   @Transactional(readOnly = true)
+  public Optional<Pet> findById(Long petId) {
+
+    return petRepository.findById(petId);
+  }
+
+
+  @Transactional(readOnly = true)
   public List<Pet> findAll( Long userId) {
     checkNotNull(userId, "userId must be provided.");
     /*

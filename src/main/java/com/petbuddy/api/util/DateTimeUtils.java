@@ -18,12 +18,19 @@ public class DateTimeUtils {
   }
 
   public static LocalDate minAgeYearCalculation(Integer age){
+    if (age == null){
+      return null;
+    }
     LocalDate now = LocalDate.now();
 
     return LocalDate.of(now.minusYears(age).getYear(),1,1);
   }
 
   public static LocalDate maxAgeYearCalculation(Integer age){
+    if (age == null){
+      return null;
+    }
+
     LocalDate now = LocalDate.now();
 
 

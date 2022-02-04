@@ -1,5 +1,7 @@
 package com.petbuddy.api.service.pet;
 
+import com.petbuddy.api.controller.pet.PetDto;
+import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Gender;
@@ -35,61 +37,71 @@ class PetServiceTest {
 
   private Long userId;
   private UserInfo userInfo;
+  private Pet pet = null;
+  private Pet likedPet = null;
+  private UserInfo user2 = null;
+  private Pet pet2 = null;
   @BeforeAll
   void setUp() {
     userInfo = userService.join("테스트",new Email("skgoddns1@gmail.com","user"),"0694123",Gender.of("MALE"));
-    petId =  1L;
-    writerId =  1L;
-    userId =  2L;
+    user2 =  userService.join("테스트2",new Email("skgoddns2@gmail.com","user"),"0694123",Gender.of("FEMALE"));
+
   }
+
+
   @Test
   @Order(1)
-  void 포스트를_작성한다() {
+  void 펫을_등록한다() {
     String contents = randomAlphabetic(10);
     String male = "male";
 
-    UserInfo user = new UserInfo("삐삐주인",new Email("skgoddns1@gmail.com","user"),"0694123",Gender.of("MALE"));
+    pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male),1,false,contents));
+    pet2 = petService.register(new Pet(user2,"뽀삐", Gender.of("FEMALE"),3,true,contents));
 
-    Pet pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male),1,false,contents));
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getSeq(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));
     log.info("Written post: {}", pet);
   }
-/*
 
   @Test
   @Order(2)
-  void 포스트를_수정한다() {
-    Pet pet = petService.findById(petId).orElse(null);
-    assertThat(pet, is(notNullValue()));
+  void 펫을_수정한다() {
+    Pet petBefore = petService.findById(pet.getSeq()).orElse(null);
+    assertThat(petBefore, is(notNullValue()));
     String petIntroduce = randomAlphabetic(40);
-    pet.modifyPetIntroduce(petIntroduce);
-    petService.modify(pet);
+    petBefore.modifyPetIntroduce(petIntroduce);
+    pet = petService.modify(petBefore);
     assertThat(pet.getPetIntroduce(), is(petIntroduce));
     log.info("Modified post: {}", pet);
   }
 
   @Test
   @Order(3)
-  void 포스트_목록을_조회한다() {
-    List<Pet> pets = petService.findAll( userId);
+  void 나의_펫_목록을_조회한다() {
+    List<Pet> pets = petService.findAll( userInfo.getSeq());
     assertThat(pets, is(notNullValue()));
-    assertThat(pets.size(), is(4));
+    assertThat(pets.size(), is(1));
   }
+/*
 
   @Test
   @Order(4)
-  void 포스트를_처음으로_좋아한다() {
-    Pet pet;
+  void 펫_좋아요() {
+    PetDto pet;
 
-    pet = petService.findById(petId).orElse(null);
+    UserInfo currentUser = userService.findById(userInfo.getSeq()).orElseThrow(() -> new NotFoundException(Long.class,userId));
+
+
+    pet = petService.findById(pet2.getSeq(),currentUser.getRepresentativePetSeq()).orElse(null);
+
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(false));
 
     int beforeLikes = pet.getLikes();
 
-    pet = petService.like(petId,  userId).orElse(null);
+
+    pet = petService.like(pet.getSeq(),  currentUser.getRepresentativePetSeq()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes + 1));
@@ -97,16 +109,18 @@ class PetServiceTest {
 
   @Test
   @Order(5)
-  void 포스트를_중복으로_좋아할수없다() {
-    Pet pet;
+  void 펫을_중복으로_좋아할수없다() {
+    PetDto pet;
 
-    pet = petService.findById(petId).orElse(null);
+    UserInfo user = userService.findById(userInfo.getSeq()).orElseThrow(() -> new NotFoundException(Long.class,userId));
+
+    pet = petService.findById(petId,user.getRepresentativePetSeq()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
 
     int beforeLikes = pet.getLikes();
 
-    pet = petService.like(petId, userId).orElse(null);
+    pet = petService.like(petId, user.getRepresentativePetSeq()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));

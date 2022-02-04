@@ -15,4 +15,5 @@ public interface PetRepositoryCustom {
   Optional<PetDto> findBySeq(Long petId,Long likedPetId);
 
 
+
 }
