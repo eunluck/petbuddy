@@ -50,8 +50,6 @@ public class Pet extends BaseEntity {
   }
   @Builder
   public Pet(Long seq, UserInfo user, String petName, String petIntroduce, Gender petGender,int petAge,boolean neuteringYn, int likes, boolean likesOfMe) {
-    System.out.println(petIntroduce);
-    System.out.println(petIntroduce.length());
     checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
