@@ -7,6 +7,7 @@ import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.commons.AttachedFile;
 import com.petbuddy.api.model.user.Email;
+import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.Role;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.Jwt;
@@ -82,7 +83,7 @@ public class UserRestController {
       joinRequest.getName(),
       new Email(joinRequest.getPrincipal(),joinRequest.getEmailType()),
       joinRequest.getCredentials(),
-      joinRequest.getGender()
+      Gender.of(joinRequest.getGender())
     );
 
     toAttachedFile(file).ifPresent(attachedFile ->

@@ -45,9 +45,8 @@ public class UserService {
         );
 
         UserInfo userInfo = new UserInfo(name, email, passwordEncoder.encode(password), gender);
-        UserSearchFilter savedFilter = userSearchFilterRepository.save(UserSearchFilter.builder().build());
-        userInfo.setSearchFilter(savedFilter);
         UserInfo saved = insert(userInfo);
+        userSearchFilterRepository.save(UserSearchFilter.createUserFilter(saved));
 
         // raise event
         //eventBus.post(new JoinEvent(saved));

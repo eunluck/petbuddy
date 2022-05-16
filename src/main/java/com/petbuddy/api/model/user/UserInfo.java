@@ -2,6 +2,7 @@ package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Strings;
 import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
@@ -58,17 +59,14 @@ public class UserInfo extends BaseEntity {
   private String profileImageUrl;
   private int status;
   private LocalDateTime lastLoginAt;
-  @OneToOne
-  @ToString.Exclude
-  @Setter
-  @JsonBackReference
-  @JoinColumn(name = "search_filter_seq",referencedColumnName = "seq")
+
+  @OneToOne(mappedBy = "userInfo")
+  @JsonManagedReference
   private UserSearchFilter searchFilter;
 
 
-  @OneToMany(fetch = FetchType.EAGER)
-  @ToString.Exclude
-  @JoinColumn(name = "user_seq",insertable = false,updatable = false)
+  @OneToMany(mappedBy = "user")
+  @JsonManagedReference
   private List<Pet> pets = Lists.newArrayList();
 
   private Long representativePetSeq;

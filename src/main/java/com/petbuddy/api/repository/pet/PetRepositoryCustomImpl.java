@@ -45,6 +45,7 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
                 .on(pet.seq.eq(likes.targetPetId)
                         .and(likes.likedPetId.eq(likedPetId)))
                 .where(
+                        userInfo.seq.ne(userSearchFilter.getUserInfo().getSeq()),
                         eqUserGender(userSearchFilter.getGender()),
                         eqPetGender(userSearchFilter.getPetGender()),
                         eqNeuteringYn(userSearchFilter.getNeuteringYn()),

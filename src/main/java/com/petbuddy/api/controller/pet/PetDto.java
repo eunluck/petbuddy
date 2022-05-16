@@ -1,5 +1,6 @@
 package com.petbuddy.api.controller.pet;
 
+import com.petbuddy.api.controller.user.UserDto;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
@@ -35,7 +36,7 @@ public class PetDto {
     @ApiModelProperty(value = "등록일시", required = true)
     private LocalDateTime createAt;
     @ApiModelProperty(value = "펫 소유자", required = true)
-    private UserInfo petOwner;
+    private UserDto petOwner;
 
     @QueryProjection
     public PetDto(Long seq,String petName,int petAge, Gender petGender, boolean neuteringYn, String petIntroduce, int likes, int status, Long likesOfMe, LocalDateTime createAt, UserInfo userInfo){
@@ -48,7 +49,7 @@ public class PetDto {
         this.likes = likes;
         this. status = status;
         this.likesOfMe = likesOfMe != null;
-        this.petOwner = userInfo;
+        this.petOwner = new UserDto(userInfo);
         this.createAt = createAt;
 
     }

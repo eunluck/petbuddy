@@ -48,6 +48,7 @@ public class MatchingService {
 
     UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(Long.class,userId));
 
+
     return petRepository.findFilteringMatchingPets(userInfo.getSearchFilter(),userInfo.getRepresentativePetSeq());
   }
 

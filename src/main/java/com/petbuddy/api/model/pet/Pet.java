@@ -1,5 +1,6 @@
 package com.petbuddy.api.model.pet;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.listener.RegisterPetListener;
 import com.petbuddy.api.model.user.Gender;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.LocalDateTime.now;
+import static javax.persistence.FetchType.LAZY;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
@@ -38,8 +40,9 @@ public class Pet extends BaseEntity {
   private int status;
   @Transient
   private boolean likesOfMe;
-  @ManyToOne(optional = false,fetch = FetchType.LAZY)
-  @ToString.Exclude
+  @JsonBackReference
+  @ManyToOne(fetch = LAZY)
+  @JoinColumn(name = "user_seq")
   private UserInfo user;
 
 

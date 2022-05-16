@@ -27,9 +27,8 @@ public class UserSearchFilter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
-    @OneToOne(mappedBy = "searchFilter")
-    @ToString.Exclude
-    @JsonManagedReference
+    @OneToOne
+    @JsonBackReference
     private UserInfo userInfo;
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
@@ -40,6 +39,10 @@ public class UserSearchFilter extends BaseEntity {
     private Gender petGender;
     private String petBreed;
     private String petSize;
+
+    public UserSearchFilter(UserInfo user) {
+        this.userInfo = user;
+    }
 
  /*   public Optional<Gender> getGender() {
         return Optional.of(gender);
@@ -69,6 +72,10 @@ public class UserSearchFilter extends BaseEntity {
         return Optional.of(petSize);
     }
 */
+
+    public static UserSearchFilter createUserFilter(UserInfo user){
+        return new UserSearchFilter(user);
+    }
     public void update(UserSearchFilterUpdateRequest userSearchFilterUpdateRequest){
         BeanUtils.copyProperties(userSearchFilterUpdateRequest,this);
         this.minBirth = DateTimeUtils.minAgeYearCalculation(userSearchFilterUpdateRequest.getMinAge());

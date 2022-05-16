@@ -24,7 +24,7 @@ public class JoinRequest {
   private String credentials;
 
   @ApiModelProperty(value = "가입자 성별", required = true)
-  private Gender gender;
+  private String gender;
 
 
 
