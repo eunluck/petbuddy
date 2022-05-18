@@ -20,7 +20,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 public class UserDto {
 
   @ApiModelProperty(value = "PK", required = true)
-  private Long seq;
+  private Long id;
 
   @ApiModelProperty(value = "사용자명", required = true)
   private String name;
@@ -38,7 +38,7 @@ public class UserDto {
   private LocalDateTime lastLoginAt;
 
   @ApiModelProperty(value = "생성일시", required = true)
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @ApiModelProperty(value = "매칭 필터", required = true)
   private UserSearchFilter searchFilter;
@@ -53,13 +53,13 @@ public class UserDto {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
+      .append("id", id)
       .append("name", name)
       .append("email", email)
       .append("profileImageUrl", profileImageUrl)
       .append("loginCount", loginCount)
       .append("lastLoginAt", lastLoginAt)
-      .append("createAt", createAt)
+      .append("createdAt", createdAt)
       .toString();
   }
 

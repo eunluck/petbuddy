@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
-@EqualsAndHashCode(of = "seq")
+@EqualsAndHashCode(of = "id")
 @EntityListeners(value = AuditingEntityListener.class)
 public abstract class BaseEntity implements Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long id;
 
     @CreatedDate
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
@@ -25,4 +25,6 @@ public abstract class BaseEntity implements Auditable{
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime updatedAt;
+
+    private LocalDateTime deletedAt;
 }

@@ -60,7 +60,7 @@ class CommentServiceTest {
     );
     Pet afterPet = postService.findById(postId, postWriterId, userId).orElseThrow(() -> new NotFoundException(Pet.class, postId));
     assertThat(comment, is(notNullValue()));
-    assertThat(comment.getSeq(), is(notNullValue()));
+    assertThat(comment.getId(), is(notNullValue()));
     assertThat(comment.getContents(), is(contents));
     log.info("Written comment: {}", comment);
   }

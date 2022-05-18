@@ -1,6 +1,9 @@
 package com.petbuddy.api.model.pet;
 
+import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.listener.RegisterPetListener;
 import com.petbuddy.api.model.user.Gender;
@@ -9,8 +12,12 @@ import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryProjection;
 import com.querydsl.core.annotations.QueryType;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,8 +29,9 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Data
 @NoArgsConstructor
 @Entity
-@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@SQLDelete(sql = "UPDATE pet SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 @EntityListeners(RegisterPetListener.class)
 public class Pet extends BaseEntity {
 
@@ -32,6 +40,7 @@ public class Pet extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private Gender petGender;
   private boolean neuteringYn;
+  @Lob
   private String petIntroduce;
   private int likes;
   private int status;
@@ -39,10 +48,11 @@ public class Pet extends BaseEntity {
   private boolean likesOfMe;
   @JsonBackReference
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "user_seq")
+  @JoinColumn(name = "user_id")
   private UserInfo user;
-
-
+  @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
+  private List<PetImage> petImages = Lists.newArrayList();
 
 
   public Pet(UserInfo user,String petName, Gender petGender,int petAge,boolean neuteringYn,  String petIntroduce) {
@@ -85,4 +95,9 @@ public class Pet extends BaseEntity {
     return ++likes;
   }
 
+
+  public void addImages(List<PetImage> petImages){
+    petImages.forEach(petImage -> petImage.setPet(this));
+    this.petImages.addAll(petImages);
+  }
 }

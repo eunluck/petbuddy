@@ -16,7 +16,7 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor
 public class ConnectedUser {
 
-  private  Long seq;
+  private  Long id;
 
   private  String name;
 
@@ -26,21 +26,21 @@ public class ConnectedUser {
 
   private  LocalDateTime grantedAt;
 
-  public ConnectedUser(Long seq, String name, Email email, String profileImageUrl, LocalDateTime grantedAt) {
-    checkNotNull(seq, "seq must be provided.");
+  public ConnectedUser(Long id, String name, Email email, String profileImageUrl, LocalDateTime grantedAt) {
+    checkNotNull(id, "id must be provided.");
     checkNotNull(name, "name must be provided.");
     checkNotNull(email, "email must be provided.");
     checkNotNull(grantedAt, "grantedAt must be provided.");
 
-    this.seq = seq;
+    this.id = id;
     this.name = name;
     this.email = email;
     this.profileImageUrl = profileImageUrl;
     this.grantedAt = grantedAt;
   }
 
-  public Long getSeq() {
-    return seq;
+  public Long getId() {
+    return id;
   }
 
   public String getName() {
@@ -62,7 +62,7 @@ public class ConnectedUser {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
+      .append("id", id)
       .append("name", name)
       .append("email", email)
       .append("profileImageUrl", profileImageUrl)

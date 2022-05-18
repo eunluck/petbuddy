@@ -11,6 +11,8 @@ import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -30,7 +32,8 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ToString(callSuper = true)
+@SQLDelete(sql = "UPDATE user_info SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 @EqualsAndHashCode(callSuper = true)
 public class UserInfo extends BaseEntity {
 
@@ -62,11 +65,11 @@ public class UserInfo extends BaseEntity {
   private UserSearchFilter searchFilter;
 
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user",cascade = CascadeType.PERSIST, orphanRemoval = true)
   @JsonManagedReference
   private List<Pet> pets = Lists.newArrayList();
 
-  private Long representativePetSeq;
+  private Long representativePetId;
 
   public UserInfo(String name, Email email, String password, Gender gender) {
     this(name, email, password, gender,null);
@@ -109,7 +112,7 @@ public class UserInfo extends BaseEntity {
   }
 
   public String newApiToken(Jwt jwt, String[] roles) {
-    Jwt.Claims claims = Jwt.Claims.of(getSeq(), name, email, roles);
+    Jwt.Claims claims = Jwt.Claims.of(getId(), name, email, roles);
     return jwt.newToken(claims);
   }
 
@@ -136,9 +139,9 @@ public class UserInfo extends BaseEntity {
     this.phone = phoneNumber;
   }
 
-  public void updateRepresentativePetSeq(Long petSeq) {
+  public void updateRepresentativePetId(Long petId) {
 
-    this.representativePetSeq = petSeq;
+    this.representativePetId = petId;
 
   }
 

@@ -9,11 +9,11 @@ import java.util.Optional;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription,Long> {
 
-    Optional<Subscription> findById(Long seq);
+    Optional<Subscription> findById(Long id);
 
     Subscription save(Subscription user);
 
-    Optional<Subscription> findByUserId(Long userSeq);
+    Optional<Subscription> findByUserId(Long userId);
 
     List<Subscription> findAll();
 

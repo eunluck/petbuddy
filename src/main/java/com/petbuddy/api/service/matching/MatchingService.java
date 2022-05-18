@@ -40,16 +40,16 @@ public class MatchingService {
       limit = 5;
 */
 
-    return petRepository.findByUserSeq(userId);
+    return petRepository.findByUserId(userId);
   }
 
   @Transactional(readOnly = true)
   public List<PetDto> findMatchingPets(Long userId) {
 
-    UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(Long.class,userId));
+    UserInfo userInfo = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(Long.class,userId));
 
 
-    return petRepository.findFilteringMatchingPets(userInfo.getSearchFilter(),userInfo.getRepresentativePetSeq());
+    return petRepository.findFilteringMatchingPets(userInfo.getSearchFilter(),userInfo.getRepresentativePetId());
   }
 
 

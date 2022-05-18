@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class RegisterPetRequest {
@@ -22,6 +24,9 @@ public class RegisterPetRequest {
   private String petGender;
   @ApiModelProperty(value = "중성화 여부")
   private boolean neuteringYn;
+  @ApiModelProperty(value = "이미지 id 목록")
+  private List<Long> imageIds;
+
 
 
   public Pet newPet(UserInfo user) {

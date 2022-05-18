@@ -59,7 +59,7 @@ class PetServiceTest {
     pet2 = petService.register(new Pet(user2,"뽀삐", Gender.of("FEMALE"),3,true,contents));
 
     assertThat(pet, is(notNullValue()));
-    assertThat(pet.getSeq(), is(notNullValue()));
+    assertThat(pet.getId(), is(notNullValue()));
     assertThat(pet.getPetIntroduce(), is(contents));
     log.info("Written post: {}", pet);
   }
@@ -67,7 +67,7 @@ class PetServiceTest {
   @Test
   @Order(2)
   void 펫을_수정한다() {
-    Pet petBefore = petService.findById(pet.getSeq()).orElse(null);
+    Pet petBefore = petService.findById(pet.getId()).orElse(null);
     assertThat(petBefore, is(notNullValue()));
     String petIntroduce = randomAlphabetic(40);
     petBefore.modifyPetIntroduce(petIntroduce);
@@ -79,7 +79,7 @@ class PetServiceTest {
   @Test
   @Order(3)
   void 나의_펫_목록을_조회한다() {
-    List<Pet> pets = petService.findAll( userInfo.getSeq());
+    List<Pet> pets = petService.findAll( userInfo.getId());
     assertThat(pets, is(notNullValue()));
     assertThat(pets.size(), is(1));
   }
@@ -90,10 +90,10 @@ class PetServiceTest {
   void 펫_좋아요() {
     PetDto pet;
 
-    UserInfo currentUser = userService.findById(userInfo.getSeq()).orElseThrow(() -> new NotFoundException(Long.class,userId));
+    UserInfo currentUser = userService.findById(userInfo.getId()).orElseThrow(() -> new NotFoundException(Long.class,userId));
 
 
-    pet = petService.findById(pet2.getSeq(),currentUser.getRepresentativePetSeq()).orElse(null);
+    pet = petService.findById(pet2.getId(),currentUser.getRepresentativePetId()).orElse(null);
 
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(false));
@@ -101,7 +101,7 @@ class PetServiceTest {
     int beforeLikes = pet.getLikes();
 
 
-    pet = petService.like(pet.getSeq(),  currentUser.getRepresentativePetSeq()).orElse(null);
+    pet = petService.like(pet.getId(),  currentUser.getRepresentativePetId()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes + 1));
@@ -112,15 +112,15 @@ class PetServiceTest {
   void 펫을_중복으로_좋아할수없다() {
     PetDto pet;
 
-    UserInfo user = userService.findById(userInfo.getSeq()).orElseThrow(() -> new NotFoundException(Long.class,userId));
+    UserInfo user = userService.findById(userInfo.getId()).orElseThrow(() -> new NotFoundException(Long.class,userId));
 
-    pet = petService.findById(petId,user.getRepresentativePetSeq()).orElse(null);
+    pet = petService.findById(petId,user.getRepresentativePetId()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
 
     int beforeLikes = pet.getLikes();
 
-    pet = petService.like(petId, user.getRepresentativePetSeq()).orElse(null);
+    pet = petService.like(petId, user.getRepresentativePetId()).orElse(null);
     assertThat(pet, is(notNullValue()));
     assertThat(pet.isLikesOfMe(), is(true));
     assertThat(pet.getLikes(), is(beforeLikes));

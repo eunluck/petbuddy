@@ -21,9 +21,9 @@ public class RegisterPetListener {
 
         UserInfo userInfo = pet.getUser();
 
-        if (userInfo.getRepresentativePetSeq() == null){
+        if (userInfo.getRepresentativePetId() == null){
 
-            userInfo.updateRepresentativePetSeq(pet.getSeq());
+            userInfo.updateRepresentativePetId(pet.getId());
 
         }
         userRepository.save(userInfo);

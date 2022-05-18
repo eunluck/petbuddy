@@ -13,6 +13,7 @@ import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.Jwt;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.user.UserService;
+import com.petbuddy.api.util.ImageUploader;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,13 +40,13 @@ public class UserRestController {
 
   private final Jwt jwt;
 
-  private final S3Client s3Client;
+  private final ImageUploader imageUploader;
 
   private final UserService userService;
 
-  public UserRestController(Jwt jwt, S3Client s3Client, UserService userService) {
+  public UserRestController(Jwt jwt, ImageUploader imageUploader, UserService userService) {
     this.jwt = jwt;
-    this.s3Client = s3Client;
+    this.imageUploader = imageUploader;
     this.userService = userService;
   }
 
@@ -60,18 +61,7 @@ public class UserRestController {
     );
   }
 
-  public Optional<String> uploadProfileImage(AttachedFile profileFile) {
-    String profileImageUrl = null;
-    if (profileFile != null) {
-      String key = profileFile.randomName("profiles", "jpeg");
-      try {
-        profileImageUrl = s3Client.upload(profileFile.inputStream(), profileFile.length(), key, profileFile.getContentType(), null);
-      } catch (AmazonS3Exception e) {
-        log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
-      }
-    }
-    return ofNullable(profileImageUrl);
-  }
+
 
   @PostMapping(path = "user/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ApiOperation(value = "회원가입 (API 토큰 필요없음)")
@@ -88,11 +78,11 @@ public class UserRestController {
 
     toAttachedFile(file).ifPresent(attachedFile ->
       supplyAsync(() ->
-        uploadProfileImage(attachedFile)
+              imageUploader.uploadProfileImage(attachedFile)
       ).thenAccept(opt ->
         opt.ifPresent(profileImageUrl ->
           // 이미지가 정상적으로 업로드가 완료된 경우 (profileImageUrl != null)
-          userService.updateProfileImage(userInfo.getSeq(), profileImageUrl)
+          userService.updateProfileImage(userInfo.getId(), profileImageUrl)
         )
       )
     );

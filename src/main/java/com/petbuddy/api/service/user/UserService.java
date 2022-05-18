@@ -78,7 +78,7 @@ public class UserService {
     public Optional<UserInfo> findById(Long userId) {
         checkNotNull(userId, "userId must be provided.");
 
-        return userRepository.findBySeq(userId);
+        return userRepository.findById(userId);
     }
 
     @Transactional(readOnly = true)
@@ -109,7 +109,7 @@ public class UserService {
     @Transactional
     public UserInfo updateUserMoreInformation(Long userId, UserMoreInformationUpdateRequest userMoreInformationUpdateRequest) {
 
-        UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+        UserInfo userInfo = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
 
         userInfo.updateMoreInfo(userMoreInformationUpdateRequest);
 
@@ -121,7 +121,7 @@ public class UserService {
     @Transactional
     public UserInfo updateUserPhoneNumber(Long userId, String phoneNumber) {
 
-        UserInfo userInfo = userRepository.findBySeq(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
+        UserInfo userInfo = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserInfo.class, userId));
 
         userInfo.updatePhoneNumber(phoneNumber);
 

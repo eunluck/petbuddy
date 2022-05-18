@@ -2,6 +2,7 @@ package com.petbuddy.api.controller.pet;
 
 import com.petbuddy.api.controller.user.UserDto;
 import com.petbuddy.api.model.pet.Pet;
+import com.petbuddy.api.model.pet.PetImage;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import com.querydsl.core.annotations.QueryProjection;
@@ -10,13 +11,14 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class PetDto {
 
 
     @ApiModelProperty(value = "PK", required = true)
-    private Long seq;
+    private Long id;
     @ApiModelProperty(value = "펫 소개", required = true)
     private String petIntroduce;
     @ApiModelProperty(value = "펫 이름", required = true)
@@ -34,13 +36,15 @@ public class PetDto {
     @ApiModelProperty(value = "펫 상태", required = true)
     private int status;
     @ApiModelProperty(value = "등록일시", required = true)
-    private LocalDateTime createAt;
-    @ApiModelProperty(value = "펫 소유자", required = true)
-    private UserDto petOwner;
-
+    private LocalDateTime createdAt;
+    @ApiModelProperty(value = "수정일시", required = true)
+    private LocalDateTime updatedAt;
+    @ApiModelProperty(value = "펫 이미지 리스트")
+    private List<PetImageDto> petImages;
+    
     @QueryProjection
-    public PetDto(Long seq,String petName,int petAge, Gender petGender, boolean neuteringYn, String petIntroduce, int likes, int status, Long likesOfMe, LocalDateTime createAt, UserInfo userInfo){
-        this.seq =seq;
+    public PetDto(Long id,String petName,int petAge, Gender petGender, boolean neuteringYn, String petIntroduce, int likes, int status, Long likesOfMe, LocalDateTime createAt){
+        this.id =id;
         this.petName = petName;
         this.petAge = petAge;
         this. petGender = petGender;
@@ -49,13 +53,13 @@ public class PetDto {
         this.likes = likes;
         this. status = status;
         this.likesOfMe = likesOfMe != null;
-        this.petOwner = new UserDto(userInfo);
-        this.createAt = createAt;
+        this.createdAt = createAt;
 
     }
 
     public PetDto(Pet pet){
         BeanUtils.copyProperties(pet,this);
+        this.petImages = PetImageDto.listOf(pet.getPetImages());
 
     }
 }

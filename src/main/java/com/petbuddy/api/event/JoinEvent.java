@@ -11,7 +11,7 @@ public class JoinEvent {
   private final String name;
 
   public JoinEvent(UserInfo userInfo) {
-    this.userId = userInfo.getSeq();
+    this.userId = userInfo.getId();
     this.name = userInfo.getName();
   }
 

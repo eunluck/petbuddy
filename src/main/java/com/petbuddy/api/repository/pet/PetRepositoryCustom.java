@@ -11,8 +11,8 @@ import java.util.Optional;
 @Repository
 public interface PetRepositoryCustom {
 
-  List<PetDto> findFilteringMatchingPets(UserSearchFilter userSearchFilter,Long representativePetSeq);
-  Optional<PetDto> findBySeq(Long petId,Long likedPetId);
+  List<PetDto> findFilteringMatchingPets(UserSearchFilter userSearchFilter,Long representativePetId);
+  Optional<PetDto> findById(Long petId,Long likedPetId);
 
 
 

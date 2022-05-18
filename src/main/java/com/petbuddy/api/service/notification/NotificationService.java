@@ -41,7 +41,7 @@ public class NotificationService {
     }
 
     public PushMessage notifyUser(UserInfo userInfo, PushMessage message) throws Exception {
-        Optional<Subscription> maybeSubscription = subscriptionRepository.findByUserId(userInfo.getSeq());
+        Optional<Subscription> maybeSubscription = subscriptionRepository.findByUserId(userInfo.getId());
 
         if (!maybeSubscription.isPresent()) {
             log.info("Can not send message to user {} because not found any subscription", userInfo);

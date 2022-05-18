@@ -24,28 +24,28 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<PetDto> findBySeq(Long petId, Long likedPetId) {
-        return Optional.ofNullable(queryFactory.select(new QPetDto(pet.seq,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.seq,pet.createdAt,userInfo))
+    public Optional<PetDto> findById(Long petId, Long likedPetId) {
+        return Optional.ofNullable(queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
                 .from(pet)
                 .join(pet.user,userInfo)
                 .leftJoin(likes)
-                .on(pet.seq.eq(likes.targetPetId)
+                .on(pet.id.eq(likes.targetPetId)
                         .and(likes.likedPetId.eq(likedPetId)))
-                .where(pet.seq.eq(petId)).fetchOne());
+                .where(pet.id.eq(petId)).fetchOne());
     }
 
     @Override
     public List<PetDto> findFilteringMatchingPets(UserSearchFilter userSearchFilter,Long likedPetId) {
 
         //return queryFactory.select(pet).from(pet,likes)
-        return queryFactory.select(new QPetDto(pet.seq,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.seq,pet.createdAt,userInfo))
+        return queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
                 .from(pet)
                 .join(pet.user,userInfo)
                 .leftJoin(likes)
-                .on(pet.seq.eq(likes.targetPetId)
+                .on(pet.id.eq(likes.targetPetId)
                         .and(likes.likedPetId.eq(likedPetId)))
                 .where(
-                        userInfo.seq.ne(userSearchFilter.getUserInfo().getSeq()),
+                        userInfo.id.ne(userSearchFilter.getUserInfo().getId()),
                         eqUserGender(userSearchFilter.getGender()),
                         eqPetGender(userSearchFilter.getPetGender()),
                         eqNeuteringYn(userSearchFilter.getNeuteringYn()),

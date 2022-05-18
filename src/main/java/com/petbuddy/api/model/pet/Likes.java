@@ -16,7 +16,7 @@ public class Likes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long id;
     private Long likedPetId;
     private Long targetPetId;
 

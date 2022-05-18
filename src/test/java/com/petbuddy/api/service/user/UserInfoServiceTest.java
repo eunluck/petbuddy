@@ -51,7 +51,7 @@ class UserInfoServiceTest {
   void 사용자를_추가한다() {
     UserInfo userInfo = userService.join(name, email, password, Gender.of("MALE"));
     assertThat(userInfo, is(notNullValue()));
-    assertThat(userInfo.getSeq(), is(notNullValue()));
+    assertThat(userInfo.getId(), is(notNullValue()));
     assertThat(userInfo.getEmail(), is(email));
     log.info("Inserted user: {}", userInfo);
   }
