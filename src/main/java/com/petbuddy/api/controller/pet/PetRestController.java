@@ -1,16 +1,13 @@
 package com.petbuddy.api.controller.pet;
 
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.AttachedFile;
-import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.PetImage;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.pet.PetService;
 import com.petbuddy.api.service.user.UserService;
-import com.petbuddy.api.util.ImageUploader;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-import static java.util.Optional.ofNullable;
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
+@Api(tags = "펫 APIs")
 public class PetRestController {
 
     private final PetService petService;

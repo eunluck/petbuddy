@@ -1,32 +1,21 @@
 package com.petbuddy.api.util;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.google.common.base.Strings;
 import com.petbuddy.api.aws.S3Client;
-import com.petbuddy.api.error.*;
+import com.petbuddy.api.error.NotFoundAlgorithmException;
 import com.petbuddy.api.model.commons.AttachedFile;
-import com.petbuddy.api.model.commons.ImageExtension;
 import com.petbuddy.api.model.pet.PetImage;
-import com.petbuddy.api.model.user.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;

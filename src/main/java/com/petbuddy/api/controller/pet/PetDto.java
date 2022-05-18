@@ -1,10 +1,7 @@
 package com.petbuddy.api.controller.pet;
 
-import com.petbuddy.api.controller.user.UserDto;
 import com.petbuddy.api.model.pet.Pet;
-import com.petbuddy.api.model.pet.PetImage;
 import com.petbuddy.api.model.user.Gender;
-import com.petbuddy.api.model.user.UserInfo;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

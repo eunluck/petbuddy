@@ -1,13 +1,9 @@
 package com.petbuddy.api.controller.pet;
 
-import com.petbuddy.api.model.commons.BaseEntity;
-import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.pet.PetImage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -2,26 +2,23 @@ package com.petbuddy.api.model.pet;
 
 import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.listener.RegisterPetListener;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
-import com.querydsl.core.annotations.PropertyType;
-import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.annotations.QueryType;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.time.LocalDateTime.now;
 import static javax.persistence.FetchType.LAZY;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -63,7 +60,7 @@ public class Pet extends BaseEntity {
     checkNotNull(petName, "강아지 이름을 입력해주세요");
     checkArgument(isNotEmpty(petIntroduce), "contents must be provided.");
     checkArgument( petAge>=0, "강아지의 나이를 입력해주세요");
-    checkArgument(petGender!= null && petGender.name().equalsIgnoreCase("male") || petGender.name().equalsIgnoreCase("female"), "contents must be provided and 'male' or 'female'");
+    checkArgument(petGender!= null &&petGender.name().equalsIgnoreCase("male") || petGender.name().equalsIgnoreCase("female"), "contents must be provided and 'male' or 'female'");
     checkArgument(
             petIntroduce.length() >= 2 && petIntroduce.length() <= 500,
       "자기소개는 두 글자 이상 and 500자 이하로 적어주세요."

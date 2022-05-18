@@ -1,11 +1,8 @@
 package com.petbuddy.api.controller.user;
 
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.petbuddy.api.aws.S3Client;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.card.UserSearchFilter;
-import com.petbuddy.api.model.commons.AttachedFile;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.Role;
@@ -25,10 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static com.petbuddy.api.model.commons.AttachedFile.toAttachedFile;
-import static java.util.Optional.ofNullable;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @RestController

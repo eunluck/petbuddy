@@ -1,7 +1,6 @@
 package com.petbuddy.api.model.card;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.user.Gender;
@@ -10,9 +9,11 @@ import com.petbuddy.api.util.DateTimeUtils;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
-import java.util.Calendar;
 
 @Entity
 @Getter
