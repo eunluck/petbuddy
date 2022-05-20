@@ -26,7 +26,6 @@ import static java.util.Optional.ofNullable;
 public class ImageUploader {
 
 
-    public static final String IMAGE_TYPE = "image";
     public static final String PET_IMAGE_DIR = "pets";
     public static final String USER_IMAGE_DIR = "profiles";
     public static final String ALGORITHM_NAME = "MD5";
@@ -47,12 +46,6 @@ public class ImageUploader {
         return ofNullable(profileImageUrl);
     }
 
-
-
-
-
-
-    @Transactional
     public List<PetImage> uploadPetImages(Long userId, List<AttachedFile> attachedFiles) {
 
         return attachedFiles.stream()
@@ -74,10 +67,6 @@ public class ImageUploader {
                 .build();
     }
 
-
-
-
-
     private String calculateUserHashCode(Long userId) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM_NAME);
@@ -90,6 +79,7 @@ public class ImageUploader {
             throw new NotFoundAlgorithmException(ALGORITHM_NAME);
         }
     }
+
 
 /*
     private void validateImage(MultipartFile multipartFile) {

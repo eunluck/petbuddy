@@ -47,7 +47,6 @@ public class PetRestController {
         );
     }
 
-
     @PostMapping(path = "pet/images",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "이미지 등록")
     public ApiResult<List<PetImageDto>> petImageUpload(
@@ -60,7 +59,6 @@ public class PetRestController {
                         AttachedFile.toAttachedFile(files))
         ));
     }
-
 
     @GetMapping(path = "user/pet/list")
     @ApiOperation(value = "강아지 목록 조회")
