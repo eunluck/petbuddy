@@ -1,5 +1,6 @@
 package com.petbuddy.api.service.pet;
 
+import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.controller.pet.PetDto;
 import com.petbuddy.api.controller.pet.RegisterPetRequest;
 import com.petbuddy.api.error.NotFoundException;
@@ -131,9 +132,7 @@ public class PetService {
         }
 
         pet.updatePet(request);
-
-        if (!CollectionUtils.isEmpty(request.getImageIds()))
-            pet.updateImages(petImageRepository.findAllById(request.getImageIds()));
+        pet.updateImages(CollectionUtils.isEmpty(request.getImageIds()) ? Lists.newArrayList() : petImageRepository.findAllById(request.getImageIds()));
 
         return pet;
 
