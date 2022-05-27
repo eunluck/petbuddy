@@ -45,7 +45,21 @@ public class UserRestController {
     this.userService = userService;
   }
 
-  @PostMapping(path = "user/exists")
+
+  @PostMapping(path = "user/exists/name")
+  @ApiOperation(value = "닉네임 중복확인 (API 토큰 필요없음)")
+  public ApiResult<Boolean> checkName(
+          @RequestBody @ApiParam(value = "example: {\"name\": \"펫버디\"}") Map<String, String> request
+  ) {
+    String name = request.get("name");
+    return ApiResult.OK(
+            userService.findByName(name).isPresent()
+    );
+  }
+
+
+
+  @PostMapping(path = "user/exists/email")
   @ApiOperation(value = "이메일 중복확인 (API 토큰 필요없음)")
   public ApiResult<Boolean> checkEmail(
     @RequestBody @ApiParam(value = "example: {\"email\": \"test00@gmail.com\",\"emailType\":\"user\"}") Map<String, String> request

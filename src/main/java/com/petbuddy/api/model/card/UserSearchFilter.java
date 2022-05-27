@@ -37,6 +37,7 @@ public class UserSearchFilter extends BaseEntity {
     private String petBreed;
     private String petSize;
 
+
     public UserSearchFilter(UserInfo user) {
         this.userInfo = user;
     }

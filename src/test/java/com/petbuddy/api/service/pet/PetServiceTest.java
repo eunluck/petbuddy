@@ -1,7 +1,5 @@
 package com.petbuddy.api.service.pet;
 
-import com.petbuddy.api.controller.pet.PetDto;
-import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Gender;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -55,8 +55,8 @@ class PetServiceTest {
     String contents = randomAlphabetic(10);
     String male = "male";
 
-    pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male),1,false,contents));
-    pet2 = petService.register(new Pet(user2,"뽀삐", Gender.of("FEMALE"),3,true,contents));
+    pet = petService.register(new Pet(userInfo,"삐삐", Gender.of(male), LocalDate.of(2000, Month.JANUARY,20),false,contents));
+    pet2 = petService.register(new Pet(user2,"뽀삐", Gender.of("FEMALE"),LocalDate.of(2000, Month.JANUARY,20),true,contents));
 
     assertThat(pet, is(notNullValue()));
     assertThat(pet.getId(), is(notNullValue()));

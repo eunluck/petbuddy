@@ -1,16 +1,17 @@
 package com.petbuddy.api.model.user;
 
 import com.beust.jcommander.internal.Lists;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Strings;
 import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
-import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.card.UserSearchFilter;
+import com.petbuddy.api.model.commons.BaseEntity;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.security.Jwt;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -148,8 +149,14 @@ public class UserInfo extends BaseEntity {
 
   public void updateMoreInfo(UserMoreInformationUpdateRequest userMoreInformationUpdateRequest) {
 
+    checkArgument(
+            Pattern.matches("^[0-9]*$", userMoreInformationUpdateRequest.getPhone()),
+            "숫자만 입력해주세요."
+    );
+
     this.address = userMoreInformationUpdateRequest.getAddress();
     this.birth = userMoreInformationUpdateRequest.getBirth();
+    this.phone = userMoreInformationUpdateRequest.getPhone();
 
   }
 

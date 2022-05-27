@@ -3,6 +3,8 @@ package com.petbuddy.api.controller.pet;
 import com.petbuddy.api.controller.ApiResult;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.AttachedFile;
+import com.petbuddy.api.model.commons.EnumMapper;
+import com.petbuddy.api.model.commons.EnumMapperValue;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.JwtAuthentication;
 import com.petbuddy.api.service.pet.PetService;
@@ -28,6 +30,35 @@ public class PetRestController {
 
     private final PetService petService;
     private final UserService userService;
+    private final EnumMapper enumMapper;
+
+    @GetMapping("/personality")
+    @ApiOperation(value = "강아지 성격 코드 조회")
+    public List<EnumMapperValue> getPersonality(){
+        return enumMapper.get("PersonalityType");
+    }
+
+
+
+    @PutMapping(path = "pet/{petId}")
+    @ApiOperation(value = "강아지 정보 수정")
+    public ApiResult<PetDto> updatePet(
+            @AuthenticationPrincipal JwtAuthentication authentication,
+            @RequestBody RegisterPetRequest request,
+            @PathVariable Long petId
+    ) {
+
+        UserInfo loginUser = userService.findById(authentication.id).orElseThrow(() -> new NotFoundException(Long.class, authentication.id));
+
+        return ApiResult.OK(
+                new PetDto(
+                        petService.updatePet(petId,
+                                request,
+                                loginUser.getId()
+                        )
+                )
+        );
+    }
 
     @PostMapping(path = "pet")
     @ApiOperation(value = "강아지 등록")

@@ -13,7 +13,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.petbuddy.api.aws.S3Client;
-import com.petbuddy.api.security.Jwt;
+import com.petbuddy.api.model.commons.EnumMapper;
+import com.petbuddy.api.model.pet.PersonalityType;
 import com.petbuddy.api.util.MessageUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
@@ -97,6 +98,13 @@ public class ServiceConfigure {
     builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     builder.modulesToInstall(jtm);
     return builder;
+  }
+
+  @Bean
+  public EnumMapper enumMapper(){
+    EnumMapper enumMapper = new EnumMapper();
+    enumMapper.put("PersonalityType", PersonalityType.class);
+    return enumMapper;
   }
 
 }

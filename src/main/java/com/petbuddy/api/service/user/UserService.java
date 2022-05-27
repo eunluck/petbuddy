@@ -1,15 +1,14 @@
 package com.petbuddy.api.service.user;
 
+import com.google.common.eventbus.EventBus;
 import com.petbuddy.api.controller.user.UserMoreInformationUpdateRequest;
 import com.petbuddy.api.controller.user.UserSearchFilterUpdateRequest;
 import com.petbuddy.api.error.NotFoundException;
-import com.petbuddy.api.event.JoinEvent;
 import com.petbuddy.api.model.card.UserSearchFilter;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Gender;
 import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.repository.user.UserRepository;
-import com.google.common.eventbus.EventBus;
 import com.petbuddy.api.repository.user.UserSearchFilterRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -87,6 +86,16 @@ public class UserService {
 
         return userRepository.findByEmail(email);
     }
+
+
+
+    @Transactional(readOnly = true)
+    public Optional<UserInfo> findByName(String name) {
+        checkNotNull(name, "nickname must be provided.");
+
+        return userRepository.findByName(name);
+    }
+
 
 
     /*

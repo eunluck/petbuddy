@@ -16,7 +16,7 @@ import com.petbuddy.api.util.ImageUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,82 +29,80 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @RequiredArgsConstructor
 public class PetService {
 
-  private final PetRepository petRepository;
-  private final PetLikeRepository petLikeRepository;
-  private final PetImageRepository petImageRepository;
-  private final ImageUploader imageUploader;
+    private final PetRepository petRepository;
+    private final PetLikeRepository petLikeRepository;
+    private final PetImageRepository petImageRepository;
+    private final ImageUploader imageUploader;
 
-
-
-  private List<PetImage> findAllPetImagesByIds(List<Long> petIds) {
-    if (Objects.isNull(petIds)) {
-      return Collections.emptyList();
+    private List<PetImage> findAllPetImagesByIds(List<Long> petIds) {
+        if (Objects.isNull(petIds)) {
+            return Collections.emptyList();
+        }
+        return petImageRepository.findAllById(petIds);
     }
-    return petImageRepository.findAllById(petIds);
-  }
 
 
-  @Transactional
-  public List<PetImage> uploadPetImages(UserInfo user, List<AttachedFile> files){
+    @Transactional
+    public List<PetImage> uploadPetImages(UserInfo user, List<AttachedFile> files) {
 
-    return petImageRepository.saveAll(imageUploader.uploadPetImages(user.getId(),files));
-  }
-
-
-  @Transactional
-  public Pet register(Pet request) {
+        return petImageRepository.saveAll(imageUploader.uploadPetImages(user.getId(), files));
+    }
 
 
+    @Transactional
+    public Pet register(Pet request) {
 
-    return insert(request);
-  }
-  @Transactional
-  public Pet register(RegisterPetRequest request,UserInfo userInfo) {
 
-    Pet pet = request.newPet(userInfo);
+        return insert(request);
+    }
 
-    pet.addImages(findAllPetImagesByIds(request.getImageIds()));
+    @Transactional
+    public Pet register(RegisterPetRequest request, UserInfo userInfo) {
 
-    return insert(pet);
-  }
+        Pet pet = request.newPet(userInfo);
 
-  @Transactional
-  public Pet modify(Pet pet) {
-    update(pet);
-    return pet;
-  }
+        pet.addImages(findAllPetImagesByIds(request.getImageIds()));
 
-  @Transactional
-  public Optional<PetDto> like(Long targetPetId, Long likedPetId) {
+        return insert(pet);
+    }
 
-    return findById(targetPetId,likedPetId).map(pet -> {
-      if (!pet.isLikesOfMe()){
-        Pet findPet = petRepository.findById(pet.getId()).orElseThrow(() -> new NotFoundException(Long.class,pet.getId()));
-        findPet.incrementAndGetLikes();
-        petLikeRepository.save(new Likes(likedPetId,targetPetId));
-        update(findPet);
-      }
+    @Transactional
+    public Pet modify(Pet pet) {
+        update(pet);
         return pet;
-    });
-  }
+    }
 
-  @Transactional(readOnly = true)
-  public Optional<PetDto> findById(Long petId, Long likedPetId) {
+    @Transactional
+    public Optional<PetDto> like(Long targetPetId, Long likedPetId) {
 
-    return petRepository.findById(petId,likedPetId);
-  }
+        return findById(targetPetId, likedPetId).map(pet -> {
+            if (!pet.isLikesOfMe()) {
+                Pet findPet = petRepository.findById(pet.getId()).orElseThrow(() -> new NotFoundException(Long.class, pet.getId()));
+                findPet.incrementAndGetLikes();
+                petLikeRepository.save(new Likes(likedPetId, targetPetId));
+                update(findPet);
+            }
+            return pet;
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<PetDto> findById(Long petId, Long likedPetId) {
+
+        return petRepository.findById(petId, likedPetId);
+    }
 
 
-  @Transactional(readOnly = true)
-  public Optional<Pet> findById(Long petId) {
+    @Transactional(readOnly = true)
+    public Optional<Pet> findById(Long petId) {
 
-    return petRepository.findById(petId);
-  }
+        return petRepository.findById(petId);
+    }
 
 
-  @Transactional(readOnly = true)
-  public List<Pet> findAll( Long userId) {
-    checkNotNull(userId, "userId must be provided.");
+    @Transactional(readOnly = true)
+    public List<Pet> findAll(Long userId) {
+        checkNotNull(userId, "userId must be provided.");
     /*
     if (offset < 0)
       offset = 0;
@@ -112,15 +110,32 @@ public class PetService {
       limit = 5;
 */
 
-    return petRepository.findByUserId(userId);
-  }
+        return petRepository.findByUserId(userId);
+    }
 
-  private Pet insert(Pet pet) {
-    return petRepository.save(pet);
-  }
+    private Pet insert(Pet pet) {
+        return petRepository.save(pet);
+    }
 
-  private void update(Pet pet) {
-    petRepository.save(pet);
-  }
+    private Pet update(Pet pet) {
+        return petRepository.save(pet);
+    }
 
+    @Transactional
+    public Pet updatePet(Long petId, RegisterPetRequest request, Long userId) {
+
+        Pet pet = findById(petId).orElseThrow(() -> new NotFoundException(Long.class, petId));
+
+        if (pet.getUser().getId() != userId) {
+            throw new NotOwnerException("펫ID:" + pet.getId().toString());
+        }
+
+        pet.updatePet(request);
+
+        if (!CollectionUtils.isEmpty(request.getImageIds()))
+            pet.updateImages(petImageRepository.findAllById(request.getImageIds()));
+
+        return pet;
+
+    }
 }
