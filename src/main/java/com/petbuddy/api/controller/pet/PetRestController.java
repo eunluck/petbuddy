@@ -1,6 +1,7 @@
 package com.petbuddy.api.controller.pet;
 
 import com.petbuddy.api.controller.ApiResult;
+import com.petbuddy.api.controller.user.UserDto;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.commons.AttachedFile;
 import com.petbuddy.api.model.commons.EnumMapper;
@@ -40,12 +41,32 @@ public class PetRestController {
 
 
 
+
+    @PutMapping(path = "pet/{petId}/represent")
+    @ApiOperation(value = "대표 강아지 변경")
+    public ApiResult<UserDto> updateRepresentativePet(
+            @AuthenticationPrincipal JwtAuthentication authentication,
+            @PathVariable @ApiParam(value = "대상 펫 PK", example = "1") Long petId
+    ) {
+
+        UserInfo loginUser = userService.findById(authentication.id).orElseThrow(() -> new NotFoundException(Long.class, authentication.id));
+        return ApiResult.OK(
+                new UserDto(
+                        petService.updateRepresentPet(petId,
+                                loginUser
+                        )
+                )
+        );
+    }
+
+
+
     @PutMapping(path = "pet/{petId}")
     @ApiOperation(value = "강아지 정보 수정")
     public ApiResult<PetDto> updatePet(
             @AuthenticationPrincipal JwtAuthentication authentication,
             @RequestBody RegisterPetRequest request,
-            @PathVariable Long petId
+            @PathVariable@ApiParam(value = "대상 펫 PK", example = "1") Long petId
     ) {
 
         UserInfo loginUser = userService.findById(authentication.id).orElseThrow(() -> new NotFoundException(Long.class, authentication.id));
@@ -117,5 +138,21 @@ public class PetRestController {
                         .orElseThrow(() -> new NotFoundException("petId:" + petId.toString(), "getRepresentativePetId:" + userInfo.getRepresentativePetId().toString()))
         );
     }
+
+
+    @GetMapping(path = "pet/friends")
+    @ApiOperation(value = "강아지 친구 목록(서로 좋아요 한)")
+    public ApiResult<List<PetDto>> friends(
+            @AuthenticationPrincipal JwtAuthentication authentication
+    ) {
+        UserInfo userInfo = userService.findById(authentication.id).orElseThrow(() -> new NotFoundException(UserInfo.class, authentication.id));
+
+        return ApiResult.OK(
+                petService.friendPets(userInfo.getRepresentativePetId()).stream()
+                .map(PetDto::new)
+                .collect(toList())
+        );
+    }
+
 
 }

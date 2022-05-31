@@ -44,7 +44,9 @@ public class PetDto {
     private LocalDateTime updatedAt;
     @ApiModelProperty(value = "펫 이미지 리스트")
     private List<PetImageDto> petImages;
-    
+
+
+
     @QueryProjection
     public PetDto(Long id,String petName,LocalDate petBirth, Gender petGender, boolean neuteringYn, String petIntroduce, int likes, int status, Long likesOfMe, LocalDateTime createAt){
         this.id =id;

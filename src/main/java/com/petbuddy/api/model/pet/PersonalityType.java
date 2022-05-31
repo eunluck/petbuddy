@@ -2,6 +2,7 @@ package com.petbuddy.api.model.pet;
 
 import com.petbuddy.api.model.commons.EnumMapperType;
 import lombok.ToString;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +50,11 @@ public enum PersonalityType implements EnumMapperType {
     }
 
     public static List<PersonalityType> of(List<String> values) {
-        return values.stream().distinct().map(s -> of(s)).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(values)){
+            return null;
+        } else{
+            return values.stream().distinct().map(s -> of(s)).collect(Collectors.toList());
+        }
     }
 
 

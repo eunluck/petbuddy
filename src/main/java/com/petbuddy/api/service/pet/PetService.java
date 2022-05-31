@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -87,6 +88,26 @@ public class PetService {
         });
     }
 
+
+
+    @Transactional
+    public List<Pet> friendPets(Long likedPetId){
+
+        return petRepository.findAllById(
+                findLikesByLikesOfMe(likedPetId)
+                        .stream()
+                        .map(Likes::getTargetPetId)
+                        .collect(Collectors.toList()));
+    }
+
+
+    public List<Likes> findLikesByLikesOfMe( Long likedPetId) {
+        return petLikeRepository.findLikesByLikesOfMe( likedPetId);
+    }
+
+
+
+
     @Transactional(readOnly = true)
     public Optional<PetDto> findById(Long petId, Long likedPetId) {
 
@@ -135,6 +156,17 @@ public class PetService {
         pet.updateImages(CollectionUtils.isEmpty(request.getImageIds()) ? Lists.newArrayList() : petImageRepository.findAllById(request.getImageIds()));
 
         return pet;
+
+    }
+
+    @Transactional
+    public UserInfo updateRepresentPet(Long petId, UserInfo user) {
+
+        Pet pet = findById(petId).orElseThrow(() -> new NotFoundException(Long.class, petId));
+
+        user.updateRepresentativePetId(petId);
+
+        return user;
 
     }
 }

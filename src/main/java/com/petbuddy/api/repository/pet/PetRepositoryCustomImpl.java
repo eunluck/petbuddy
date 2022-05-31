@@ -1,12 +1,8 @@
 package com.petbuddy.api.repository.pet;
 
-import static com.petbuddy.api.model.pet.QPet.pet;
-import static com.petbuddy.api.model.user.QUserInfo.userInfo;
-import static com.petbuddy.api.model.pet.QLikes.likes;
-
+import com.petbuddy.api.controller.pet.PetDto;
 import com.petbuddy.api.controller.pet.QPetDto;
 import com.petbuddy.api.model.card.UserSearchFilter;
-import com.petbuddy.api.controller.pet.PetDto;
 import com.petbuddy.api.model.user.Gender;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +13,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.petbuddy.api.model.pet.QLikes.likes;
+import static com.petbuddy.api.model.pet.QPet.pet;
+import static com.petbuddy.api.model.user.QUserInfo.userInfo;
+
 @Repository
 @RequiredArgsConstructor
 public class PetRepositoryCustomImpl implements PetRepositoryCustom {
@@ -25,7 +25,7 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
 
     @Override
     public Optional<PetDto> findById(Long petId, Long likedPetId) {
-        return Optional.ofNullable(queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
+        return Optional.ofNullable(queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petBirth,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
                 .from(pet)
                 .join(pet.user,userInfo)
                 .leftJoin(likes)
@@ -38,7 +38,7 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
     public List<PetDto> findFilteringMatchingPets(UserSearchFilter userSearchFilter,Long likedPetId) {
 
         //return queryFactory.select(pet).from(pet,likes)
-        return queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petAge,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
+        return queryFactory.select(new QPetDto(pet.id,pet.petName,pet.petBirth,pet.petGender,pet.neuteringYn,pet.petIntroduce,pet.likes,pet.status,likes.id,pet.createdAt))
                 .from(pet)
                 .join(pet.user,userInfo)
                 .leftJoin(likes)

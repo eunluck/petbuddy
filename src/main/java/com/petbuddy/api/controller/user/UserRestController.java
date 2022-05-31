@@ -78,6 +78,7 @@ public class UserRestController {
     @ModelAttribute JoinRequest joinRequest,
     @RequestPart(required = false) MultipartFile file
   ) {
+
     UserInfo userInfo = userService.join(
       joinRequest.getName(),
       new Email(joinRequest.getPrincipal(),joinRequest.getEmailType()),

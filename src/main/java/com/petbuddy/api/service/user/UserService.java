@@ -42,6 +42,10 @@ public class UserService {
                 password.length() >= 4 && password.length() <= 15,
                 "password length must be between 4 and 15 characters."
         );
+        checkArgument(
+                !findByEmail(email).isPresent(),
+                "이메일이 중복됩니다."
+        );
 
         UserInfo userInfo = new UserInfo(name, email, passwordEncoder.encode(password), gender);
         UserInfo saved = insert(userInfo);
