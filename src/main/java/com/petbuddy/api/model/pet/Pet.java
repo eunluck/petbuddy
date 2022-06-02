@@ -107,6 +107,12 @@ public class Pet extends BaseEntity {
         return ++likes;
     }
 
+    public int decrementAndGetLikes() {
+        likesOfMe = false;
+        return --likes;
+    }
+
+
 
     public void addImages(List<PetImage> petImages) {
         petImages.forEach(petImage -> petImage.setPet(this));

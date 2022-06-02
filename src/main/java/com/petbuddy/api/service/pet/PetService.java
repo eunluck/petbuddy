@@ -78,12 +78,16 @@ public class PetService {
     public Optional<PetDto> like(Long targetPetId, Long likedPetId) {
 
         return findById(targetPetId, likedPetId).map(pet -> {
+            Pet findPet = petRepository.findById(pet.getId()).orElseThrow(() -> new NotFoundException(Long.class, pet.getId()));
             if (!pet.isLikesOfMe()) {
-                Pet findPet = petRepository.findById(pet.getId()).orElseThrow(() -> new NotFoundException(Long.class, pet.getId()));
                 findPet.incrementAndGetLikes();
                 petLikeRepository.save(new Likes(likedPetId, targetPetId));
-                update(findPet);
+            }else {
+                findPet.decrementAndGetLikes();
+                petLikeRepository.delete(new Likes(likedPetId, targetPetId));
+
             }
+            update(findPet);
             return pet;
         });
     }
