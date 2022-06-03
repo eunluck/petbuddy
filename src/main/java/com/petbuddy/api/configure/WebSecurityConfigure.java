@@ -1,14 +1,10 @@
 package com.petbuddy.api.configure;
 
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.security.*;
-import com.petbuddy.api.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
@@ -61,7 +57,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**");
+    web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**","/chat","/chat/**");
   }
 
   @Override
@@ -133,6 +129,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/_hcheck").permitAll()
         .antMatchers("/api/auth").permitAll()
         .antMatchers("/api/user/join").permitAll()
+        .antMatchers("/chat/**").permitAll()
+        .antMatchers("/chat").permitAll()
         .antMatchers("/api/user/exists").permitAll()
         .antMatchers("/api/**").hasRole(Role.USER.name())
         //.accessDecisionManager(accessDecisionManager())
