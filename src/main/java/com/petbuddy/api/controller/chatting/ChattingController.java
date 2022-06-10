@@ -1,52 +1,59 @@
 package com.petbuddy.api.controller.chatting;
 
 import com.petbuddy.api.controller.ApiResult;
+import com.petbuddy.api.error.NotFoundException;
+import com.petbuddy.api.model.chatting.ChattingRoom;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.chatting.ChattingService;
+import com.petbuddy.api.service.pet.PetService;
+import com.petbuddy.api.service.user.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.petbuddy.api.configure.WebSocketConfigure.SUBSCRIBE;
 import static com.petbuddy.api.controller.ApiResult.OK;
 
-@Controller
+@RestController
+@RequestMapping("api/chat/room")
+@Api(tags = "채팅방 APIs")
 @RequiredArgsConstructor
 public class ChattingController {
-    public static final String DESTINATION = SUBSCRIBE + "/chat/rooms/";
-    public static final String MESSAGE_URI = "/chat/messages";
-    public static final String MESSAGE_REST_URI = "/chat/rooms/{roomId}/messages";
-    public static final String NEW = "/new";
-
-
-
-    private final SimpMessageSendingOperations messageSendingOperations;
     private final ChattingService chattingService;
+    private final UserService userService;
+    private final PetService petService;
 
-    @MessageMapping(MESSAGE_URI)
-    public void message(MessageRequest request) {
-        System.out.println("호출완료");
-        MessageDto response = chattingService.save(request);
-        messageSendingOperations.convertAndSend(DESTINATION + request.getRoomId(), response);
+    @ApiOperation(value = "대상 펫과의 채팅방 생성")
+    @PostMapping
+    public ApiResult<URI> create(@RequestParam("partnerId")Long partnerId,
+                                       @AuthenticationPrincipal UserInfo loginUser) {
+
+        ChattingRoom chattingRoom = chattingService.createChatRoom(petService.findById(partnerId).orElseThrow(() -> new NotFoundException(Long.class,partnerId)),
+                userService.findById(loginUser.getId()).orElseThrow(() -> new NotFoundException(Long.class, loginUser.getId())));
+        return OK(URI.create("/api/chat/rooms/" + chattingRoom.getId()));
     }
 
-    @GetMapping(MESSAGE_REST_URI)
-    public ApiResult<List<MessageDto>> showAll(@PathVariable Long roomId,
-                                               @RequestParam int size, @RequestParam String lastMessageDate) {
-        System.out.println("호출완료2");
-        return OK(chattingService.showAll(roomId, size, lastMessageDate));
+    @ApiOperation(value = "대표펫 채팅방 목록")
+    @GetMapping
+    public ApiResult<List<ChatRoomDto>> showAll(@AuthenticationPrincipal UserInfo loginUser) {
+        return OK(chattingService.findAllByPetId(
+                loginUser.getRepresentativePetId())
+                .stream()
+                .map(ChatRoomDto::new)
+                .collect(Collectors.toList()));
     }
 
-    @GetMapping(MESSAGE_REST_URI + NEW)
-    public ApiResult<MessageDto> showLast(@PathVariable Long roomId) {
-        System.out.println("호출완료3");
-        MessageDto response = chattingService.showLast(roomId);
-        return OK(response);
+    @ApiOperation(value = "채팅방 삭제")
+    @DeleteMapping("/{roomId}")
+    public ApiResult<Void> delete(@PathVariable Long roomId) {
+        chattingService.deleteChattingRoom(roomId);
+        return OK(null);
     }
+
 
 }

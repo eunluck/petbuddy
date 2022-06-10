@@ -1,5 +1,6 @@
 package com.petbuddy.api.controller.pet;
 
+import com.beust.jcommander.internal.Lists;
 import com.petbuddy.api.model.commons.EnumMapperValue;
 import com.petbuddy.api.model.pet.Pet;
 import com.petbuddy.api.model.user.Gender;
@@ -65,7 +66,7 @@ public class PetDto {
     public PetDto(Pet pet){
         BeanUtils.copyProperties(pet,this);
         this.petImages = PetImageDto.listOf(pet.getPetImages());
-        this.personalities = pet.getPersonalities().stream().map(EnumMapperValue::new).collect(Collectors.toList());
+        this.personalities =pet.getPersonalities() == null? Lists.newArrayList() : pet.getPersonalities().stream().map(EnumMapperValue::new).collect(Collectors.toList());
 
     }
 }

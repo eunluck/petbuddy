@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllByRoomIdAndCreatedAtIsBeforeOrderByCreatedAtDesc(Long roomId,
-                                                                              LocalDateTime createdTime, PageRequest pageRequest);
+                                                                              LocalDateTime createdAt, PageRequest pageRequest);
+
     Optional<Message> findTopByRoomIdOrderByCreatedAtDesc(Long roomId);
 }

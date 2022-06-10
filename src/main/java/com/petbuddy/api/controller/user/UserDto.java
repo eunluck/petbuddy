@@ -31,9 +31,6 @@ public class UserDto {
   @ApiModelProperty(value = "프로필 이미지 URL")
   private String profileImageUrl;
 
-  @ApiModelProperty(value = "로그인 횟수", required = true)
-  private int loginCount;
-
   @ApiModelProperty(value = "최종로그인일시")
   private LocalDateTime lastLoginAt;
 
@@ -42,6 +39,10 @@ public class UserDto {
 
   @ApiModelProperty(value = "매칭 필터", required = true)
   private UserSearchFilter searchFilter;
+
+  @ApiModelProperty(value = "대표 펫 ID")
+  private Long representativePetId;
+
 
   public UserDto(UserInfo source) {
     copyProperties(source, this);
@@ -57,7 +58,6 @@ public class UserDto {
       .append("name", name)
       .append("email", email)
       .append("profileImageUrl", profileImageUrl)
-      .append("loginCount", loginCount)
       .append("lastLoginAt", lastLoginAt)
       .append("createdAt", createdAt)
       .toString();
