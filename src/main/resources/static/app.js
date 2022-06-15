@@ -66,7 +66,7 @@ function showChattingRome() {
             var results = data.response;
             var str = '<TR>';
             $.each(results, function (i) {
-                str += '<TD>' + results[i].id + '<TD>' + results[i].petName + '</TD><TD>' + results[i].likesOfMe + '</TD>';
+                str += '<TD>' + results[i].id + '<TD>' + results[i].petName + '</TD><TD>' + results[i].likesOfMe + '</TD>' + '<TD><input value="'+results[i].id+'" type="button" name="connect" class="btn btn-default"></TD>';
                 str += '</TR>';
             });
             $("#chat-room").append(str);
@@ -91,6 +91,9 @@ $(function () {
         sendName();
     });
     showChattingRome();
+    $("input[name=connect]").click(function (e) {
+
+    })
 });
 
 
