@@ -1,9 +1,14 @@
 package com.petbuddy.api.controller.user;
 
+import com.petbuddy.api.model.user.Gender;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+@Getter
+@Setter
 public class JoinRequest {
 
   @ApiModelProperty(value = "이름", required = true)
@@ -12,34 +17,18 @@ public class JoinRequest {
   @ApiModelProperty(value = "로그인 이메일", required = true)
   private String principal;
 
+  @ApiModelProperty(value = "이메일 타입", required = true)
+  private String emailType;
+
   @ApiModelProperty(value = "로그인 비밀번호", required = true)
   private String credentials;
 
+  @ApiModelProperty(value = "가입자 성별", required = true)
+  private String gender;
+
+
+
   protected JoinRequest() {}
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getPrincipal() {
-    return principal;
-  }
-
-  public void setPrincipal(String principal) {
-    this.principal = principal;
-  }
-
-  public String getCredentials() {
-    return credentials;
-  }
-
-  public void setCredentials(String credentials) {
-    this.credentials = credentials;
-  }
 
   @Override
   public String toString() {
@@ -47,6 +36,7 @@ public class JoinRequest {
       .append("name", name)
       .append("principal", principal)
       .append("credentials", credentials)
+      .append("emailType", emailType)
       .toString();
   }
 

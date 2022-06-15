@@ -57,6 +57,7 @@ public final class S3Client {
     executeDelete(request);
   }
 
+
   private String executePut(PutObjectRequest request) {
     amazonS3.putObject(request.withCannedAcl(CannedAccessControlList.PublicRead));
     StringBuilder sb = new StringBuilder(url);

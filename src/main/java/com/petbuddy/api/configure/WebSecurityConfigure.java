@@ -1,13 +1,10 @@
 package com.petbuddy.api.configure;
 
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.User;
 import com.petbuddy.api.security.*;
-import com.petbuddy.api.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
@@ -43,12 +40,13 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
   private final JwtAccessDeniedHandler accessDeniedHandler;
 
   private final EntryPointUnauthorizedHandler unauthorizedHandler;
-
-  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler) {
-    this.jwt = jwt;
+  private final JwtAuthenticationProvider jwtAuthenticationProvider;
+  public WebSecurityConfigure(Jwt jwt, JwtTokenConfigure jwtTokenConfigure, JwtAccessDeniedHandler accessDeniedHandler, EntryPointUnauthorizedHandler unauthorizedHandler, @Lazy JwtAuthenticationProvider jwtAuthenticationProvider) {
     this.jwtTokenConfigure = jwtTokenConfigure;
+    this.jwt = jwt;
     this.accessDeniedHandler = accessDeniedHandler;
     this.unauthorizedHandler = unauthorizedHandler;
+    this.jwtAuthenticationProvider =jwtAuthenticationProvider;
   }
 
   @Bean
@@ -56,20 +54,26 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     return new JwtAuthenticationTokenFilter(jwtTokenConfigure.getHeader(), jwt);
   }
 
+
   @Override
   public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**");
+    web.ignoring().antMatchers("/swagger-resources", "/webjars/**", "/static/**", "/templates/**", "/h2/**","/chat","/chat/**");
   }
 
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth){
+    auth.authenticationProvider(jwtAuthenticationProvider);
+  }
+/*
   @Autowired
   public void configureAuthentication(AuthenticationManagerBuilder builder, JwtAuthenticationProvider authenticationProvider) {
     builder.authenticationProvider(authenticationProvider);
-  }
-
+  }*/
+/*
   @Bean
   public JwtAuthenticationProvider jwtAuthenticationProvider(Jwt jwt, UserService userService) {
     return new JwtAuthenticationProvider(jwt, userService);
-  }
+  }*/
 
   @Bean
   @Override
@@ -93,7 +97,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         /* url에서 targetId를 추출하기 위해 정규식 처리 */
         Matcher matcher = pattern.matcher(url);
         long id = matcher.find() ? toLong(matcher.group(1), -1) : -1;
-        return Id.of(User.class, id);
+        return  id;
       }
     );
   }
@@ -125,6 +129,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/_hcheck").permitAll()
         .antMatchers("/api/auth").permitAll()
         .antMatchers("/api/user/join").permitAll()
+        .antMatchers("/chat/**").permitAll()
+        .antMatchers("/chat").permitAll()
         .antMatchers("/api/user/exists").permitAll()
         .antMatchers("/api/**").hasRole(Role.USER.name())
         //.accessDecisionManager(accessDecisionManager())

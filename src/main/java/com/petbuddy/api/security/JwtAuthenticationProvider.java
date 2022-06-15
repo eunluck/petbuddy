@@ -3,8 +3,9 @@ package com.petbuddy.api.security;
 import com.petbuddy.api.error.NotFoundException;
 import com.petbuddy.api.model.user.Email;
 import com.petbuddy.api.model.user.Role;
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import com.petbuddy.api.service.user.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -13,13 +14,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import static org.apache.commons.lang3.ClassUtils.isAssignable;
 
+@Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   private final Jwt jwt;
-
   private final UserService userService;
 
   public JwtAuthenticationProvider(Jwt jwt, UserService userService) {
@@ -35,15 +37,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   private Authentication processUserAuthentication(AuthenticationRequest request) {
     try {
-      User user = userService.login(new Email(request.getPrincipal()), request.getCredentials());
+      UserInfo userInfo = userService.login(new Email(request.getPrincipal(),"user"), request.getCredentials());
       JwtAuthenticationToken authenticated =
         new JwtAuthenticationToken(
-          new JwtAuthentication(user.getSeq(), user.getName(), user.getEmail()),
+          new JwtAuthentication(userInfo.getId(), userInfo.getName(), userInfo.getEmail()),
           null,
-          AuthorityUtils.createAuthorityList(Role.USER.value())
-        );
-      String apiToken = user.newApiToken(jwt, new String[]{Role.USER.value()});
-      authenticated.setDetails(new AuthenticationResult(apiToken, user));
+          AuthorityUtils.createAuthorityList(Role.USER.value()));
+      String apiToken = userInfo.newApiToken(jwt, new String[]{Role.USER.value()});
+      authenticated.setDetails(new AuthenticationResult(apiToken, userInfo));
       return authenticated;
     } catch (NotFoundException e) {
       throw new UsernameNotFoundException(e.getMessage());

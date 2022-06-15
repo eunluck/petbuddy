@@ -13,7 +13,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 public class ConnectedUserDto {
 
   @ApiModelProperty(value = "친구 PK", required = true)
-  private Long seq;
+  private Long id;
 
   @ApiModelProperty(value = "이름", required = true)
   private String name;
@@ -33,12 +33,12 @@ public class ConnectedUserDto {
     this.profileImageUrl = source.getProfileImageUrl().orElse(null);
   }
 
-  public Long getSeq() {
-    return seq;
+  public Long getId() {
+    return id;
   }
 
-  public void setSeq(Long seq) {
-    this.seq = seq;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
@@ -76,7 +76,7 @@ public class ConnectedUserDto {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
+      .append("id", id)
       .append("name", name)
       .append("email", email)
       .append("profileImageUrl", profileImageUrl)

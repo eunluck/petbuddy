@@ -1,41 +1,46 @@
 package com.petbuddy.api.model.user;
 
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 
+@NoArgsConstructor
 public class ConnectedUser {
 
-  private final Long seq;
+  private  Long id;
 
-  private final String name;
+  private  String name;
 
-  private final Email email;
+  private  Email email;
 
-  private final String profileImageUrl;
+  private  String profileImageUrl;
 
-  private final LocalDateTime grantedAt;
+  private  LocalDateTime grantedAt;
 
-  public ConnectedUser(Long seq, String name, Email email, String profileImageUrl, LocalDateTime grantedAt) {
-    checkNotNull(seq, "seq must be provided.");
+  public ConnectedUser(Long id, String name, Email email, String profileImageUrl, LocalDateTime grantedAt) {
+    checkNotNull(id, "id must be provided.");
     checkNotNull(name, "name must be provided.");
     checkNotNull(email, "email must be provided.");
     checkNotNull(grantedAt, "grantedAt must be provided.");
 
-    this.seq = seq;
+    this.id = id;
     this.name = name;
     this.email = email;
     this.profileImageUrl = profileImageUrl;
     this.grantedAt = grantedAt;
   }
 
-  public Long getSeq() {
-    return seq;
+  public Long getId() {
+    return id;
   }
 
   public String getName() {
@@ -57,7 +62,7 @@ public class ConnectedUser {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-      .append("seq", seq)
+      .append("id", id)
       .append("name", name)
       .append("email", email)
       .append("profileImageUrl", profileImageUrl)

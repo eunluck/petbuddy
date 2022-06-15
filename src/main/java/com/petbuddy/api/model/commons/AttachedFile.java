@@ -1,17 +1,24 @@
 package com.petbuddy.api.model.commons;
 
+import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static org.apache.commons.lang3.StringUtils.*;
 
+@Getter
 public class AttachedFile {
 
   private final String originalFileName;
@@ -20,7 +27,8 @@ public class AttachedFile {
 
   private final byte[] bytes;
 
-  public AttachedFile(String originalFileName, String contentType, byte[] bytes) {
+  public AttachedFile( String originalFileName, String contentType, byte[] bytes) {
+
     this.originalFileName = originalFileName;
     this.contentType = contentType;
     this.bytes = bytes;
@@ -35,6 +43,19 @@ public class AttachedFile {
     }
     return false;
   }
+
+
+
+
+  public static List<AttachedFile> toAttachedFile(List<MultipartFile> multipartFiles) {
+
+
+    return multipartFiles.stream().map(file -> toAttachedFile(file).orElse(null)).filter(Objects::nonNull).collect(Collectors.toList());
+  }
+
+
+
+
 
   public static Optional<AttachedFile> toAttachedFile(MultipartFile multipartFile) {
     try {
@@ -72,5 +93,16 @@ public class AttachedFile {
   public String getContentType() {
     return contentType;
   }
+
+
+  public String generatePetFileName(String key){
+    return key
+            + "/"
+            + UUID.randomUUID().toString()
+            + "_"
+            + originalFileName;
+
+  }
+
 
 }

@@ -1,6 +1,6 @@
 package com.petbuddy.api.security;
 
-import com.petbuddy.api.model.user.User;
+import com.petbuddy.api.model.user.UserInfo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,29 +10,29 @@ public class AuthenticationResult {
 
   private final String apiToken;
 
-  private final User user;
+  private final UserInfo userInfo;
 
-  public AuthenticationResult(String apiToken, User user) {
+  public AuthenticationResult(String apiToken, UserInfo userInfo) {
     checkNotNull(apiToken, "apiToken must be provided.");
-    checkNotNull(user, "user must be provided.");
+    checkNotNull(userInfo, "user must be provided.");
 
     this.apiToken = apiToken;
-    this.user = user;
+    this.userInfo = userInfo;
   }
 
   public String getApiToken() {
     return apiToken;
   }
 
-  public User getUser() {
-    return user;
+  public UserInfo getUserInfo() {
+    return userInfo;
   }
 
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
       .append("apiToken", apiToken)
-      .append("user", user)
+      .append("user", userInfo)
       .toString();
   }
 

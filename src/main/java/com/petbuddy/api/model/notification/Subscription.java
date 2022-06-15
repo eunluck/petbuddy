@@ -1,16 +1,22 @@
 package com.petbuddy.api.model.notification;
 
-import com.petbuddy.api.model.commons.Id;
-import com.petbuddy.api.model.user.User;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+@Entity
+@Data
+@NoArgsConstructor
 public class Subscription {
 
-    private Long seq;
+    @javax.persistence.Id
+    @GeneratedValue
+    private Long id;
 
     private String notificationEndPoint;
 
@@ -18,15 +24,12 @@ public class Subscription {
 
     private String auth;
 
-    private Id<User, Long> userId;
+    private Long userId;
 
     private LocalDateTime createAt;
 
-    protected Subscription() {
-    }
-
-    public Subscription(Long seq, String notificationEndPoint, String publicKey, String auth, Id<User, Long> userId) {
-        this.seq = seq;
+    public Subscription(Long id, String notificationEndPoint, String publicKey, String auth,  Long userId) {
+        this.id = id;
         this.notificationEndPoint = notificationEndPoint;
         this.publicKey = publicKey;
         this.auth = auth;
@@ -34,11 +37,11 @@ public class Subscription {
         this.createAt = defaultIfNull(createAt, now());
     }
 
-    public Long getSeq() {
-        return seq;
+    public Long getId() {
+        return id;
     }
 
-    public Id<User, Long> getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -59,18 +62,18 @@ public class Subscription {
     }
 
     public static final class SubscriptionBuilder {
-        private Long seq;
+        private Long id;
         private String notificationEndPoint;
         private String publicKey;
         private String auth;
-        private Id<User, Long> userId;
+        private Long userId;
         private LocalDateTime createAt;
 
         public SubscriptionBuilder() {
         }
 
         public SubscriptionBuilder(Subscription subscription) {
-            this.seq = subscription.seq;
+            this.id = subscription.id;
             this.notificationEndPoint = subscription.notificationEndPoint;
             this.publicKey = subscription.publicKey;
             this.auth = subscription.auth;
@@ -78,8 +81,8 @@ public class Subscription {
             this.createAt = subscription.createAt;
         }
 
-        public SubscriptionBuilder seq(Long seq) {
-            this.seq = seq;
+        public SubscriptionBuilder id(Long id) {
+            this.id = id;
             return this;
         }
 
@@ -98,7 +101,7 @@ public class Subscription {
             return this;
         }
 
-        public SubscriptionBuilder userId(Id<User, Long> userId) {
+        public SubscriptionBuilder userId( Long userId) {
             this.userId = userId;
             return this;
         }
@@ -109,7 +112,7 @@ public class Subscription {
         }
 
         public Subscription build() {
-            Subscription subscription = new Subscription(seq, notificationEndPoint, publicKey, auth, userId);
+            Subscription subscription = new Subscription(id, notificationEndPoint, publicKey, auth, userId);
             subscription.createAt = this.createAt;
             return subscription;
         }
@@ -118,7 +121,7 @@ public class Subscription {
     @Override
     public String toString() {
         return "Subscription{" +
-                "seq=" + seq +
+                "id=" + id +
                 ", notificationEndPoint='" + notificationEndPoint + '\'' +
                 ", publicKey='" + publicKey + '\'' +
                 ", auth='" + auth + '\'' +

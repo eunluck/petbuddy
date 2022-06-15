@@ -1,14 +1,12 @@
 package com.petbuddy.api.security;
 
-import com.petbuddy.api.model.commons.Id;
 import com.petbuddy.api.model.user.Email;
-import com.petbuddy.api.model.user.User;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class JwtAuthentication {
 
-  public final Id<User, Long> id;
+  public final Long id;
 
   public final String name;
 
@@ -19,7 +17,7 @@ public class JwtAuthentication {
     checkNotNull(name, "name must be provided.");
     checkNotNull(email, "email must be provided.");
 
-    this.id = Id.of(User.class, id);
+    this.id = id;
     this.name = name;
     this.email = email;
   }

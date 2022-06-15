@@ -28,15 +28,15 @@ class S3ClientTest {
   @BeforeAll
   void setUp() {
     String region = "ap-northeast-2";
-    String accessKey = "AKIAICIRJ3XXHNYOOGLQ";
-    String secretKey = "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";
+    String accessKey = "AKIATBMVA6B72DEXHSX4";
+    String secretKey = "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";
     AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard()
       .withRegion(Regions.fromName(region))
       .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
       .build();
 
     String url = "https://s3.ap-northeast-2.amazonaws.com";
-    String bucketName = "prgrms-web-bjs";
+    String bucketName = "petbuddy-images";
 
     s3Client = new S3Client(amazonS3, url, bucketName);
   }

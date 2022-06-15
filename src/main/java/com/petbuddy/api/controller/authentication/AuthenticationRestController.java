@@ -31,7 +31,7 @@ public class AuthenticationRestController {
   @ApiOperation(value = "사용자 로그인 (API 토큰 필요없음)")
   public ApiResult<AuthenticationResultDto> authentication(@RequestBody AuthenticationRequest authRequest) throws UnauthorizedException {
     try {
-      JwtAuthenticationToken authToken = new JwtAuthenticationToken(authRequest.getPrincipal(), authRequest.getCredentials());
+      JwtAuthenticationToken authToken = new JwtAuthenticationToken(authRequest.getPrincipal(),authRequest.getCredentials());
       Authentication authentication = authenticationManager.authenticate(authToken);
       SecurityContextHolder.getContext().setAuthentication(authentication);
       return ApiResult.OK(

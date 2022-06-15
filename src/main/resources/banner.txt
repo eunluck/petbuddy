@@ -6,4 +6,3 @@ ${AnsiColor.}
 ██║     ███████╗   ██║   ██████╔╝╚██████╔╝██████╔╝██████╔╝   ██║
 ╚═╝     ╚══════╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝    ╚═╝
 ${AnsiColor.BRIGHT_GREEN}Spring Boot ${AnsiColor.RED}${spring-boot.formatted-version}
-${AnsiColor.BRIGHT_GREEN}Author jackson (iyboklee@gmail.com) & harry (haibane84@gmail.com)

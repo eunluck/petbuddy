@@ -6,14 +6,20 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.petbuddy.api.configure.JwtTokenConfigure;
 import com.petbuddy.api.model.user.Email;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Date;
 
-public final class Jwt {
+@Component
+public class Jwt {
 
   private final String issuer;
 
@@ -25,6 +31,17 @@ public final class Jwt {
 
   private final JWTVerifier jwtVerifier;
 
+
+  public Jwt(JwtTokenConfigure jwtTokenConfigure) {
+    this.issuer = jwtTokenConfigure.getIssuer();
+    this.clientSecret = jwtTokenConfigure.getClientSecret();
+    this.expirySeconds = jwtTokenConfigure.getExpirySeconds();
+    this.algorithm = Algorithm.HMAC512(clientSecret);
+    this.jwtVerifier = com.auth0.jwt.JWT.require(algorithm)
+            .withIssuer(issuer)
+            .build();
+  }
+/*
   public Jwt(String issuer, String clientSecret, int expirySeconds) {
     this.issuer = issuer;
     this.clientSecret = clientSecret;
@@ -33,7 +50,7 @@ public final class Jwt {
     this.jwtVerifier = com.auth0.jwt.JWT.require(algorithm)
       .withIssuer(issuer)
       .build();
-  }
+  }*/
 
   public String newToken(Claims claims) {
     Date now = new Date();
@@ -46,6 +63,7 @@ public final class Jwt {
     builder.withClaim("userKey", claims.userKey);
     builder.withClaim("name", claims.name);
     builder.withClaim("email", claims.email.getAddress());
+    builder.withClaim("emailType", claims.email.getEmailType());
     builder.withArrayClaim("roles", claims.roles);
     return builder.sign(algorithm);
   }
@@ -89,7 +107,7 @@ public final class Jwt {
     Date iat;
     Date exp;
 
-    private Claims() {
+    public Claims() {
     }
 
     Claims(DecodedJWT decodedJWT) {
@@ -100,8 +118,9 @@ public final class Jwt {
       if (!name.isNull())
         this.name = name.asString();
       Claim email = decodedJWT.getClaim("email");
-      if (!email.isNull())
-        this.email = new Email(email.asString());
+      Claim emailType = decodedJWT.getClaim("emailType");
+      if (!email.isNull() && !emailType.isNull())
+        this.email = new Email(email.asString(),emailType.asString());
       Claim roles = decodedJWT.getClaim("roles");
       if (!roles.isNull())
         this.roles = roles.asArray(String.class);
