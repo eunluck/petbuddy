@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/app.js"></script>
+</head>
+<body>
+
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="chat-room" class="table table-striped">
+             <!--   <thead>
+                <tr>
+                    <th>방번호</th>
+                    <th>대화가능상대</th>
+                    <th>방 생성시간</th>
+                    <th>입장/퇴장</th>
+                </tr>
+                </thead>
+                <tbody id="chatRoomBody">
+                </tbody>-->
+            </table>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <button id="connect" class="btn btn-default" type="submit">입장</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">퇴장
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="message">메시지</label>
+                    <input type="text" id="message" class="form-control" placeholder="메시지 :">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>대화</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
