@@ -1,11 +1,15 @@
 package com.petbuddy.api.security;
 
 import com.petbuddy.api.model.user.Email;
+import lombok.RequiredArgsConstructor;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static java.lang.Thread.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,26 +17,20 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+@SpringBootTest
+@ActiveProfiles("test")
+@RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JwtTest {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private Jwt jwt;
-
-  @BeforeAll
-  void setUp() {
-    String issuer = "social-server";
-    String clientSecret = "Rel5Bjce6MajBo08qgkNgYaTuzvJe6iwnBFhsD11";
-    int expirySeconds = 10;
-
-    jwt = new Jwt(issuer, clientSecret, expirySeconds);
-  }
+  private final Jwt jwt;
 
   @Test
   void JWT_토큰을_생성하고_복호화_할수있다() {
-    Jwt.Claims claims = Jwt.Claims.of(1L,"tester", new Email("test@gmail.com"), new String[]{"ROLE_USER"});
+    Jwt.Claims claims = Jwt.Claims.of(1L,"tester", new Email("test@gmail.com","user"), new String[]{"ROLE_USER"});
     String encodedJWT = jwt.newToken(claims);
     log.info("encodedJWT: {}", encodedJWT);
 
@@ -46,7 +44,7 @@ class JwtTest {
   @Test
   void JWT_토큰을_리프레시_할수있다() throws Exception {
     if (jwt.getExpirySeconds() > 0) {
-      Jwt.Claims claims = Jwt.Claims.of(1L, "tester", new Email("test@gmail.com"), new String[]{"ROLE_USER"});
+      Jwt.Claims claims = Jwt.Claims.of(1L, "tester", new Email("test@gmail.com","user"), new String[]{"ROLE_USER"});
       String encodedJWT = jwt.newToken(claims);
       log.info("encodedJWT: {}", encodedJWT);
 

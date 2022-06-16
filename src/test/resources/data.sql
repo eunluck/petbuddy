@@ -1,0 +1,11 @@
+INSERT INTO public.user_info (id, created_at, updated_at, address_etc, address_jb, address_st, birth, email, email_type, gender, last_login_at, name, password, phone, profile_image_url, representative_pet_id, status) VALUES (1, '2022-05-16 14:00:32.181000', '2022-05-16 14:00:36.454000', null, null, null, null, 'skgoddns1@gmail.com', 'user', 'MALE', null, '은행', '$2a$10$6xEN39z3EEDyosXcjsMxPOnv5R/7jk4CSPYI2lkicDmkU/DsCkMmu', null, null, 1, 1);
+INSERT INTO public.user_info (id, created_at, updated_at, address_etc, address_jb, address_st, birth, email, email_type, gender, last_login_at, name, password, phone, profile_image_url, representative_pet_id, status) VALUES (2, '2022-05-16 14:19:42.643000', '2022-05-16 14:20:09.151000', null, null, null, null, 'skgoddns2@gmail.com', 'user', 'FEMALE', null, '금행', '$2a$10$9FXki55q9euV/I2ghNdts.dFBLXA1ENd/iUEx6crpdmix/vc3pVtC', null, null, 2, 1);
+
+INSERT INTO public.user_search_filter (id, created_at, updated_at, gender, max_birth, min_birth, neutering_yn, pet_breed, pet_gender, pet_size, user_info_id) VALUES (1, '2022-05-16 14:00:32.267000', '2022-05-16 14:00:32.267000', null, null, null, null, null, null, null, 1);
+INSERT INTO public.user_search_filter (id, created_at, updated_at, gender, max_birth, min_birth, neutering_yn, pet_breed, pet_gender, pet_size, user_info_id) VALUES (2, '2022-05-16 14:19:42.646000', '2022-05-16 14:21:21.838000', null, '2017-01-01', '2022-01-01', true, 'string', 'FEMALE', 'string', 2);
+
+INSERT INTO public.pet (id, created_at, updated_at, likes, neutering_yn, pet_age, pet_gender, pet_introduce, pet_name, status, user_id) VALUES (2, '2022-05-16 14:20:09.147000', '2022-05-16 14:20:09.147000', 0, true, 2, 'FEMALE', '자기소개입력2', '금삐', 1, 2);
+INSERT INTO public.pet (id, created_at, updated_at, likes, neutering_yn, pet_age, pet_gender, pet_introduce, pet_name, status, user_id) VALUES (3, '2022-05-16 14:20:31.900000', '2022-05-16 14:20:31.900000', 0, false, 1, 'FEMALE', '자기소개입력23', '동삐', 1, 2);
+INSERT INTO public.pet (id, created_at, updated_at, likes, neutering_yn, pet_age, pet_gender, pet_introduce, pet_name, status, user_id) VALUES (1, '2022-05-16 14:00:36.433000', '2022-05-16 14:20:38.597000', 1, true, 3, 'MALE', '자기소개입력', '뽀삐', 1, 1);
+
+INSERT INTO public.likes (id, liked_pet_id, target_pet_id) VALUES (1, 2, 1);
