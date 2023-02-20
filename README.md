@@ -15,4 +15,4 @@
 
 
 - 사용기술
-### Spring boot, JPA, mysql, JWT, WebSocket, 등
+##### Spring boot, JPA, mysql, JWT, WebSocket, 등
