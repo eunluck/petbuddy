@@ -2,7 +2,7 @@
 ## 은행운(010-2352-3943)
 
 ----
-Petbuddy(강아지소개팅)
+사이드프로젝트 Petbuddy(강아지소개팅)
 ----
 
 강아지 소개팅 앱서버입니다.
@@ -15,4 +15,4 @@ Petbuddy(강아지소개팅)
 
 
 - 사용기술
-Spring boot, JPA, mysql, JWT, WebSocket 등
+### Spring boot, JPA, mysql, JWT, WebSocket, 등
